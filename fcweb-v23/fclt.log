@@ -1,0 +1,238 @@
+2022-04-07 16:58:24.591  INFO 31068 --- [restartedMain] fcweb.FcltApplication                    : Starting FcltApplication using Java 11.0.5 on davide with PID 31068 (C:\eclipse\workspace\fcweb-v23\target\classes started by Administrator in C:\eclipse\workspace\fcweb-v23)
+2022-04-07 16:58:24.594 DEBUG 31068 --- [restartedMain] fcweb.FcltApplication                    : Running with Spring Boot v2.6.6, Spring v5.3.18
+2022-04-07 16:58:24.597  INFO 31068 --- [restartedMain] fcweb.FcltApplication                    : The following 1 profile is active: "@activatedProperties@"
+2022-04-07 16:58:24.832  INFO 31068 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\Administrator\.m2\repository\commons-logging\commons-logging\1.0.3\commons-logging-1.0.3.jar referenced one or more files that do not exist: file:/C:/Users/Administrator/.m2/repository/commons-logging/commons-logging/1.0.3/log4j.jar,file:/C:/Users/Administrator/.m2/repository/commons-logging/commons-logging/1.0.3/log4j-core.jar
+2022-04-07 16:58:24.840  INFO 31068 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-04-07 16:58:27.579  INFO 31068 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-04-07 16:58:27.945  INFO 31068 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 346 ms. Found 27 JPA repository interfaces.
+2022-04-07 16:58:30.513  INFO 31068 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-04-07 16:58:30.542  INFO 31068 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-04-07 16:58:30.543  INFO 31068 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.60]
+2022-04-07 16:58:30.951  INFO 31068 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-04-07 16:58:30.952  INFO 31068 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 6111 ms
+2022-04-07 16:58:31.360 DEBUG 31068 --- [restartedMain] o.s.b.w.s.ServletContextInitializerBeans : Mapping filters: filterRegistrationBean urls=[/*] order=-2147483647, characterEncodingFilter urls=[/*] order=-2147483648, formContentFilter urls=[/*] order=-9900, requestContextFilter urls=[/*] order=-105
+2022-04-07 16:58:31.361 DEBUG 31068 --- [restartedMain] o.s.b.w.s.ServletContextInitializerBeans : Mapping servlets: dispatcherServlet urls=[/], springServlet urls=[/vaadinServlet/*]
+2022-04-07 16:58:31.938  INFO 31068 --- [restartedMain] c.v.f.s.VaadinServletContextInitializer  : Search for VaadinAppShell took 297 ms
+2022-04-07 16:58:55.236  INFO 31068 --- [restartedMain] c.v.f.s.VaadinServletContextInitializer  : Search for subclasses and classes with annotations took 22572 ms
+2022-04-07 16:58:55.237  INFO 31068 --- [restartedMain] c.v.f.s.VaadinServletContextInitializer  : Due to slow search it is recommended to use the whitelisted-packages feature to make scanning faster.
+
+See the whitelisted-packages section in the docs at https://vaadin.com/docs/latest/flow/integrations/spring/configuration#special-configuration-parameters
+2022-04-07 16:58:55.452  INFO 31068 --- [restartedMain] c.v.b.d.startup.DevModeStartupListener   : Starting dev-mode updaters in C:\eclipse\workspace\fcweb-v23 folder.
+2022-04-07 16:58:55.621  INFO 31068 --- [restartedMain] c.v.f.s.f.s.FullDependenciesScanner      : Visited 172 classes. Took 100 ms.
+2022-04-07 16:58:55.978  WARN 31068 --- [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'dataSourceScriptDatabaseInitializer' defined in class path resource [org/springframework/boot/autoconfigure/sql/init/DataSourceInitializationConfiguration.class]: Unsatisfied dependency expressed through method 'dataSourceScriptDatabaseInitializer' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception; nested exception is org.springframework.boot.autoconfigure.jdbc.DataSourceProperties$DataSourceBeanCreationException: Failed to determine suitable jdbc url
+2022-04-07 16:58:55.988  INFO 31068 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2022-04-07 16:58:56.068  INFO 31068 --- [restartedMain] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2022-04-07 16:58:56.214 ERROR 31068 --- [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+Reason: Failed to determine suitable jdbc url
+
+
+Action:
+
+Consider the following:
+	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+	If you have database settings to be loaded from a particular profile you may need to activate it (the profiles @activatedProperties@ are currently active).
+
+2022-04-07 16:58:56.657  INFO 31068 --- [ForkJoinPool.commonPool-worker-5] c.v.f.s.frontend.TaskUpdatePackages      : Running `npm install` to resolve and optionally download frontend dependencies. This may take a moment, please stand by...
+2022-04-07 17:01:55.917  INFO 1584 --- [restartedMain] fcweb.FcltApplication                    : Starting FcltApplication using Java 11.0.5 on davide with PID 1584 (C:\eclipse\workspace\fcweb-v23\target\classes started by Administrator in C:\eclipse\workspace\fcweb-v23)
+2022-04-07 17:01:55.919 DEBUG 1584 --- [restartedMain] fcweb.FcltApplication                    : Running with Spring Boot v2.6.6, Spring v5.3.18
+2022-04-07 17:01:55.921  INFO 1584 --- [restartedMain] fcweb.FcltApplication                    : The following 1 profile is active: "localfc"
+2022-04-07 17:01:56.125  INFO 1584 --- [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\Administrator\.m2\repository\commons-logging\commons-logging\1.0.3\commons-logging-1.0.3.jar referenced one or more files that do not exist: file:/C:/Users/Administrator/.m2/repository/commons-logging/commons-logging/1.0.3/log4j.jar,file:/C:/Users/Administrator/.m2/repository/commons-logging/commons-logging/1.0.3/log4j-core.jar
+2022-04-07 17:01:56.126  INFO 1584 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-04-07 17:01:58.506  INFO 1584 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-04-07 17:01:58.840  INFO 1584 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 312 ms. Found 27 JPA repository interfaces.
+2022-04-07 17:02:00.938  INFO 1584 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-04-07 17:02:00.963  INFO 1584 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-04-07 17:02:00.964  INFO 1584 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.60]
+2022-04-07 17:02:01.376  INFO 1584 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-04-07 17:02:01.377  INFO 1584 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5249 ms
+2022-04-07 17:02:01.810 DEBUG 1584 --- [restartedMain] o.s.b.w.s.ServletContextInitializerBeans : Mapping filters: filterRegistrationBean urls=[/*] order=-2147483647, characterEncodingFilter urls=[/*] order=-2147483648, formContentFilter urls=[/*] order=-9900, requestContextFilter urls=[/*] order=-105
+2022-04-07 17:02:01.811 DEBUG 1584 --- [restartedMain] o.s.b.w.s.ServletContextInitializerBeans : Mapping servlets: dispatcherServlet urls=[/], springServlet urls=[/vaadinServlet/*]
+2022-04-07 17:02:02.466  INFO 1584 --- [restartedMain] c.v.f.s.VaadinServletContextInitializer  : Search for VaadinAppShell took 312 ms
+2022-04-07 17:02:25.197  INFO 1584 --- [restartedMain] c.v.f.s.VaadinServletContextInitializer  : Search for subclasses and classes with annotations took 21971 ms
+2022-04-07 17:02:25.197  INFO 1584 --- [restartedMain] c.v.f.s.VaadinServletContextInitializer  : Due to slow search it is recommended to use the whitelisted-packages feature to make scanning faster.
+
+See the whitelisted-packages section in the docs at https://vaadin.com/docs/latest/flow/integrations/spring/configuration#special-configuration-parameters
+2022-04-07 17:02:25.368  INFO 1584 --- [restartedMain] c.v.b.d.startup.DevModeStartupListener   : Starting dev-mode updaters in C:\eclipse\workspace\fcweb-v23 folder.
+2022-04-07 17:02:25.521  INFO 1584 --- [restartedMain] c.v.f.s.f.s.FullDependenciesScanner      : Visited 172 classes. Took 88 ms.
+2022-04-07 17:02:25.909  INFO 1584 --- [ForkJoinPool.commonPool-worker-5] c.v.f.s.frontend.TaskUpdatePackages      : Running `npm install` to resolve and optionally download frontend dependencies. This may take a moment, please stand by...
+2022-04-07 17:02:27.511  INFO 1584 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-04-07 17:02:28.126  INFO 1584 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-04-07 17:02:34.258  INFO 1584 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-04-07 17:02:38.181  INFO 1584 --- [restartedMain] fcweb.backend.tasks.MyScheduledTasks     : Ufficiosi cron 0 30 7 * * *
+2022-04-07 17:02:38.207  INFO 1584 --- [restartedMain] fcweb.backend.tasks.MyScheduledTasks     : Ufficiali cron 0 30 15 * * *
+2022-04-07 17:02:38.210  INFO 1584 --- [restartedMain] eConfig$$EnhancerBySpringCGLIB$$22c81f9e : Date in Europe/Berlin: Thu Apr 07 17:02:38 CEST 2022
+2022-04-07 17:02:38.211  INFO 1584 --- [restartedMain] eConfig$$EnhancerBySpringCGLIB$$22c81f9e : basePathData C:\eclipse\workspace\fcweb-v23
+2022-04-07 17:02:40.011  INFO 1584 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-04-07 17:02:40.020  INFO 1584 --- [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2022-04-07 17:02:40.536  INFO 1584 --- [restartedMain] c.v.f.s.DefaultDeploymentConfiguration   : 
+Vaadin is running in DEBUG MODE.
+When deploying application for production, remember to disable debug features. See more from https://vaadin.com/docs/
+2022-04-07 17:02:40.639  INFO 1584 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-04-07 17:02:40.731  INFO 1584 --- [restartedMain] fcweb.FcltApplication                    : Started FcltApplication in 45.925 seconds (JVM running for 47.457)
+2022-04-07 17:02:46.058  INFO 1584 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-04-07 17:02:46.059  INFO 1584 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-04-07 17:02:46.062  INFO 1584 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2022-04-07 17:02:47.219  WARN 1584 --- [http-nio-8080-exec-1] o.a.c.util.SessionIdGeneratorBase        : Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [1,050] milliseconds.
+2022-04-07 17:02:47.236  INFO 1584 --- [http-nio-8080-exec-1] c.vaadin.flow.spring.SpringInstantiator  : The number of beans implementing 'I18NProvider' is 0. Cannot use Spring beans for I18N, falling back to the default behavior
+2022-04-07 17:03:15.424  INFO 1584 --- [ForkJoinPool.commonPool-worker-5] c.v.f.s.frontend.TaskUpdatePackages      : using 'C:\Program Files\nodejs\npm.cmd --no-update-notifier --no-audit --scripts-prepend-node-path=true --ignore-scripts install' for frontend package installation
+2022-04-07 17:08:34.710  INFO 1584 --- [ForkJoinPool.commonPool-worker-5] c.v.f.s.frontend.TaskUpdatePackages      : Frontend dependencies resolved successfully.
+2022-04-07 17:08:49.748  INFO 1584 --- [ForkJoinPool.commonPool-worker-5] c.v.f.s.frontend.TaskCopyFrontendFiles   : Copying frontend resources from jar files ...
+2022-04-07 17:08:50.261  INFO 1584 --- [ForkJoinPool.commonPool-worker-5] c.v.f.s.frontend.TaskCopyFrontendFiles   : Visited 27 resources. Took 512 ms.
+2022-04-07 17:08:50.650  INFO 1584 --- [ForkJoinPool.commonPool-worker-3] c.v.b.devserver.AbstractDevServerRunner  : Starting Webpack
+2022-04-07 17:09:18.231  INFO 1584 --- [ForkJoinPool.commonPool-worker-3] c.v.b.devserver.AbstractDevServerRunner  : Running Webpack to compile frontend resources. This may take a moment, please stand by...
+2022-04-07 17:09:32.002  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [webpack-dev-server] Project is running at:
+2022-04-07 17:09:32.003  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [webpack-dev-server] Loopback: http://localhost:1100/
+2022-04-07 17:09:32.003  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [webpack-dev-server] On Your Network (IPv4): http://192.168.1.242:1100/
+2022-04-07 17:09:32.004  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [webpack-dev-server] Content not from webpack is served from 'C:\eclipse\workspace\fcweb-v23\target\classes\META-INF\VAADIN\webapp, C:\eclipse\workspace\fcweb-v23\src\main\webapp' directory
+2022-04-07 17:09:54.534  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.535  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 32:34-52
+2022-04-07 17:09:54.535  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'TemplateResultType' was not found in 'lit/directive-helpers.js'
+2022-04-07 17:09:54.536  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.536  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../target/flow-frontend/VaadinDevmodeGizmo.js 1225:86-93
+2022-04-07 17:09:54.537  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:09:54.538  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.538  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../target/flow-frontend/VaadinDevmodeGizmo.js 1277:108-115
+2022-04-07 17:09:54.539  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:09:54.540  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.541  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 16:15-22
+2022-04-07 17:09:54.541  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:09:54.542  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.543  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 32:72-79
+2022-04-07 17:09:54.544  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:09:54.544  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.544  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 41:49-56
+2022-04-07 17:09:54.546  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:09:54.547  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.547  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 45:13-20
+2022-04-07 17:09:54.548  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:09:54.548  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.548  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../target/flow-frontend/lit-renderer.ts 22:5-11
+2022-04-07 17:09:54.548  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'render' was not found in 'lit'
+2022-04-07 17:09:54.549  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.549  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 59:2-8
+2022-04-07 17:09:54.549  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'render' was not found in 'lit'
+2022-04-07 17:09:54.550  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:09:54.550  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/notification/src/vaadin-notification.js 507:8-14
+2022-04-07 17:09:54.550  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'render' was not found in 'lit'
+2022-04-07 17:09:54.555  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [build-status] 10 warnings were reported.
+2022-04-07 17:09:54.560  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [build-status] : Compiled.
+2022-04-07 17:09:54.565  INFO 1584 --- [ForkJoinPool.commonPool-worker-3] c.v.b.devserver.AbstractDevServerRunner  : Started Webpack. Time: 63914ms
+2022-04-07 17:09:55.022  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : No issues found.
+2022-04-07 17:10:04.831  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [webpack-dev-middleware] wait until bundle finished: /favicon.ico
+2022-04-07 17:10:04.835  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [webpack-dev-middleware] wait until bundle finished: /index.html
+2022-04-07 17:10:05.508  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.509  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 32:34-52
+2022-04-07 17:10:05.509  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'TemplateResultType' was not found in 'lit/directive-helpers.js'
+2022-04-07 17:10:05.509  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.509  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../target/flow-frontend/VaadinDevmodeGizmo.js 1225:86-93
+2022-04-07 17:10:05.510  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:10:05.510  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.510  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../target/flow-frontend/VaadinDevmodeGizmo.js 1277:108-115
+2022-04-07 17:10:05.510  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:10:05.510  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.511  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 16:15-22
+2022-04-07 17:10:05.511  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:10:05.511  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.511  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 32:72-79
+2022-04-07 17:10:05.512  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:10:05.512  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.512  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 41:49-56
+2022-04-07 17:10:05.512  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:10:05.512  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.513  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 45:13-20
+2022-04-07 17:10:05.513  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'nothing' was not found in 'lit'
+2022-04-07 17:10:05.514  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.514  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../target/flow-frontend/lit-renderer.ts 22:5-11
+2022-04-07 17:10:05.514  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'render' was not found in 'lit'
+2022-04-07 17:10:05.514  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.515  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/notification/src/vaadin-notification.js 507:8-14
+2022-04-07 17:10:05.515  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'render' was not found in 'lit'
+2022-04-07 17:10:05.515  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.515  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in ../node_modules/@vaadin/icon/src/vaadin-icon-svg.js 59:2-8
+2022-04-07 17:10:05.516  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : "export 'render' was not found in 'lit'
+2022-04-07 17:10:05.516  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : 
+2022-04-07 17:10:05.520  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : WARNING in InjectManifest has been called multiple times, perhaps due to running webpack in --watch mode. The precache manifest generated after the first call may be inaccurate! Please see https://github.com/GoogleChrome/workbox/issues/1790 for more information.
+2022-04-07 17:10:05.534  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [build-status] 11 warning were reported.
+2022-04-07 17:10:05.535  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : [build-status] : Compiled.
+2022-04-07 17:10:05.559  INFO 1584 --- [dev-server-output] c.v.b.devserver.DevServerOutputTracker   : No issues found.
+2022-04-07 17:10:11.470  INFO 1584 --- [http-nio-8080-exec-10] fcweb.ui.views.login.LoginView           : init
+2022-04-07 17:10:11.506  INFO 1584 --- [http-nio-8080-exec-10] common.util.Utils                        : isValidVaadinSession = false 
+2022-04-07 17:10:12.384  INFO 1584 --- [http-nio-8080-exec-6] fcweb.ui.views.login.LoginView           : resX 2195
+2022-04-07 17:10:12.384  INFO 1584 --- [http-nio-8080-exec-6] fcweb.ui.views.login.LoginView           : resY 1235
+2022-04-07 17:10:12.385  INFO 1584 --- [http-nio-8080-exec-6] fcweb.ui.views.login.LoginView           : Math.max 2195
+2022-04-07 17:10:21.026 DEBUG 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : username: davide.cremona@gmail.com
+2022-04-07 17:10:21.026 DEBUG 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : pwd: da
+2022-04-07 17:10:21.142  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : Campionato: 2
+2022-04-07 17:10:21.192  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : CurrentGG: 32
+2022-04-07 17:10:21.247  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : now.getDayOfWeek() : THURSDAY
+2022-04-07 17:10:21.248  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : dataGiornata.getDayOfWeek() : SUNDAY
+2022-04-07 17:10:21.251  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : 1 days, 
+2022-04-07 17:10:21.251  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : 21 hours, 
+2022-04-07 17:10:21.251  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : 48 minutes, 
+2022-04-07 17:10:21.251  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : 39 seconds
+2022-04-07 17:10:21.252  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : millisDiff : 164919000
+2022-04-07 17:10:21.252  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.login.LoginView           : Login DAVIDE success
+2022-04-07 17:10:21.272  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.MainAppLayout                   : START MainAppLayout
+2022-04-07 17:10:21.273  INFO 1584 --- [http-nio-8080-exec-8] common.util.Utils                        : isValidVaadinSession = true 
+2022-04-07 17:10:21.482  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.seriea.HomeView           : HomeView()
+2022-04-07 17:10:21.484  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.seriea.HomeView           : init
+2022-04-07 17:10:21.486  INFO 1584 --- [http-nio-8080-exec-8] common.util.Utils                        : isValidVaadinSession = true 
+2022-04-07 17:10:21.659  INFO 1584 --- [http-nio-8080-exec-8] fcweb.backend.service.AccessoController  : now : 2022-04-07T17:10:21.486537800 attore DAVIDE note fcweb.ui.views.seriea.HomeView
+2022-04-07 17:10:21.909  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.seriea.HomeView           : millisDiff 164919000
+2022-04-07 17:10:21.960  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.seriea.HomeView           : from 20
+2022-04-07 17:10:21.961  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.seriea.HomeView           : to 38
+2022-04-07 17:10:22.283  INFO 1584 --- [http-nio-8080-exec-8] fcweb.backend.service.AccessoController  : now : 2022-04-07T17:10:22.238299500 attore DAVIDE note fcweb.ui.views.login.LoginView
+2022-04-07 17:10:29.900  INFO 1584 --- [http-nio-8080-exec-4] fcweb.ui.views.seriea.TeamInsertView     : init
+2022-04-07 17:10:29.901  INFO 1584 --- [http-nio-8080-exec-4] common.util.Utils                        : isValidVaadinSession = true 
+2022-04-07 17:10:29.919  INFO 1584 --- [http-nio-8080-exec-4] fcweb.backend.service.AccessoController  : now : 2022-04-07T17:10:29.901047900 attore DAVIDE note fcweb.ui.views.seriea.TeamInsertView
+2022-04-07 17:10:30.317  INFO 1584 --- [http-nio-8080-exec-4] fcweb.ui.views.seriea.TeamInsertView     : loadFcGiornatadett
+2022-04-07 17:10:34.012  WARN 1584 --- [http-nio-8080-exec-10] s.b.a.a.m.OnlyOnceLoggingDenyMeterFilter : Reached the maximum number of URI tags for 'http.server.requests'.
+2022-04-07 17:10:36.692  INFO 1584 --- [http-nio-8080-exec-2] f.ui.views.seriea.TeamInsertMobileView   : init
+2022-04-07 17:10:36.693  INFO 1584 --- [http-nio-8080-exec-2] common.util.Utils                        : isValidVaadinSession = true 
+2022-04-07 17:10:36.720  INFO 1584 --- [http-nio-8080-exec-2] fcweb.backend.service.AccessoController  : now : 2022-04-07T17:10:36.693685300 attore DAVIDE note fcweb.ui.views.seriea.TeamInsertMobileView
+2022-04-07 17:10:36.748  INFO 1584 --- [http-nio-8080-exec-2] f.ui.views.seriea.TeamInsertMobileView   : resX 2195
+2022-04-07 17:10:36.749  INFO 1584 --- [http-nio-8080-exec-2] f.ui.views.seriea.TeamInsertMobileView   : resY 1235
+2022-04-07 17:10:36.749  INFO 1584 --- [http-nio-8080-exec-2] f.ui.views.seriea.TeamInsertMobileView   : Math.max 2195
+2022-04-07 17:10:36.800  INFO 1584 --- [http-nio-8080-exec-2] f.ui.views.seriea.TeamInsertMobileView   : loadFcGiornatadett
+2022-04-07 17:10:41.112  INFO 1584 --- [http-nio-8080-exec-4] fcweb.ui.MainAppLayout                   : START MainAppLayout
+2022-04-07 17:10:41.113  INFO 1584 --- [http-nio-8080-exec-4] common.util.Utils                        : isValidVaadinSession = true 
+2022-04-07 17:10:41.141  INFO 1584 --- [http-nio-8080-exec-4] fcweb.ui.views.seriea.HomeView           : HomeView()
+2022-04-07 17:10:41.142  INFO 1584 --- [http-nio-8080-exec-4] fcweb.ui.views.seriea.HomeView           : init
+2022-04-07 17:10:41.142  INFO 1584 --- [http-nio-8080-exec-4] common.util.Utils                        : isValidVaadinSession = true 
+2022-04-07 17:10:41.166  INFO 1584 --- [http-nio-8080-exec-4] fcweb.backend.service.AccessoController  : now : 2022-04-07T17:10:41.142290600 attore DAVIDE note fcweb.ui.views.seriea.HomeView
+2022-04-07 17:10:41.373  INFO 1584 --- [http-nio-8080-exec-4] fcweb.ui.views.seriea.HomeView           : millisDiff 164919000
+2022-04-07 17:10:41.396  INFO 1584 --- [http-nio-8080-exec-4] fcweb.ui.views.seriea.HomeView           : from 20
+2022-04-07 17:10:41.396  INFO 1584 --- [http-nio-8080-exec-4] fcweb.ui.views.seriea.HomeView           : to 38
+2022-04-07 17:10:45.848  INFO 1584 --- [http-nio-8080-exec-6] fcweb.ui.views.admin.FcMercatoDettView   : FcMercatoDettView()
+2022-04-07 17:10:45.852  INFO 1584 --- [http-nio-8080-exec-6] fcweb.ui.views.admin.FcMercatoDettView   : init
+2022-04-07 17:10:45.852  INFO 1584 --- [http-nio-8080-exec-6] common.util.Utils                        : isValidVaadinSession = true 
+2022-04-07 17:10:45.866  INFO 1584 --- [http-nio-8080-exec-6] fcweb.backend.service.AccessoController  : now : 2022-04-07T17:10:45.852903 attore DAVIDE note fcweb.ui.views.admin.FcMercatoDettView
+2022-04-07 17:10:53.692  INFO 1584 --- [http-nio-8080-exec-2] f.ui.views.seriea.TeamInsertMobileView   : winWidth 2195
+2022-04-07 17:10:53.699  INFO 1584 --- [http-nio-8080-exec-2] f.ui.views.seriea.TeamInsertMobileView   : winHeight 1035
+2022-04-07 17:10:56.987  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.seriea.SquadreAllView     : SquadreAllView()
+2022-04-07 17:10:56.988  INFO 1584 --- [http-nio-8080-exec-8] fcweb.ui.views.seriea.SquadreAllView     : init
+2022-04-07 17:10:56.989  INFO 1584 --- [http-nio-8080-exec-8] common.util.Utils                        : isValidVaadinSession = true 
+2022-04-07 17:10:57.011  INFO 1584 --- [http-nio-8080-exec-8] fcweb.backend.service.AccessoController  : now : 2022-04-07T17:10:56.989621400 attore DAVIDE note fcweb.ui.views.seriea.SquadreAllView
+2022-04-07 17:11:02.428  INFO 1584 --- [http-nio-8080-exec-3] fcweb.ui.views.seriea.CalendarioView     : CalendarioView()
+2022-04-07 17:11:02.431  INFO 1584 --- [http-nio-8080-exec-3] fcweb.ui.views.seriea.CalendarioView     : init
+2022-04-07 17:11:02.431  INFO 1584 --- [http-nio-8080-exec-3] common.util.Utils                        : isValidVaadinSession = true 
+2022-04-07 17:11:02.449  INFO 1584 --- [http-nio-8080-exec-3] fcweb.backend.service.AccessoController  : now : 2022-04-07T17:11:02.431687100 attore DAVIDE note fcweb.ui.views.seriea.CalendarioView
+2022-04-07 17:11:02.618  WARN 1584 --- [http-nio-8080-exec-3] c.v.f.s.c.r.AbstractRpcInvocationHandler : Ignoring RPC for non-existent node: 1423
+2022-04-07 17:11:02.619  WARN 1584 --- [http-nio-8080-exec-3] c.v.f.s.c.r.AbstractRpcInvocationHandler : Ignoring RPC for non-existent node: 1431
+2022-04-07 17:11:02.619  WARN 1584 --- [http-nio-8080-exec-3] c.v.f.s.c.r.AbstractRpcInvocationHandler : Ignoring RPC for non-existent node: 1440
+2022-04-07 17:11:02.619  WARN 1584 --- [http-nio-8080-exec-3] c.v.f.s.c.r.AbstractRpcInvocationHandler : Ignoring RPC for non-existent node: 1448
+2022-04-07 17:11:02.620  WARN 1584 --- [http-nio-8080-exec-3] c.v.f.s.c.r.AbstractRpcInvocationHandler : Ignoring RPC for non-existent node: 1457
+2022-04-07 17:11:02.620  WARN 1584 --- [http-nio-8080-exec-3] c.v.f.s.c.r.AbstractRpcInvocationHandler : Ignoring RPC for non-existent node: 1465
+2022-04-07 17:11:02.620  WARN 1584 --- [http-nio-8080-exec-3] c.v.f.s.c.r.AbstractRpcInvocationHandler : Ignoring RPC for non-existent node: 1474
+2022-04-07 17:11:02.620  WARN 1584 --- [http-nio-8080-exec-3] c.v.f.s.c.r.AbstractRpcInvocationHandler : Ignoring RPC for non-existent node: 1482

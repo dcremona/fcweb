@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fcweb
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fcweb
+  template:
+    metadata:
+      labels:
+        app: fcweb
+    spec:
+      containers:
+        - name: fcweb
+          image: fcweb:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '1'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fcweb-balancer
+spec:
+  selector:
+    app: fcweb
+  ports:
+    - protocol: TCP
+      port: 8000 # The port to expose to the outside
+      targetPort: 8080 # The port the application is running on in the pods
+  type: LoadBalancer
+  sessionAffinity: ClientIP
