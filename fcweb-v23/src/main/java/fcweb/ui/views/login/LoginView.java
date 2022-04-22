@@ -206,6 +206,9 @@ public class LoginView extends VerticalLayout{
 			properties.setProperty(prop.getKey(), prop.getValue());
 		}
 
+		String springMailPassword = (String) env.getProperty("spring.mail.password");
+		properties.setProperty("mail.password", springMailPassword);
+		
 		FcCampionato campionato = campionatoController.findByActive(true);
 		if (campionato == null) {
 			CustomMessageDialog.showMessageError("Contattare amministratore! (campionato=null)");
