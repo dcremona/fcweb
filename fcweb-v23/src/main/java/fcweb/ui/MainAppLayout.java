@@ -1,13 +1,7 @@
 package fcweb.ui;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -36,7 +30,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 
 import common.util.Utils;
@@ -804,6 +797,7 @@ public class MainAppLayout extends AppLayout {
 	private static final long serialVersionUID = 1L;
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+	/*
 	
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -823,6 +817,7 @@ public class MainAppLayout extends AppLayout {
 		Image img = new Image(resource,"");
 		return img;
 	}
+	*/
 
     /**
      * A simple navigation item component, based on ListItem element.
@@ -1073,14 +1068,13 @@ public class MainAppLayout extends AppLayout {
                 };
     		}
         	
-        	
     	} else {
     		
     		if (attore.isAdmin()) {
 
             	return new MenuItemInfo[]{ //
                         new MenuItemInfo("Home", "la la-home", EmHomeView.class), //
-                        new MenuItemInfo("Mercato", "la search-dollar", EmMercatoView.class), //
+                        new MenuItemInfo("Mercato", "la la-search-dollar", EmMercatoView.class), //
                         new MenuItemInfo("Schera Formazione", "la la-futbol", EmTeamInsertView.class), //
                         new MenuItemInfo("Rose", "la la-user", EmSquadreView.class), //
                         new MenuItemInfo("Classifica", "la la-table", EmClassificaView.class), //
@@ -1091,7 +1085,7 @@ public class MainAppLayout extends AppLayout {
                         
                         new MenuItemInfo("Impostazioni", "la la-tools", EmImpostazioniView.class), //
                         new MenuItemInfo("Proprieta", "la la-toolbox", FcPropertiesView.class), //
-                        new MenuItemInfo("Utenti", "la user-edit", FcUserView.class), //
+                        new MenuItemInfo("Utenti", "la la-user-edit", FcUserView.class), //
                         new MenuItemInfo("Giocatore", "la la-users", FcGiocatoreView.class), //
                         new MenuItemInfo("GiornataInfo", "la la-calendar-week", FcGiornataInfoView.class), //
                         new MenuItemInfo("GiornataDett", "la la-calendar-check", FcGiornataDettView.class), //
@@ -1100,13 +1094,12 @@ public class MainAppLayout extends AppLayout {
                         new MenuItemInfo("Pagelle", "la la-poll", FcPagelleView.class), //
                         new MenuItemInfo("Accesso", "la la-universal-access", FcAccessoView.class), //
                         new MenuItemInfo("Campionato", "la la-brush", FcCampionatoView.class), //
-
             	};
 
     		} else {
             	return new MenuItemInfo[]{ //
                         new MenuItemInfo("Home", "la la-home", EmHomeView.class), //
-                        new MenuItemInfo("Mercato", "la search-dollar", EmMercatoView.class), //
+                        new MenuItemInfo("Mercato", "la la-search-dollar", EmMercatoView.class), //
                         new MenuItemInfo("Schera Formazione", "la la-futbol", EmTeamInsertView.class), //
                         new MenuItemInfo("Rose", "la la-user", EmSquadreView.class), //
                         new MenuItemInfo("Classifica", "la la-table", EmClassificaView.class), //
