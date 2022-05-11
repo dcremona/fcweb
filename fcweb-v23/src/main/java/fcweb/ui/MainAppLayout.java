@@ -892,13 +892,25 @@ public class MainAppLayout extends AppLayout {
     }
 
     private Component createHeaderContent(FcAttore attore,FcCampionato campionato) {
-        DrawerToggle toggle = new DrawerToggle();
+
+        HorizontalLayout layout = new HorizontalLayout();
+        //layout.setClassName("sidemenu-header");
+        //layout.getThemeList().set("dark", true);
+        layout.setWidthFull();
+        layout.setSpacing(true);
+        layout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+    	DrawerToggle toggle = new DrawerToggle();
         toggle.addClassName("text-secondary");
         toggle.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         toggle.getElement().setAttribute("aria-label", "Menu toggle");
 
+        layout.add(toggle);
+        
         viewTitle = new H1();
         viewTitle.addClassNames("m-0", "text-l");
+        
+        layout.add(viewTitle);
         
 		Avatar avatar = new Avatar(attore.getNome() + " " +attore.getCognome());
 		MenuBar menuBar = new MenuBar();
@@ -909,29 +921,13 @@ public class MainAppLayout extends AppLayout {
 		menuSettings.addClickListener(e -> {
 			UI.getCurrent().navigate(SettingsView.class);
 		});
-
 		MenuItem menuLogout = subMenu.addItem("Logout"); 		
 		menuLogout.addClickListener(e -> {
 			UI.getCurrent().getPage().executeJs("window.location.href='/fcWeb'");
 		});
 
-//        Header header = new Header(toggle, viewTitle,menuBar);
-//        header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center","w-full");
-//        return header;
-        
-        HorizontalLayout layout = new HorizontalLayout();
-        //layout.setClassName("sidemenu-header");
-        //layout.getThemeList().set("dark", true);
-        layout.setWidthFull();
-        layout.setSpacing(false);
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
-
-        layout.add(toggle);
-        layout.add(viewTitle);
-
 		final FlexLayout menuBarEnd = new FlexLayout();
 		menuBarEnd.getStyle().set("margin-left", "auto");
-		
 		menuBarEnd.add(menuBar);
 
 		layout.add(menuBarEnd);
@@ -946,20 +942,24 @@ public class MainAppLayout extends AppLayout {
         layout.setClassName("sidemenu-header");
         layout.getThemeList().set("dark", true);
         layout.setWidthFull();
-        layout.setSpacing(false);
+        layout.setSpacing(true);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
+		layout.setJustifyContentMode(FlexLayout.JustifyContentMode.START);
+        
         layout.add(new DrawerToggle());
+
         viewTitle = new H1();
+        viewTitle.addClassNames("m-0", "text-l");
+        
         layout.add(viewTitle);
 
-		final FlexLayout menuBarEnd = new FlexLayout();
+		//final FlexLayout menuBarEnd = new FlexLayout();
 		Button login = new Button("Login",VaadinIcon.EXIT.create());
 		login.addClickListener(e -> {
 			UI.getCurrent().getPage().executeJs("window.location.href='/fcWeb'");
 		});
-		menuBarEnd.add(login);
-		
-		layout.add(menuBarEnd);
+		//menuBarEnd.add(login);
+		layout.add(login);
 
         return layout;
     }
