@@ -24,9 +24,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.vaadin.ronny.AbsoluteLayout;
 import org.vaadin.tabs.PagedTabs;
 
@@ -94,6 +96,12 @@ public class EmMercatoView extends VerticalLayout
 	private static final long serialVersionUID = 1L;
 
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private Environment env;
+
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	private static final String width = "100px";
 	private static final String height = "130px";
@@ -2499,11 +2507,7 @@ public class EmMercatoView extends VerticalLayout
 		formazioneHtml += "</BODY>\n";
 		formazioneHtml += "<HTML>";
 
-		Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
-		MailClient client = new MailClient(p);
-
-		String from = (String) p.get("from");
-		// String email_destinatario = (String) p.getProperty("to");
+		MailClient client = new MailClient(javaMailSender);
 
 		String email_destinatario = "";
 		List<FcAttore> att = attoreController.findAll();
@@ -2521,6 +2525,8 @@ public class EmMercatoView extends VerticalLayout
 		String[] cc = null;
 		String[] bcc = null;
 
+		String from = (String) env.getProperty("spring.mail.username");
+		
 		client.sendMail2(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
 
 		LOG.info("END sendNewMail");

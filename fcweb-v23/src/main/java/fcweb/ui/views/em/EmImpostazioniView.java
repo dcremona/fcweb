@@ -33,6 +33,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
@@ -99,6 +100,9 @@ public class EmImpostazioniView extends VerticalLayout
 
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+	@Autowired
+	private JavaMailSender javaMailSender;
+	
 	@Autowired
 	private Environment env;
 
@@ -621,8 +625,7 @@ public class EmImpostazioniView extends VerticalLayout
 				//JasperRunManager.runReportToPdfStream(inputStream2, outputStream2, params2, conn);
 				JasperReporUtils.runReportToPdfStream(inputStream2, outputStream2, params2, conn);
 
-				MailClient client = new MailClient(p);
-				String from = (String) p.get("from");
+				MailClient client = new MailClient(javaMailSender);
 				String email_destinatario = "";
 
 				if (this.chkSendMail.getValue()) {
@@ -653,14 +656,14 @@ public class EmImpostazioniView extends VerticalLayout
 				String message = getBody();
 
 				try {
+					String from = (String) env.getProperty("spring.mail.username");
 					client.sendMail(from, to, cc, bcc, subject, message, "text/html", "3", att);
 				} catch (Exception e) {
 					CustomMessageDialog.showMessageError(CustomMessageDialog.MSG_MAIL_KO);
 				}
 			} else if (event.getSource() == notifica) {
 
-				MailClient client = new MailClient(p);
-				String from = (String) p.get("from");
+				MailClient client = new MailClient(javaMailSender);
 				String email_destinatario = "";
 				List<FcAttore> attori = attoreController.findAll();
 				for (FcAttore a : attori) {
@@ -677,6 +680,8 @@ public class EmImpostazioniView extends VerticalLayout
 				String message = messaggio.getValue();
 
 				try {
+					String from = (String) env.getProperty("spring.mail.username");
+					
 					client.sendMail(from, to, cc, bcc, subject, message, "", "3", null);
 				} catch (Exception e) {
 					CustomMessageDialog.showMessageError(CustomMessageDialog.MSG_MAIL_KO);
@@ -815,8 +820,7 @@ public class EmImpostazioniView extends VerticalLayout
 		Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 		p.setProperty("ACTIVE_MAIL", this.chkSendMail.getValue().toString());
 
-		MailClient client = new MailClient(p);
-		String from = (String) p.get("from");
+		MailClient client = new MailClient(javaMailSender);
 		String email_destinatario = "";
 		String ACTIVE_MAIL = (String) p.getProperty("ACTIVE_MAIL");
 		LOG.info("ACTIVE_MAIL " + ACTIVE_MAIL);
@@ -841,6 +845,8 @@ public class EmImpostazioniView extends VerticalLayout
 
 		LOG.info(formazioneHtml);
 
+		String from = (String) env.getProperty("spring.mail.username");
+		
 		client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", null);
 
 	}

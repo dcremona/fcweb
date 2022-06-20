@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,12 @@ import org.vaadin.filesystemdataprovider.FileSelect;
 import org.vaadin.haijian.Exporter;
 import org.vaadin.tabs.PagedTabs;
 
+import com.vaadin.componentfactory.pdfviewer.PdfViewer;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -29,6 +33,7 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -54,8 +59,7 @@ import fcweb.utils.CustomMessageDialog;
 @Route(value = "downnload", layout = MainAppLayout.class)
 @PreserveOnRefresh
 @PageTitle("Download")
-public class DownloadView extends VerticalLayout
-		implements ComponentEventListener<ClickEvent<Button>>{
+public class DownloadView extends VerticalLayout implements ComponentEventListener<ClickEvent<Button>> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -87,6 +91,9 @@ public class DownloadView extends VerticalLayout
 	@Autowired
 	private AccessoController accessoController;
 
+	int resX = 0;
+	int resY = 0;
+
 	@PostConstruct
 	void init() {
 		LOG.info("init");
@@ -103,6 +110,13 @@ public class DownloadView extends VerticalLayout
 	}
 
 	private void initLayout() {
+
+		UI.getCurrent().getPage().retrieveExtendedClientDetails(event -> {
+			resX = event.getScreenWidth();
+			resY = event.getScreenHeight();
+			LOG.info("resX " + resX);
+			LOG.info("resY " + resY);
+		});
 
 		Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 
@@ -140,13 +154,22 @@ public class DownloadView extends VerticalLayout
 			File file = fileSelect.getValue();
 			Date date = new Date(file.lastModified());
 			if (!file.isDirectory()) {
+				// UI.getCurrent().navigate(PdfView.class,file.getPath());
+
+				Dialog dialog = new Dialog();
+				// dialog.getElement().setAttribute("aria-label", "System maintenance hint");
+				VerticalLayout dialogLayout = createDialogLayout(dialog, file);
+				dialog.add(dialogLayout);
+				dialog.open();
+
 				Notification.show(file.getPath() + ", " + date + ", " + file.length());
+
 			} else {
 				Notification.show(file.getPath() + ", " + date);
 			}
 		});
-		fileSelect.setWidth("500px");
-		fileSelect.setHeight("500px");
+		fileSelect.setWidth(resX + "px");
+		fileSelect.setHeight(resY + "px");
 		fileSelect.setLabel("Select file");
 
 		VerticalLayout container = new VerticalLayout();
@@ -159,13 +182,52 @@ public class DownloadView extends VerticalLayout
 		add(tabs, container);
 	}
 
+	private VerticalLayout createDialogLayout(Dialog dialog, File f) {
+		VerticalLayout dialogLayout = null;
+
+		try {
+
+//			H2 headline = new H2("System maintenance");
+//			headline.getStyle().set("margin", "var(--lumo-space-m) 0").set("font-size", "1.5em").set("font-weight", "bold");
+//
+//			Paragraph paragraph = new Paragraph(
+//					"System maintenance will begin at 3 PM. It is schedule to conclude at 5PM. We apologize for any inconvenience.");
+//
+			int resX2 = resX - 200;
+			int resY2 = resY - 200;
+
+			InputStream targetStream = FileUtils.openInputStream(f);
+			PdfViewer pdfViewer = new PdfViewer();
+			StreamResource resource = new StreamResource(f.getName(), () -> targetStream);
+			pdfViewer.setSrc(resource);
+			pdfViewer.setSizeFull();
+
+			Button closeButton = new Button("Chiudi");
+			closeButton.addClickListener(e -> dialog.close());
+
+			dialogLayout = new VerticalLayout(pdfViewer, closeButton);
+			dialogLayout.setPadding(false);
+			dialogLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+			dialogLayout.getStyle().set("width", resX2 + "px").set("max-width", "100%");
+			dialogLayout.getStyle().set("height", resY2 + "px").set("max-height", "100%");
+			dialogLayout.setAlignSelf(FlexComponent.Alignment.END, closeButton);
+			// dialogLayout.setSizeFull();
+
+		} catch (IOException e) {
+
+		}
+
+		return dialogLayout;
+	}
+
 	private void setRoseA(VerticalLayout layout) {
 
 		List<FcExpRosea> items = expRoseAController.findAll();
 
 		gridRosea.setItems(items);
 		gridRosea.setSelectionMode(Grid.SelectionMode.NONE);
-		gridRosea.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+		gridRosea.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS,
+				GridVariant.LUMO_ROW_STRIPES);
 		gridRosea.setAllRowsVisible(true);
 		gridRosea.getStyle().set("fontSize", "smaller");
 
@@ -239,7 +301,8 @@ public class DownloadView extends VerticalLayout
 
 		}
 
-		Anchor downloadAsExcel = new Anchor(new StreamResource("roseA.xlsx",Exporter.exportAsExcel(gridRosea)),"Download As Excel");
+		Anchor downloadAsExcel = new Anchor(new StreamResource("roseA.xlsx", Exporter.exportAsExcel(gridRosea)),
+				"Download As Excel");
 		// Anchor downloadAsCSV = new Anchor(new
 		// StreamResource("roseA.csv",Exporter.exportAsCSV(gridRosea)),"Download
 		// As CSV");
@@ -300,7 +363,8 @@ public class DownloadView extends VerticalLayout
 		gridFreePl.setItems(items);
 		gridFreePl.setSelectionMode(Grid.SelectionMode.NONE);
 		gridFreePl.setAllRowsVisible(true);
-		gridFreePl.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+		gridFreePl.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS,
+				GridVariant.LUMO_ROW_STRIPES);
 		gridFreePl.getStyle().set("fontSize", "smaller");
 
 		for (int i = 1; i < 11; i++) {
@@ -372,7 +436,8 @@ public class DownloadView extends VerticalLayout
 			// qxColumn.setAutoWidth(true);
 		}
 
-		Anchor downloadAsExcel = new Anchor(new StreamResource("freePlayers.xlsx",Exporter.exportAsExcel(gridFreePl)),"Download As Excel");
+		Anchor downloadAsExcel = new Anchor(new StreamResource("freePlayers.xlsx", Exporter.exportAsExcel(gridFreePl)),
+				"Download As Excel");
 		// Anchor downloadAsCSV = new Anchor(new
 		// StreamResource("freePlayers.csv",Exporter.exportAsCSV(gridFreePl)),"Download
 		// As CSV");
@@ -454,7 +519,7 @@ public class DownloadView extends VerticalLayout
 	}
 
 	private Image buildImage(String path, String nomeImg) {
-		StreamResource resource = new StreamResource(nomeImg,() -> {
+		StreamResource resource = new StreamResource(nomeImg, () -> {
 			Resource r = resourceLoader.getResource(path + nomeImg);
 			InputStream inputStream = null;
 			try {
@@ -465,7 +530,7 @@ public class DownloadView extends VerticalLayout
 			return inputStream;
 		});
 
-		Image img = new Image(resource,"");
+		Image img = new Image(resource, "");
 		return img;
 	}
 

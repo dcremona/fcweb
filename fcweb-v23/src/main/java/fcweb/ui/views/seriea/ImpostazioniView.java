@@ -18,8 +18,10 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.ClickEvent;
@@ -84,6 +86,12 @@ public class ImpostazioniView extends VerticalLayout
 	private List<FcAttore> squadre = null;
 	private List<FcSquadra> squadreSerieA = null;
 	private List<FcGiornataInfo> giornate = null;
+
+	@Autowired
+	private Environment env;
+
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@Autowired
 	private CalendarioTimController calendarioTimController;
@@ -817,8 +825,7 @@ public class ImpostazioniView extends VerticalLayout
 		Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 		p.setProperty("ACTIVE_MAIL", this.chkSendMail.getValue().toString());
 
-		MailClient client = new MailClient(p);
-		String from = (String) p.get("from");
+		MailClient client = new MailClient(javaMailSender);
 		String email_destinatario = "";
 		String ACTIVE_MAIL = (String) p.getProperty("ACTIVE_MAIL");
 		if ("true".equals(ACTIVE_MAIL)) {
@@ -842,7 +849,9 @@ public class ImpostazioniView extends VerticalLayout
 
 		LOG.info(formazioneHtml);
 
-		client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", null);
+		String from = (String) env.getProperty("spring.mail.username");
+		
+		client.sendMail(from,to, cc, bcc, subject, formazioneHtml, "text/html", "3", null);
 
 	}
 

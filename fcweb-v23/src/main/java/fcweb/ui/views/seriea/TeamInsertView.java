@@ -25,11 +25,13 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.vaadin.ronny.AbsoluteLayout;
 
 import com.flowingcode.vaadin.addons.simpletimer.SimpleTimer;
@@ -84,6 +86,12 @@ public class TeamInsertView extends VerticalLayout
 	private static final long serialVersionUID = 1L;
 
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private Environment env;
+
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -1895,8 +1903,8 @@ public class TeamInsertView extends VerticalLayout
 
 		Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 
-		MailClient client = new MailClient(p);
-		String from = (String) p.get("from");
+		MailClient client = new MailClient(javaMailSender);
+
 		String email_destinatario = "";
 		String ACTIVE_MAIL = (String) p.getProperty("ACTIVE_MAIL");
 		if ("true".equals(ACTIVE_MAIL)) {
@@ -1918,7 +1926,9 @@ public class TeamInsertView extends VerticalLayout
 		String[] cc = null;
 		String[] bcc = null;
 
-		client.sendMail2(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
+		String from = (String) env.getProperty("spring.mail.username");
+		
+		client.sendMail2(from,to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
 
 	}
 

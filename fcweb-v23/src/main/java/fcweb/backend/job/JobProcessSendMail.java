@@ -22,9 +22,11 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,6 +59,12 @@ import fcweb.utils.JasperReporUtils;
 public class JobProcessSendMail{
 
 	private static final Logger LOG = LoggerFactory.getLogger(JobProcessSendMail.class);
+
+	@Autowired
+	private Environment env;
+
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@Autowired
 	private GiornataInfoController giornataInfoController;
@@ -148,8 +156,7 @@ public class JobProcessSendMail{
 			//JasperRunManager.runReportToPdfStream(inputStream2, outputStream2, parameters, conn);
 			JasperReporUtils.runReportToPdfStream(inputStream2, outputStream2, parameters, conn);
 
-			MailClient client = new MailClient(p);
-			String from = (String) p.get("from");
+			MailClient client = new MailClient(javaMailSender);
 
 			String email_destinatario = "";
 			String ACTIVE_MAIL = (String) p.getProperty("ACTIVE_MAIL");
@@ -175,7 +182,9 @@ public class JobProcessSendMail{
 			String subject = "Risultati " + (String) p.getProperty("INFO_RESULT") + " " + giornataInfo.getDescGiornataFc();
 			String message = getBody();
 
-			client.sendMail(from, to, cc, bcc, subject, message, "text/html", "3", att);
+			String from = (String) env.getProperty("spring.mail.username");
+			
+			client.sendMail(from,to, cc, bcc, subject, message, "text/html", "3", att);
 
 		} catch (Exception e) {
 			e.printStackTrace();

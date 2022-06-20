@@ -33,7 +33,7 @@ import fcweb.utils.Costants;;
 @Route(value = "albo", layout = MainAppLayout.class)
 @PageTitle("Albo")
 @PreserveOnRefresh
-public class AlboView extends VerticalLayout{
+public class AlboView extends VerticalLayout {
 
 	private static final long serialVersionUID = 1L;
 
@@ -47,7 +47,7 @@ public class AlboView extends VerticalLayout{
 
 	@Autowired
 	private AccessoController accessoController;
-	
+
 	public AlboView() {
 		LOG.info("AlboView()");
 	}
@@ -59,7 +59,7 @@ public class AlboView extends VerticalLayout{
 			return;
 		}
 		accessoController.insertAccesso(this.getClass().getName());
-		
+
 		initLayout();
 	}
 
@@ -71,8 +71,7 @@ public class AlboView extends VerticalLayout{
 		this.add(getGrid(items));
 
 		List<FcExpStat> modelCrosstab = getModelCrosstab(items);
-		modelCrosstab.sort((p1,
-				p2) -> p2.getScudetto().compareToIgnoreCase(p1.getScudetto()));
+		modelCrosstab.sort((p1, p2) -> p2.getScudetto().compareToIgnoreCase(p1.getScudetto()));
 		this.add(getGrid2(modelCrosstab));
 
 	}
@@ -83,7 +82,8 @@ public class AlboView extends VerticalLayout{
 		grid.setItems(items);
 		// grid.setSizeFull();
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS,
+				GridVariant.LUMO_ROW_STRIPES);
 		grid.setAllRowsVisible(true);
 
 		// Column<FcExpStat> annoColumn = grid.addColumn(s -> s.getAnno());
@@ -322,7 +322,8 @@ public class AlboView extends VerticalLayout{
 
 			cellLayout.getStyle().set("color", Costants.LIGHT_GRAY);
 			FcAttore att = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
-			if (att.getDescAttore().equals(s.getScudetto()) && att.getDescAttore().equals(s.getWinClasPt()) && att.getDescAttore().equals(s.getWinClasReg())) {
+			if (att.getDescAttore().equals(s.getScudetto()) && att.getDescAttore().equals(s.getWinClasPt())
+					&& att.getDescAttore().equals(s.getWinClasReg())) {
 				cellLayout.getStyle().set("color", Costants.GRAY);
 			}
 
@@ -340,7 +341,8 @@ public class AlboView extends VerticalLayout{
 		Grid<FcExpStat> grid = new Grid<>();
 		grid.setItems(items);
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS,
+				GridVariant.LUMO_ROW_STRIPES);
 		grid.setAllRowsVisible(true);
 		// grid.setSizeFull();
 
@@ -456,16 +458,17 @@ public class AlboView extends VerticalLayout{
 
 			FcExpStat b = new FcExpStat();
 			b.setAnno(squadra);
-			b.setScudetto("" + count_scudetto);
-			b.setP2("" + count_p2);
-			b.setP3("" + count_p3);
-			b.setP4("" + count_p4);
-			b.setP5("" + count_p5);
-			b.setP6("" + count_p6);
-			b.setP7("" + count_p7);
-			b.setP8("" + count_p8);
-			b.setWinClasPt("" + count_win_clas_pt);
-			b.setWinClasReg("" + count_win_clas_reg);
+			b.setScudetto(count_scudetto < 10 ? "0" + count_scudetto : "" + count_scudetto);
+			b.setP2(count_p2 < 10 ? "0" + count_p2 : "" + count_p2);
+			b.setP3(count_p3 < 10 ? "0" + count_p3 : "" + count_p3);
+			b.setP4(count_p4 < 10 ? "0" + count_p4 : "" + count_p4);
+			b.setP5(count_p5 < 10 ? "0" + count_p5 : "" + count_p5);
+			b.setP6(count_p6 < 10 ? "0" + count_p6 : "" + count_p6);
+			b.setP7(count_p7 < 10 ? "0" + count_p7 : "" + count_p7);
+			b.setP8(count_p8 < 10 ? "0" + count_p8 : "" + count_p8);
+
+			b.setWinClasPt(count_win_clas_pt < 10 ? "0" + count_win_clas_pt : "" + count_win_clas_pt);
+			b.setWinClasReg(count_win_clas_reg < 10 ? "0" + count_win_clas_reg : "" + count_win_clas_reg);
 
 			beans.add(b);
 			// }

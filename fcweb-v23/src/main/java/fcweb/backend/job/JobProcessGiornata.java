@@ -25,10 +25,12 @@ import org.hibernate.engine.jdbc.BlobProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,6 +70,12 @@ import fcweb.utils.Costants;
 public class JobProcessGiornata{
 
 	private static final Logger LOG = LoggerFactory.getLogger(JobProcessGiornata.class);
+
+	@Autowired
+	private Environment env;
+
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@Autowired
 	private CampionatoRepository campionatoRepository;
@@ -934,8 +942,7 @@ public class JobProcessGiornata{
 				}
 			}
 
-			MailClient client = new MailClient(p);
-			String from = (String) p.get("from");
+			MailClient client = new MailClient(javaMailSender);
 			String email_destinatario = (String) p.getProperty("to");
 			String[] to = null;
 			if (email_destinatario != null && !email_destinatario.equals("")) {
@@ -966,8 +973,8 @@ public class JobProcessGiornata{
 			formazioneHtml += "</body>\n";
 			formazioneHtml += "<html>";
 
-			// client.sendMail(from, to, cc, bcc, subject, message, "", "3",
-			// att);
+			String from = (String) env.getProperty("spring.mail.username");
+			
 			client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", att);
 
 			LOG.info("END aggiornamentoPFGiornata");

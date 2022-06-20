@@ -26,10 +26,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -60,6 +62,12 @@ import fcweb.utils.Costants;
 public class EmJobProcessGiornata{
 
 	private final static Log LOG = LogFactory.getLog(EmJobProcessGiornata.class);
+
+	@Autowired
+	private Environment env;
+
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@Autowired
 	private GiornataDettRepository giornataDettRepository;
@@ -555,8 +563,8 @@ public class EmJobProcessGiornata{
 				}
 			}
 
-			MailClient client = new MailClient(p);
-			String from = (String) p.get("from");
+			MailClient client = new MailClient(javaMailSender);
+			//String from = (String) p.get("from");
 			String email_destinatario = (String) p.getProperty("to");
 			String[] to = null;
 			if (email_destinatario != null && !email_destinatario.equals("")) {
@@ -587,8 +595,8 @@ public class EmJobProcessGiornata{
 			formazioneHtml += "</body>\n";
 			formazioneHtml += "<html>";
 
-			// client.sendMail(from, to, cc, bcc, subject, message, "", "3",
-			// att);
+			String from = (String) env.getProperty("spring.mail.username");
+			
 			client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", att);
 
 			LOG.info("END emaggiornamentoPFGiornata");

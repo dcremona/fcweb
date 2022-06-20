@@ -24,6 +24,7 @@ import org.springframework.core.io.ResourceLoader;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -52,7 +53,7 @@ import fcweb.utils.CustomMessageDialog;
 @Route(value = "fcWeb")
 @RouteAlias(value = "")
 @PageTitle("")
-public class LoginView extends VerticalLayout{
+public class LoginView extends VerticalLayout {
 
 	private static final long serialVersionUID = 1L;
 
@@ -132,15 +133,32 @@ public class LoginView extends VerticalLayout{
 //			LOG.info("winWidth " + winWidth);
 //			LOG.info("winHeight " + winHeight);
 //		});
-		
+
 		String imgLogo = (String) env.getProperty("img.logo");
 
 		Image img = buildImage("classpath:images/", imgLogo);
 		this.add(img);
 		this.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, img);
 
-		LoginForm component = new LoginForm();
-		component.addLoginListener(e -> {
+		LoginI18n i18n = LoginI18n.createDefault();
+
+		LoginI18n.Form i18nForm = i18n.getForm();
+		i18nForm.setTitle("Fc App");
+		i18nForm.setUsername("Email");
+		i18nForm.setPassword("Password");
+		i18nForm.setSubmit("Login");
+		i18nForm.setForgotPassword("Password dimenticata?");
+		i18n.setForm(i18nForm);
+
+		LoginI18n.ErrorMessage i18nErrorMessage = i18n.getErrorMessage();
+		i18nErrorMessage.setTitle("Email o password non valide");
+		i18nErrorMessage.setMessage("Verifica di aver inserito l'email e la password corrette e riprova.");
+		i18n.setErrorMessage(i18nErrorMessage);
+
+		LoginForm loginForm = new LoginForm();
+		loginForm.setI18n(i18n);
+
+		loginForm.addLoginListener(e -> {
 
 			boolean isAuthenticated = checkUser(e.getUsername(), e.getPassword());
 			if (isAuthenticated) {
@@ -151,15 +169,15 @@ public class LoginView extends VerticalLayout{
 				}
 				accessoController.insertAccesso(this.getClass().getName());
 			} else {
-				component.setError(true);
+				loginForm.setError(true);
 			}
 		});
-		component.setForgotPasswordButtonVisible(false);
+		loginForm.setForgotPasswordButtonVisible(false);
 
 		this.getStyle().set("border", Costants.BORDER_COLOR);
 
-		this.add(component);
-		this.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, component);
+		this.add(loginForm);
+		this.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, loginForm);
 		this.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
 	}
@@ -170,7 +188,7 @@ public class LoginView extends VerticalLayout{
 		LOG.debug("pwd: " + pwd);
 
 		if (StringUtils.isEmpty(username)) {
-			CustomMessageDialog.showMessageError("Utente non valido");
+			CustomMessageDialog.showMessageError("Email non valida");
 			return false;
 		}
 
@@ -178,7 +196,7 @@ public class LoginView extends VerticalLayout{
 		if (StringUtils.isEmpty(pwd)) {
 			attore = attoreController.findByUsername(username);
 			if (attore == null) {
-				CustomMessageDialog.showMessageError("Utente non valido");
+				CustomMessageDialog.showMessageError("Email non valida");
 				return false;
 			}
 
@@ -190,7 +208,7 @@ public class LoginView extends VerticalLayout{
 		} else {
 			attore = attoreController.findByUsernameAndPassword(username, pwd);
 			if (attore == null) {
-				CustomMessageDialog.showMessageError("Utente o Password non valide");
+				CustomMessageDialog.showMessageError("Email o Password non valide");
 				return false;
 			}
 		}
@@ -206,9 +224,9 @@ public class LoginView extends VerticalLayout{
 			properties.setProperty(prop.getKey(), prop.getValue());
 		}
 
-		String springMailPassword = (String) env.getProperty("spring.mail.password");
-		properties.setProperty("mail.password", springMailPassword);
-		
+//		String springMailPassword = (String) env.getProperty("spring.mail.password");
+//		properties.setProperty("mail.password", springMailPassword);
+
 		FcCampionato campionato = campionatoController.findByActive(true);
 		if (campionato == null) {
 			CustomMessageDialog.showMessageError("Contattare amministratore! (campionato=null)");
@@ -269,7 +287,8 @@ public class LoginView extends VerticalLayout{
 
 				LOG.info("now.getDayOfWeek() : " + now.getDayOfWeek());
 				LOG.info("dataGiornata.getDayOfWeek() : " + dataGiornata.getDayOfWeek());
-				if (now.isAfter(dataAnticipo) && now.isBefore(dataGiornata) && now.getDayOfWeek() == dataGiornata.getDayOfWeek()) {
+				if (now.isAfter(dataAnticipo) && now.isBefore(dataGiornata)
+						&& now.getDayOfWeek() == dataGiornata.getDayOfWeek()) {
 					currentDate = dataGiornata;
 				}
 			}
@@ -291,8 +310,7 @@ public class LoginView extends VerticalLayout{
 		return currentDataGiornata;
 	}
 
-	private Date getCalendarCountDown(String currentDataGiornata,
-			String FUSO_ORARIO) {
+	private Date getCalendarCountDown(String currentDataGiornata, String FUSO_ORARIO) {
 
 		Calendar c = Calendar.getInstance();
 		int dd = 0;
@@ -315,8 +333,7 @@ public class LoginView extends VerticalLayout{
 		return c.getTime();
 	}
 
-	private long getMillisDiff(String nextDate, String fusoOrario)
-			throws Exception {
+	private long getMillisDiff(String nextDate, String fusoOrario) throws Exception {
 
 		Calendar c = Calendar.getInstance();
 		DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -353,7 +370,7 @@ public class LoginView extends VerticalLayout{
 	}
 
 	private Image buildImage(String path, String nomeImg) {
-		StreamResource resource = new StreamResource(nomeImg,() -> {
+		StreamResource resource = new StreamResource(nomeImg, () -> {
 			Resource r = resourceLoader.getResource(path + nomeImg);
 			InputStream inputStream = null;
 			try {
@@ -364,7 +381,7 @@ public class LoginView extends VerticalLayout{
 			return inputStream;
 		});
 
-		Image img = new Image(resource,"");
+		Image img = new Image(resource, "");
 		return img;
 	}
 
