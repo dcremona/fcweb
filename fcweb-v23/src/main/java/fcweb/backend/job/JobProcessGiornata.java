@@ -390,6 +390,9 @@ public class JobProcessGiornata{
 		double newQuotazione = Double.parseDouble(bgQ.toString()) - appo;
 		// LOG.debug(" newQuotazione " + newQuotazione);
 		new_quot = Math.round(newQuotazione);
+		if (new_quot < 1) {
+			new_quot = 1;
+		}
 		LOG.debug(" new_quot " + new_quot);
 
 		return (int) new_quot;
