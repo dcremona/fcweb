@@ -65,19 +65,17 @@ public class EmRegolamentoView extends VerticalLayout
 
 	@PostConstruct
 	void init() {
-		LOG.debug("init");
+		// LOG.debug("init");
 		if (!Utils.isValidVaadinSession()) {
 			return;
 		}
 		accessoController.insertAccesso(this.getClass().getName());
-
 		initData();
 		initLayout();
 	}
 
 	private void initData() {
 		List<FcRegolamento> l = regolamentoController.findAll();
-
 		try {
 
 			BufferedReader br = null;
@@ -97,7 +95,7 @@ public class EmRegolamentoView extends VerticalLayout
 				}
 
 			} else {
-				Resource resource = resourceLoader.getResource("classpath:html/fceuro2021_regolamento.html");
+				Resource resource = resourceLoader.getResource("classpath:html/fcqatar2022_regolamento.html");
 				InputStreamReader isr = new InputStreamReader(resource.getInputStream());
 				br = new BufferedReader(isr);
 
@@ -109,9 +107,7 @@ public class EmRegolamentoView extends VerticalLayout
 					}
 				}
 			}
-
 			LOG.debug(html);
-
 			// if (l != null && l.size() > 0) {
 			// LOG.debug(html);
 			// String encodedString = html;
@@ -146,15 +142,29 @@ public class EmRegolamentoView extends VerticalLayout
 		decoupledEditor.setReadOnly(!attore.isAdmin());
 
 		this.add(decoupledEditor);
+
+		VerticalLayout previewHtml = new VerticalLayout();
+		try {
+
+			previewHtml.getElement().setProperty("innerHTML", html);
+
+			this.add(previewHtml);
+
+		} catch (Exception ex2) {
+			LOG.error("ex2 " + ex2.getMessage());
+		}
+
 	}
 
 	@Override
 	public void onComponentEvent(ClickEvent<Button> event) {
 		try {
 			if (event.getSource() == salvaDb) {
+				LOG.info("SALVA");
+
 				String valueHtml = decoupledEditor.getValue();
+				LOG.info(valueHtml);
 				// valueHtml = StringUtils.encodeHtml(valueHtml);
-				// LOG.debug(valueHtml);
 				// Encoder encoder = Base64.getEncoder();
 				// String encodedString =
 				// encoder.encodeToString(valueHtml.getBytes());

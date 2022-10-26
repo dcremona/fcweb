@@ -25,6 +25,16 @@ public class SquadraController{
 		return l;
 	}
 
+	public FcSquadra findByNomeSquadra(String nomeSquadra) {
+		FcSquadra fcSquadra = squadraRepository.findByNomeSquadra(nomeSquadra);
+		return fcSquadra;
+	}
+
+	public FcSquadra findByIdSquadra(int idSquadra) {
+		FcSquadra fcSquadra = squadraRepository.findByIdSquadra(idSquadra);
+		return fcSquadra;
+	}
+
 	private Sort sortByIdSquadra() {
 		return Sort.by(Sort.Direction.ASC, "idSquadra");
 	}

@@ -1,9 +1,5 @@
 package fcweb.ui.views.admin;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
-
 import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
@@ -86,17 +82,26 @@ public class FcGiornataInfoView extends VerticalLayout{
 
 		crud.getGrid().removeAllColumns();
 		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : "" + g.getCodiceGiornata()));
-		Column<FcGiornataInfo> dataAnticipoColumn = crud.getGrid().addColumn(new LocalDateTimeRenderer<>(FcGiornataInfo::getDataAnticipo,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)));
+		Column<FcGiornataInfo> dataAnticipoColumn = crud.getGrid().addColumn(
+				//new LocalDateTimeRenderer<>(FcGiornataInfo::getDataAnticipo,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
+				new LocalDateTimeRenderer<>(FcGiornataInfo::getDataAnticipo)
+		);
 		dataAnticipoColumn.setSortable(false);
 		dataAnticipoColumn.setAutoWidth(true);
 		// dataAnticipoColumn.setFlexGrow(2);
 
-		Column<FcGiornataInfo> dataGiornataColumn = crud.getGrid().addColumn(new LocalDateTimeRenderer<>(FcGiornataInfo::getDataGiornata,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)));
+		Column<FcGiornataInfo> dataGiornataColumn = crud.getGrid().addColumn(
+				//new LocalDateTimeRenderer<>(FcGiornataInfo::getDataGiornata,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
+				new LocalDateTimeRenderer<>(FcGiornataInfo::getDataGiornata)
+		);
 		dataGiornataColumn.setSortable(false);
 		dataGiornataColumn.setAutoWidth(true);
 		// dataGiornataColumn.setFlexGrow(2);
 
-		Column<FcGiornataInfo> dataPosticipoColumn = crud.getGrid().addColumn(new LocalDateTimeRenderer<>(FcGiornataInfo::getDataPosticipo,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)));
+		Column<FcGiornataInfo> dataPosticipoColumn = crud.getGrid().addColumn(
+				//new LocalDateTimeRenderer<>(FcGiornataInfo::getDataPosticipo,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
+				new LocalDateTimeRenderer<>(FcGiornataInfo::getDataPosticipo)
+		);
 		dataPosticipoColumn.setSortable(false);
 		dataPosticipoColumn.setAutoWidth(true);
 		// dataGiornataColumn.setFlexGrow(2);

@@ -3,6 +3,7 @@ package fcweb.ui.views.em;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -316,9 +317,17 @@ public class EmStatisticheView extends VerticalLayout
 		comboNazione.setPlaceholder("Nazione");
 		comboNazione.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
-			Image imgSq = buildImage("classpath:/img/nazioni/", item.getNomeSquadra() + ".png");
-			Label lblSquadra = new Label(item.getNomeSquadra());
-			container.add(imgSq);
+//			Image imgSq = buildImage("classpath:/img/nazioni/", item.getNomeSquadra() + ".png");
+//			container.add(imgSq);
+			if (item.getImg() != null) {
+				try {
+					Image img = Utils.getImage(item.getNomeSquadra(), item.getImg().getBinaryStream());
+					container.add(img);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			Label lblSquadra = new Label(item.getNomeSquadra());			
 			container.add(lblSquadra);
 			return container;
 		}));
@@ -407,37 +416,38 @@ public class EmStatisticheView extends VerticalLayout
 		giocatoreColumn.setAutoWidth(true);
 
 		Column<FcStatistiche> nomeSquadraColumn = grid.addColumn(new ComponentRenderer<>(s -> {
-
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			// cellLayout.setSizeFull();
-
 			if (s != null && s.getNomeSquadra() != null) {
-
-				StreamResource resource = new StreamResource(s.getNomeSquadra(),() -> {
-					Resource r = resourceLoader.getResource("classpath:" + "/img/nazioni/" + s.getNomeSquadra() + ".png");
-					InputStream inputStream = null;
+//				StreamResource resource = new StreamResource(s.getNomeSquadra(),() -> {
+//					Resource r = resourceLoader.getResource("classpath:" + "/img/nazioni/" + s.getNomeSquadra() + ".png");
+//					InputStream inputStream = null;
+//					try {
+//						inputStream = r.getInputStream();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//					return inputStream;
+//				});
+//				Image img = new Image(resource,"");
+//				img.setSrc(resource);
+//				cellLayout.add(img);
+				FcSquadra sq = squadraController.findByNomeSquadra(s.getNomeSquadra());
+				if (sq != null && sq.getImg() != null) {
 					try {
-						inputStream = r.getInputStream();
-					} catch (IOException e) {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-					return inputStream;
-				});
-
-				Image img = new Image(resource,"");
-				img.setSrc(resource);
-
+				}
 				Label lblSquadra = new Label(s.getNomeSquadra());
-				// lblSquadra.getStyle().set("font-size", "11px");
-
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
-
 			return cellLayout;
 
 		}));

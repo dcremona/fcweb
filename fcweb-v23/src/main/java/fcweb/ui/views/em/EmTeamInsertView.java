@@ -7,12 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -65,12 +62,14 @@ import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornataDett;
 import fcweb.backend.data.entity.FcGiornataInfo;
+import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
 import fcweb.backend.service.AccessoController;
 import fcweb.backend.service.AttoreController;
 import fcweb.backend.service.CalendarioTimController;
 import fcweb.backend.service.FormazioneController;
 import fcweb.backend.service.GiornataDettController;
+import fcweb.backend.service.SquadraController;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
@@ -197,6 +196,9 @@ public class EmTeamInsertView extends VerticalLayout
 
 	@Autowired
 	private AccessoController accessoController;
+
+	@Autowired
+	private SquadraController squadraController;
 
 	@PostConstruct
 	void init() throws Exception {
@@ -709,8 +711,15 @@ public class EmTeamInsertView extends VerticalLayout
 				cellLayout.add(imgR);
 
 				if (p.getFcSquadra() != null) {
-					Image img = buildImage("classpath:/img/nazioni/", p.getFcSquadra().getNomeSquadra() + ".png");
-					cellLayout.add(img);
+					FcSquadra sq = p.getFcSquadra();
+					if (sq.getImg() != null) {
+						try {
+							Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+							cellLayout.add(img);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
 
 					Label lblInfoNomeSquadra = new Label(p.getFcSquadra().getNomeSquadra());
 					lblInfoNomeSquadra.getStyle().set("font-size", "11px");
@@ -1904,9 +1913,19 @@ public class EmTeamInsertView extends VerticalLayout
 				color = "BGCOLOR=\"#FFFF84\"";
 			}
 
-			Resource resourceNomeSq = resourceLoader.getResource("classpath:img/nazioni/" + bean.getFcSquadra().getNomeSquadra() + ".png");
-			String cidNomeSq = ContentIdGenerator.getContentId();
-			listImg.put(cidNomeSq, resourceNomeSq.getInputStream());
+//			Resource resourceNomeSq = resourceLoader.getResource("classpath:img/nazioni/" + bean.getFcSquadra().getNomeSquadra() + ".png");
+//			String cidNomeSq = ContentIdGenerator.getContentId();
+//			listImg.put(cidNomeSq, resourceNomeSq.getInputStream());
+			
+			String cidNomeSq = ContentIdGenerator.getContentId();			
+			FcSquadra sq = bean.getFcSquadra();
+			if (sq.getImg() != null) {
+				try {
+					listImg.put(cidNomeSq, sq.getImg().getBinaryStream());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 
 			formazioneHtml += "<tr " + color + ">";
 
@@ -2002,10 +2021,19 @@ public class EmTeamInsertView extends VerticalLayout
 			// cellLayout.setSizeFull();
 
 			if (s != null && s.getSquadraCasa() != null) {
-				Image img = buildImage("classpath:/img/nazioni/", s.getSquadraCasa() + ".png");
-				Label lblSquadra = new Label(s.getSquadraCasa().substring(0, 3));
 				// lblSquadra.getStyle().set("font-size", "11px");
-				cellLayout.add(img);
+//				Image img = buildImage("classpath:/img/nazioni/", s.getSquadraCasa() + ".png");
+//				cellLayout.add(img);
+				FcSquadra sq = squadraController.findByIdSquadra(s.getIdSquadraCasa());
+				if (sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+				Label lblSquadra = new Label(s.getSquadraCasa().substring(0, 3));
 				cellLayout.add(lblSquadra);
 			}
 
@@ -2026,10 +2054,19 @@ public class EmTeamInsertView extends VerticalLayout
 			// cellLayout.setSizeFull();
 
 			if (s != null && s.getSquadraCasa() != null) {
-				Image img = buildImage("classpath:/img/nazioni/", s.getSquadraFuori() + ".png");
 				Label lblSquadra = new Label(s.getSquadraFuori().substring(0, 3));
 				// lblSquadra.getStyle().set("font-size", "11px");
-				cellLayout.add(img);
+//				Image img = buildImage("classpath:/img/nazioni/", s.getSquadraFuori() + ".png");
+//				cellLayout.add(img);
+				FcSquadra sq = squadraController.findByIdSquadra(s.getIdSquadraFuori());
+				if (sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
 				cellLayout.add(lblSquadra);
 			}
 
@@ -2040,7 +2077,10 @@ public class EmTeamInsertView extends VerticalLayout
 		// nomeSquadraFuoriColumn.setHeader("Fuori");
 		nomeSquadraFuoriColumn.setAutoWidth(true);
 
-		Column<FcCalendarioTim> dataColumn = grid.addColumn(new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)));
+		Column<FcCalendarioTim> dataColumn = grid.addColumn(
+				//new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
+				new LocalDateTimeRenderer<>(FcCalendarioTim::getData)
+		);
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
 		dataColumn.setFlexGrow(2);

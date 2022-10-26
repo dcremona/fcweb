@@ -1094,6 +1094,8 @@ public class MainAppLayout extends AppLayout {
                         new MenuItemInfo("Pagelle", "la la-poll", FcPagelleView.class), //
                         new MenuItemInfo("Accesso", "la la-universal-access", FcAccessoView.class), //
                         new MenuItemInfo("Campionato", "la la-brush", FcCampionatoView.class), //
+                        new MenuItemInfo("Squadre EM", "la la-users-cog", FcSquadraView.class), //
+                        new MenuItemInfo("Calendario EM", "la la-calendar-alt", FcCalendarioTimView.class), //
             	};
 
     		} else {

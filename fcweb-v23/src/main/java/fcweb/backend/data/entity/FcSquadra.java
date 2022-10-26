@@ -25,7 +25,9 @@ public class FcSquadra implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 	private int idSquadra;
 	private String nomeSquadra;
+	private String nomeImg;
 	private Blob img;
+	private Blob img40;
 	private Set<FcGiocatore> fcGiocatores = new HashSet<FcGiocatore>(0);
 
 	public FcSquadra() {
@@ -71,6 +73,16 @@ public class FcSquadra implements java.io.Serializable{
 	public void setFcGiocatores(Set<FcGiocatore> fcGiocatores) {
 		this.fcGiocatores = fcGiocatores;
 	}
+	
+	@Column(name = "nome_img")
+	public String getNomeImg() {
+		return this.nomeImg;
+	}
+
+	public void setNomeImg(String nomeImg) {
+		this.nomeImg = nomeImg;
+	}
+	
 	@Column(name = "img")
 	public Blob getImg() {
 		return this.img;
@@ -78,6 +90,15 @@ public class FcSquadra implements java.io.Serializable{
 
 	public void setImg(Blob img) {
 		this.img = img;
+	}
+
+	@Column(name = "img40")
+	public Blob getImg40() {
+		return this.img40;
+	}
+
+	public void setImg40(Blob img40) {
+		this.img40 = img40;
 	}
 
 }

@@ -96,40 +96,61 @@ public class FcSquadraView extends VerticalLayout
 		crud.setCrudFormFactory(formFactory);
 		formFactory.setUseBeanValidation(false);
 
-		crud.getCrudFormFactory().setVisibleProperties(CrudOperation.READ, "idSquadra", "nomeSquadra");
-		crud.getCrudFormFactory().setVisibleProperties(CrudOperation.ADD, "idSquadra", "nomeSquadra");
-		crud.getCrudFormFactory().setVisibleProperties(CrudOperation.UPDATE, "idSquadra", "nomeSquadra");
+		crud.getCrudFormFactory().setVisibleProperties(CrudOperation.READ, "idSquadra", "nomeSquadra", "nomeImg");
+		crud.getCrudFormFactory().setVisibleProperties(CrudOperation.ADD, "idSquadra", "nomeSquadra", "nomeImg");
+		crud.getCrudFormFactory().setVisibleProperties(CrudOperation.UPDATE, "idSquadra", "nomeSquadra", "nomeImg");
 		crud.getCrudFormFactory().setVisibleProperties(CrudOperation.DELETE, "idSquadra");
 
-		// crud.getGrid().setColumns("idSquadra", "nomeSquadra");
 		crud.getGrid().removeAllColumns();
+		crud.getGrid().addColumn(new TextRenderer<>(s -> s == null ? "" : "" + s.getIdSquadra())).setHeader("Id");
+		crud.getGrid().addColumn(new ComponentRenderer<>(f -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			//cellLayout.setAlignItems(Alignment.STRETCH);
+			// cellLayout.setSizeFull();
 
-		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : "" + g.getIdSquadra())).setHeader("Id");
+			if (f != null) {
+				try {
+					if (f.getImg() != null && f.getImg().getBinaryStream() != null) {
+						Image img = Utils.getImage(f.getNomeSquadra(), f.getImg().getBinaryStream());
+						cellLayout.add(img);
+					}
+					Label lblSquadra = new Label(f.getNomeSquadra());
+					cellLayout.add(lblSquadra);
+
+//					if (f.getImg40() != null && f.getImg40().getBinaryStream() != null) {
+//						Image img2 = Utils.getImage(f.getNomeSquadra(), f.getImg40().getBinaryStream());
+//						cellLayout.add(img2);
+//					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return cellLayout;
+		}));
+		crud.getGrid().addColumn(new TextRenderer<>(s -> s == null ? "" : "" + s.getNomeImg())).setHeader("Nome Img");
 
 		crud.getGrid().addColumn(new ComponentRenderer<>(f -> {
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(false);
-			cellLayout.setAlignItems(Alignment.STRETCH);
+			//cellLayout.setAlignItems(Alignment.STRETCH);
 			// cellLayout.setSizeFull();
-
 			if (f != null) {
-				if (f.getImg() != null) {
-					try {
-						Image img = Utils.getImage(f.getNomeSquadra(), f.getImg().getBinaryStream());
-						cellLayout.add(img);
-					} catch (SQLException e) {
-						e.printStackTrace();
+				try {
+					if (f.getImg40() != null && f.getImg40().getBinaryStream() != null) {
+						Image img2 = Utils.getImage(f.getNomeSquadra(), f.getImg40().getBinaryStream());
+						cellLayout.add(img2);
 					}
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
-
-				Label lblSquadra = new Label(f.getNomeSquadra());
-				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
 		}));
-
 		crud.getGrid().setColumnReorderingAllowed(true);
 
 		crud.setRowCountCaption("%d squadra(s) found");
@@ -147,30 +168,42 @@ public class FcSquadraView extends VerticalLayout
 
 	@Override
 	public void onComponentEvent(ClickEvent<Button> event) {
-
 		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
-
 		try {
 			if (event.getSource() == initDb) {
 				List<FcSquadra> squadreSerieA = squadraController.findAll();
 				for (FcSquadra s : squadreSerieA) {
 					Resource r = null;
+					Resource r2 = null;
 					if ("1".equals(campionato.getType())) {
-						r = resourceLoader.getResource("classpath:/img/squadre/" + s.getNomeSquadra() + ".png");
-					} else {
-						r = resourceLoader.getResource("classpath:/img/nazioni/" + s.getNomeSquadra() + ".png");
-					}
+						r = resourceLoader.getResource("classpath:/img/squadre/" + s.getNomeImg());
+						if (r != null) {
+							InputStream inputStream = r.getInputStream();
+							byte[] targetArray = IOUtils.toByteArray(inputStream);
+							s.setImg(BlobProxy.generateProxy(targetArray));
+						}
 
-					InputStream inputStream = null;
-					inputStream = r.getInputStream();
-					byte[] targetArray = IOUtils.toByteArray(inputStream);
-					s.setImg(BlobProxy.generateProxy(targetArray));
+					} else {
+						r = resourceLoader.getResource("classpath:/img/nazioni/w20/" + s.getNomeImg());
+						if (r != null) {
+							InputStream inputStream = r.getInputStream();
+							byte[] targetArray = IOUtils.toByteArray(inputStream);
+							s.setImg(BlobProxy.generateProxy(targetArray));
+						}
+
+						r2 = resourceLoader.getResource("classpath:/img/nazioni/w40/" + s.getNomeImg());
+						if (r2 != null) {
+							InputStream inputStream2 = r2.getInputStream();
+							byte[] targetArray2 = IOUtils.toByteArray(inputStream2);
+							s.setImg40(BlobProxy.generateProxy(targetArray2));
+						}
+					}
 					squadraController.updateSquadra(s);
 				}
 				CustomMessageDialog.showMessageInfo(CustomMessageDialog.MSG_OK);
 			}
 		} catch (Exception e) {
-			CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC,e.getMessage());
+			CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, e.getMessage());
 		}
 	}
 }

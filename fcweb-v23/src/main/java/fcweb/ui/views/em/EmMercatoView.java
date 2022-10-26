@@ -3,6 +3,7 @@ package fcweb.ui.views.em;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
@@ -358,9 +359,17 @@ public class EmMercatoView extends VerticalLayout
 		comboNazione.setPlaceholder("Nazione");
 		comboNazione.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
-			Image imgSq = buildImage("classpath:/img/nazioni/", item.getNomeSquadra() + ".png");
-			Label lblSquadra = new Label(item.getNomeSquadra());
-			container.add(imgSq);
+//			Image imgSq = buildImage("classpath:/img/nazioni/", item.getNomeSquadra() + ".png");
+//			container.add(imgSq);
+			if (item.getImg() != null) {
+				try {
+					Image img = Utils.getImage(item.getNomeSquadra(), item.getImg().getBinaryStream());
+					container.add(img);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			Label lblSquadra = new Label(item.getNomeSquadra());			
 			container.add(lblSquadra);
 			return container;
 		}));
@@ -2561,9 +2570,17 @@ public class EmMercatoView extends VerticalLayout
 				cellLayout.add(imgR);
 
 				if (p.getFcSquadra() != null) {
-					Image img = buildImage("classpath:/img/nazioni/", p.getFcSquadra().getNomeSquadra() + ".png");
-					cellLayout.add(img);
-
+//					Image img = buildImage("classpath:/img/nazioni/", p.getFcSquadra().getNomeSquadra() + ".png");
+//					cellLayout.add(img);
+					FcSquadra sq = p.getFcSquadra();
+					if (sq.getImg40() != null) {
+						try {
+							Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg40().getBinaryStream());
+							cellLayout.add(img);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
 					Label lblInfoNomeSquadra = new Label(p.getFcSquadra().getNomeSquadra());
 					lblInfoNomeSquadra.getStyle().set("font-size", "11px");
 					lblInfoNomeSquadra.setTitle(title);
@@ -2860,9 +2877,18 @@ public class EmMercatoView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (f != null && f.getFcSquadra() != null) {
-				Image img = buildImage("classpath:/img/nazioni/", f.getFcSquadra().getNomeSquadra() + ".png");
-				Label lblSquadra = new Label(f.getFcSquadra().getNomeSquadra());
-				cellLayout.add(img);
+//				Image img = buildImage("classpath:/img/nazioni/", f.getFcSquadra().getNomeSquadra() + ".png");
+//				cellLayout.add(img);
+				FcSquadra sq = f.getFcSquadra();
+				if (sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+				Label lblSquadra = new Label(f.getFcSquadra().getNomeSquadra());				
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
@@ -3084,9 +3110,18 @@ public class EmMercatoView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (f != null && f.getKey() != null) {
-				Image img = buildImage("classpath:/img/nazioni/", f.getKey() + ".png");
+//				Image img = buildImage("classpath:/img/nazioni/", f.getKey() + ".png");
+//				cellLayout.add(img);				
+				FcSquadra sq = squadraController.findByNomeSquadra(f.getKey());
+				if (sq.getImg40() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg40().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
 				Label lblSquadra = new Label(f.getKey());
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;

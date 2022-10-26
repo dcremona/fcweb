@@ -2,6 +2,7 @@ package fcweb.ui.views.em;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import fcweb.backend.data.entity.FcClassificaTotPt;
 import fcweb.backend.data.entity.FcGiornataDett;
 import fcweb.backend.data.entity.FcGiornataDettInfo;
 import fcweb.backend.data.entity.FcGiornataInfo;
+import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.service.AccessoController;
 import fcweb.backend.service.AttoreController;
 import fcweb.backend.service.ClassificaTotalePuntiController;
@@ -363,10 +365,19 @@ public class EmFormazioniView extends VerticalLayout{
 				cellLayout.getStyle().set("color", Costants.LIGHT_GRAY);
 			}
 			if (gd != null && gd.getFcGiocatore() != null) {
-				Image img = buildImage("classpath:/img/nazioni/", gd.getFcGiocatore().getFcSquadra().getNomeSquadra() + ".png");
 				Label lblSquadra = new Label(gd.getFcGiocatore().getFcSquadra().getNomeSquadra().substring(0, 3));
 				lblSquadra.getStyle().set("fontSize", "smaller");
-				cellLayout.add(img);
+				FcSquadra sq = gd.getFcGiocatore().getFcSquadra();
+				if (sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+//				Image img = buildImage("classpath:/img/nazioni/", gd.getFcGiocatore().getFcSquadra().getNomeSquadra() + ".png");
+//				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
@@ -703,22 +714,5 @@ public class EmFormazioniView extends VerticalLayout{
 		img.setTitle(title);
 		return img;
 	}
-	
-	private Image buildImage(String path, String nomeImg) {
-		StreamResource resource = new StreamResource(nomeImg,() -> {
-			Resource r = resourceLoader.getResource(path + nomeImg);
-			InputStream inputStream = null;
-			try {
-				inputStream = r.getInputStream();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return inputStream;
-		});
-
-		Image img = new Image(resource,"");
-		return img;
-	}
-
 
 }

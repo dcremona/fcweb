@@ -2,6 +2,7 @@ package fcweb.ui.views.seriea;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,6 +46,7 @@ import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
+import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
 import fcweb.backend.service.AccessoController;
 import fcweb.backend.service.AttoreController;
@@ -240,9 +242,18 @@ public class SquadreAllView extends VerticalLayout{
 		Column<FcFormazione> nomeSquadraColumn = grid.addColumn(new ComponentRenderer<>(f -> {
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			if (f != null && f.getFcGiocatore() != null && f.getFcGiocatore().getFcSquadra() != null) {
-				Image img = buildImage("classpath:/img/squadre/", f.getFcGiocatore().getFcSquadra().getNomeSquadra() + ".png");
+//				Image img = buildImage("classpath:/img/squadre/", f.getFcGiocatore().getFcSquadra().getNomeSquadra() + ".png");
+//				cellLayout.add(img);
+				FcSquadra sq = f.getFcGiocatore().getFcSquadra();
+				if (sq != null && sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
 				Label lblSquadra = new Label(f.getFcGiocatore().getFcSquadra().getNomeSquadra());
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;

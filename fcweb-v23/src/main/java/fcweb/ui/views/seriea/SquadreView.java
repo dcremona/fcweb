@@ -3,13 +3,11 @@ package fcweb.ui.views.seriea;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -53,6 +51,7 @@ import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcMercatoDett;
+import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
 import fcweb.backend.service.AccessoController;
 import fcweb.backend.service.AttoreController;
@@ -311,10 +310,18 @@ public class SquadreView extends VerticalLayout{
 			// cellLayout.setAlignItems(Alignment.STRETCH);
 			// cellLayout.setSizeFull();
 			if (f != null && f.getFcGiocatore() != null && f.getFcGiocatore().getFcSquadra() != null) {
-				Image img = buildImage("classpath:/img/squadre/", f.getFcGiocatore().getFcSquadra().getNomeSquadra() + ".png");
+//				Image img = buildImage("classpath:/img/squadre/", f.getFcGiocatore().getFcSquadra().getNomeSquadra() + ".png");
+//				cellLayout.add(img);
+				FcSquadra sq = f.getFcGiocatore().getFcSquadra();
+				if (sq != null && sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
 				Label lblSquadra = new Label(f.getFcGiocatore().getFcSquadra().getNomeSquadra());
-				// lblSquadra.getStyle().set("font-size", "11px");
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 
@@ -454,7 +461,10 @@ public class SquadreView extends VerticalLayout{
 		giornataColumn.setHeader("Giornata");
 		giornataColumn.setAutoWidth(true);
 
-		Column<FcMercatoDett> dataCambioColumn = grid.addColumn(new LocalDateTimeRenderer<>(FcMercatoDett::getDataCambio,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)));
+		Column<FcMercatoDett> dataCambioColumn = grid.addColumn(
+				//new LocalDateTimeRenderer<>(FcMercatoDett::getDataCambio,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
+				new LocalDateTimeRenderer<>(FcMercatoDett::getDataCambio)
+		);
 		dataCambioColumn.setSortable(false);
 		dataCambioColumn.setHeader("Data");
 		dataCambioColumn.setAutoWidth(true);

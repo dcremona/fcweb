@@ -1,7 +1,6 @@
 package fcweb.ui.views.seriea;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,8 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.vaadin.flow.component.ClickEvent;
@@ -38,7 +35,6 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 
 import common.util.Utils;
@@ -48,11 +44,13 @@ import fcweb.backend.data.entity.FcClassifica;
 import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcProperties;
+import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.service.AccessoController;
 import fcweb.backend.service.AttoreController;
 import fcweb.backend.service.ClassificaController;
 import fcweb.backend.service.FormazioneController;
 import fcweb.backend.service.GiocatoreController;
+import fcweb.backend.service.SquadraController;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
 
@@ -103,10 +101,10 @@ public class MercatoView extends VerticalLayout
 	public List<FcClassifica> creditiFm = new ArrayList<FcClassifica>();
 
 	@Autowired
-	private ResourceLoader resourceLoader;
+	private AccessoController accessoController;
 
 	@Autowired
-	private AccessoController accessoController;
+	private SquadraController squadraController;
 
 	public MercatoView() {
 		LOG.info("MercatoView");
@@ -681,11 +679,19 @@ public class MercatoView extends VerticalLayout
 			cellLayout.setAlignItems(Alignment.STRETCH);
 
 			if (f != null && f.getKey() != null) {
-
-				Image img = buildImage("classpath:/img/squadre/", f.getKey() + ".png");
+//				Image img = buildImage("classpath:/img/squadre/", f.getKey() + ".png");
+//				cellLayout.add(img);
+				FcSquadra sq = squadraController.findByNomeSquadra(f.getKey());
+				if (sq != null && sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+				
 				Label lblSquadra = new Label(f.getKey());
-
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 
@@ -702,22 +708,6 @@ public class MercatoView extends VerticalLayout
 		valueColumn.setAutoWidth(true);
 
 		return grid;
-	}
-
-	private Image buildImage(String path, String nomeImg) {
-		StreamResource resource = new StreamResource(nomeImg,() -> {
-			Resource r = resourceLoader.getResource(path + nomeImg);
-			InputStream inputStream = null;
-			try {
-				inputStream = r.getInputStream();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return inputStream;
-		});
-
-		Image img = new Image(resource,"");
-		return img;
 	}
 
 }

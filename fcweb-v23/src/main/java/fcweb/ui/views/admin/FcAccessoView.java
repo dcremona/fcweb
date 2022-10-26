@@ -1,9 +1,5 @@
 package fcweb.ui.views.admin;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
-
 import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
@@ -83,20 +79,23 @@ public class FcAccessoView extends VerticalLayout
 		crud.getGrid().removeAllColumns();
 		crud.getGrid().addColumn(new TextRenderer<>(f -> f != null ? "" + f.getId() : "")).setHeader("Id");
 		crud.getGrid().addColumn(new TextRenderer<>(f -> f != null && f.getFcAttore() != null ? f.getFcAttore().getDescAttore() : "")).setHeader("Attore");
-		Column<FcAccesso> dataColumn = crud.getGrid().addColumn(new LocalDateTimeRenderer<>(FcAccesso::getData,
-				DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.MEDIUM).withLocale(Locale.ITALY))
-		);
+		Column<FcAccesso> dataColumn = crud.getGrid().addColumn(
+				// new LocalDateTimeRenderer<>(FcAccesso::getData,
+				// DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT,
+				// FormatStyle.MEDIUM).withLocale(Locale.ITALY))
+				new LocalDateTimeRenderer<>(FcAccesso::getData));
+		crud.getGrid().addColumn(new TextRenderer<>(s -> s == null ? "" : "" + s.getNote())).setHeader("Info");
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
 		dataColumn.setFlexGrow(2);
 
 		crud.getGrid().setColumnReorderingAllowed(true);
 
-		crud.getCrudFormFactory().setFieldProvider("data",  a -> {
+		crud.getCrudFormFactory().setFieldProvider("data", a -> {
 			DateTimePicker data = new DateTimePicker();
 			return data;
 		});
-		
+
 		crud.setRowCountCaption("%d Accesso(s) found");
 		crud.setClickRowToUpdate(true);
 		crud.setUpdateOperationVisible(true);

@@ -1,11 +1,7 @@
 package fcweb.ui.views.admin;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -14,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridCrud;
 import org.vaadin.crudui.form.impl.form.factory.DefaultCrudFormFactory;
@@ -38,18 +32,19 @@ import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcCalendarioTim;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcGiornataInfo;
+import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.job.JobProcessFileCsv;
 import fcweb.backend.job.JobProcessGiornata;
 import fcweb.backend.service.AccessoController;
 import fcweb.backend.service.CalendarioTimController;
 import fcweb.backend.service.GiornataInfoController;
+import fcweb.backend.service.SquadraController;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.CustomMessageDialog;
 
@@ -73,9 +68,6 @@ public class FcCalendarioTimView extends VerticalLayout
 	private Button updateGiornata;
 
 	@Autowired
-	private ResourceLoader resourceLoader;
-
-	@Autowired
 	private JobProcessGiornata jobProcessGiornata;
 
 	@Autowired
@@ -85,6 +77,9 @@ public class FcCalendarioTimView extends VerticalLayout
 
 	@Autowired
 	private AccessoController accessoController;
+	
+	@Autowired
+	private SquadraController squadraController;
 
 	public FcCalendarioTimView() {
 		LOG.info("FcCalendarioTimView()");
@@ -132,7 +127,10 @@ public class FcCalendarioTimView extends VerticalLayout
 		// "squadraFuori");
 		crud.getGrid().removeAllColumns();
 		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : "" + g.getIdGiornata()));
-		Column<FcCalendarioTim> dataColumn = crud.getGrid().addColumn(new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)));
+		Column<FcCalendarioTim> dataColumn = crud.getGrid().addColumn(
+				//new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
+				new LocalDateTimeRenderer<>(FcCalendarioTim::getData)
+		);
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
 		dataColumn.setFlexGrow(2);
@@ -144,15 +142,23 @@ public class FcCalendarioTimView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (s != null && s.getSquadraCasa() != null) {
-				Image img = null;
-				if ("1".equals(campionato.getType())) {
-					img = buildImage("classpath:/img/squadre/", s.getSquadraCasa() + ".png");
-				} else {
-					img = buildImage("classpath:/img/nazioni/", s.getSquadraCasa() + ".png");
+//				Image img = null;
+//				if ("1".equals(campionato.getType())) {
+//					img = buildImage("classpath:/img/squadre/", s.getSquadraCasa() + ".png");
+//				} else {
+//					img = buildImage("classpath:/img/nazioni/", s.getSquadraCasa() + ".png");
+//				}
+//				cellLayout.add(img);				
+				FcSquadra sq = squadraController.findByIdSquadra(s.getIdSquadraCasa());
+				if (sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
-
 				Label lblSquadra = new Label(s.getSquadraCasa());
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
@@ -167,15 +173,23 @@ public class FcCalendarioTimView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (s != null && s.getSquadraFuori() != null) {
-				Image img = null;
-				if ("1".equals(campionato.getType())) {
-					img = buildImage("classpath:/img/squadre/", s.getSquadraFuori() + ".png");
-				} else {
-					img = buildImage("classpath:/img/nazioni/", s.getSquadraFuori() + ".png");
+//				Image img = null;
+//				if ("1".equals(campionato.getType())) {
+//					img = buildImage("classpath:/img/squadre/", s.getSquadraFuori() + ".png");
+//				} else {
+//					img = buildImage("classpath:/img/nazioni/", s.getSquadraFuori() + ".png");
+//				}
+//				cellLayout.add(img);
+				FcSquadra sq = squadraController.findByIdSquadra(s.getIdSquadraFuori());
+				if (sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
 				Label lblSquadra = new Label(s.getSquadraFuori());
-
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
@@ -296,22 +310,6 @@ public class FcCalendarioTimView extends VerticalLayout
 			CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, e.getMessage());
 		}
 
-	}
-
-	private Image buildImage(String path, String nomeImg) {
-		StreamResource resource = new StreamResource(nomeImg,() -> {
-			Resource r = resourceLoader.getResource(path + nomeImg);
-			InputStream inputStream = null;
-			try {
-				inputStream = r.getInputStream();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return inputStream;
-		});
-
-		Image img = new Image(resource,"");
-		return img;
 	}
 
 }

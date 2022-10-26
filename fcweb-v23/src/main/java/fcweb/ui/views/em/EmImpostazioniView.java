@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ import fcweb.backend.data.entity.FcClassificaTotPt;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornataDett;
 import fcweb.backend.data.entity.FcGiornataInfo;
+import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.job.EmJobProcessFileCsv;
 import fcweb.backend.job.EmJobProcessGiornata;
 import fcweb.backend.job.JobProcessFileCsv;
@@ -926,10 +928,18 @@ public class EmImpostazioniView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (g != null && g.getFcSquadra() != null) {
-
-				Image img = buildImage("classpath:/img/nazioni/", g.getFcSquadra().getNomeSquadra() + ".png");
+//				Image img = buildImage("classpath:/img/nazioni/", g.getFcSquadra().getNomeSquadra() + ".png");
+//				cellLayout.add(img);
+				FcSquadra sq = g.getFcSquadra();
+				if (sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
 				Label lblSquadra = new Label(g.getFcSquadra().getNomeSquadra());
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;

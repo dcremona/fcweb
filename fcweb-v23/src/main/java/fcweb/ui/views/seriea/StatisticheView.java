@@ -3,6 +3,7 @@ package fcweb.ui.views.seriea;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -350,9 +351,17 @@ public class StatisticheView extends VerticalLayout
 		comboSqudreA.setPlaceholder("Seleziona squadra Serie A");
 		comboSqudreA.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
-			Image img = buildImage("classpath:/img/squadre/", item.getNomeSquadra() + ".png");
+//			Image img = buildImage("classpath:/img/squadre/", item.getNomeSquadra() + ".png");
+//			container.add(img);			
+			if (item != null && item.getImg() != null) {
+				try {
+					Image img = Utils.getImage(item.getNomeSquadra(), item.getImg().getBinaryStream());
+					container.add(img);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 			Label lblSquadra = new Label(item.getNomeSquadra());
-			container.add(img);
 			container.add(lblSquadra);
 			return container;
 		}));

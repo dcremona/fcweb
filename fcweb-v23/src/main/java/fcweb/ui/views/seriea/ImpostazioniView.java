@@ -3,6 +3,7 @@ package fcweb.ui.views.seriea;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -363,9 +364,17 @@ public class ImpostazioniView extends VerticalLayout
 		comboSqudreA.setPlaceholder("Seleziona squadra Serie A");
 		comboSqudreA.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
-			Image img = buildImage("classpath:/img/squadre/", item.getNomeSquadra() + ".png");
+//			Image img = buildImage("classpath:/img/squadre/", item.getNomeSquadra() + ".png");
+//			container.add(img);
+			if (item != null && item.getImg() != null) {
+				try {
+					Image img = Utils.getImage(item.getNomeSquadra(), item.getImg().getBinaryStream());
+					container.add(img);		
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 			Label lblSquadra = new Label(item.getNomeSquadra());
-			container.add(img);
 			container.add(lblSquadra);
 			return container;
 		}));
@@ -928,11 +937,18 @@ public class ImpostazioniView extends VerticalLayout
 			cellLayout.setAlignItems(Alignment.STRETCH);
 
 			if (g != null && g.getFcSquadra() != null) {
-
-				Image img = buildImage("classpath:/img/squadre/", g.getFcSquadra().getNomeSquadra() + ".png");
+//				Image img = buildImage("classpath:/img/squadre/", g.getFcSquadra().getNomeSquadra() + ".png");
+//				cellLayout.add(img);
+				FcSquadra sq = g.getFcSquadra();
+				if (sq != null && sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
 				Label lblSquadra = new Label(g.getFcSquadra().getNomeSquadra());
-				// lblSquadra.getStyle().set("font-size", "11px");
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 

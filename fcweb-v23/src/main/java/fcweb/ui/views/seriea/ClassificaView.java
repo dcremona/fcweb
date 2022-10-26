@@ -67,7 +67,7 @@ import fcweb.utils.JasperReporUtils;
 @Route(value = "classifica", layout = MainAppLayout.class)
 @PreserveOnRefresh
 @PageTitle("Classifica")
-public class ClassificaView extends VerticalLayout{
+public class ClassificaView extends VerticalLayout {
 
 	private static final long serialVersionUID = 1L;
 
@@ -177,13 +177,16 @@ public class ClassificaView extends VerticalLayout{
 
 		if (all.size() > 0) {
 
-			Series series = new Series("Tot Pt",data.get(0),data.get(1),data.get(2),data.get(3),data.get(4),data.get(5),data.get(6),data.get(7));
+			Series series = new Series("Tot Pt", data.get(0), data.get(1), data.get(2), data.get(3), data.get(4),
+					data.get(5), data.get(6), data.get(7));
 
 			ApexCharts barChart = ApexChartsBuilder.get().withChart(ChartBuilder.get().withType(Type.bar).build())
 
-					.withPlotOptions(PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(false).build()).build())
+					.withPlotOptions(
+							PlotOptionsBuilder.get().withBar(BarBuilder.get().withHorizontal(false).build()).build())
 
-					.withTitle(TitleSubtitleBuilder.get().withText("Classifica per Totale Punti").withAlign(Align.left).build())
+					.withTitle(TitleSubtitleBuilder.get().withText("Classifica per Totale Punti").withAlign(Align.left)
+							.build())
 
 					.withDataLabels(DataLabelsBuilder.get().withEnabled(false).build())
 
@@ -191,9 +194,9 @@ public class ClassificaView extends VerticalLayout{
 
 					.withXaxis(XAxisBuilder.get().withCategories(att).build()).build();
 
-			//barChart.setWidth("600px");
-			//barChart.setHeight("400px");
-			//setWidth("80%");
+			// barChart.setWidth("600px");
+			// barChart.setHeight("400px");
+			// setWidth("80%");
 			barChart.setWidth("70%");
 
 			return barChart;
@@ -202,55 +205,49 @@ public class ClassificaView extends VerticalLayout{
 		return null;
 
 	}
-	
+
 	/*
-	public SOChart buildGrafico2() {
-
-	    // Creating a chart display area
-	    SOChart soChart = new SOChart();
-	    soChart.setSize("800px", "500px");
-
-	    // Let us define some inline data
-	    CategoryData labels = new CategoryData("Banana", "Apple", "Orange", "Grapes");
-	    Data data = new Data(25, 40, 20, 30);
-
-	    // We are going to create a couple of charts. So, each chart should be positioned appropriately
-	    // Create a self-positioning chart
-	    NightingaleRoseChart nc = new NightingaleRoseChart(labels, data);
-	    Position p = new Position();
-	    p.setTop(Size.percentage(50));
-	    nc.setPosition(p); // Position it leaving 50% space at the top
-
-	    // Second chart to add
-	    BarChart bc = new BarChart(labels, data);
-	    RectangularCoordinate coordinate =
-	        new RectangularCoordinate(new XAxis(DataType.CATEGORY), new YAxis(DataType.NUMBER));
-	    p = new Position();
-	    p.setBottom(Size.percentage(55));
-	    coordinate.setPosition(p); // Position it leaving 55% space at the bottom
-	    bc.plotOn(coordinate); // Bar chart needs to be plotted on a coordinate system
-
-	    // Just to demonstrate it, we are creating a "Download" and a "Zoom" toolbox button
-	    Toolbox toolbox = new Toolbox();
-	    toolbox.addButton(new Toolbox.Download(), new Toolbox.Zoom());
-
-	    // Let's add some titles
-	    Title title = new Title("My First Chart");
-	    title.setSubtext("2nd Line of the Title");
-
-	    // Add the chart components to the chart display area
-	    soChart.add(nc, bc, toolbox, title);
-	    
-	    return soChart;
-
-   }
-*/
-	private HorizontalLayout buildButtonPdf(FcCampionato campionato,
-			Properties p) throws Exception {
+	 * public SOChart buildGrafico2() {
+	 * 
+	 * // Creating a chart display area SOChart soChart = new SOChart();
+	 * soChart.setSize("800px", "500px");
+	 * 
+	 * // Let us define some inline data CategoryData labels = new
+	 * CategoryData("Banana", "Apple", "Orange", "Grapes"); Data data = new Data(25,
+	 * 40, 20, 30);
+	 * 
+	 * // We are going to create a couple of charts. So, each chart should be
+	 * positioned appropriately // Create a self-positioning chart
+	 * NightingaleRoseChart nc = new NightingaleRoseChart(labels, data); Position p
+	 * = new Position(); p.setTop(Size.percentage(50)); nc.setPosition(p); //
+	 * Position it leaving 50% space at the top
+	 * 
+	 * // Second chart to add BarChart bc = new BarChart(labels, data);
+	 * RectangularCoordinate coordinate = new RectangularCoordinate(new
+	 * XAxis(DataType.CATEGORY), new YAxis(DataType.NUMBER)); p = new Position();
+	 * p.setBottom(Size.percentage(55)); coordinate.setPosition(p); // Position it
+	 * leaving 55% space at the bottom bc.plotOn(coordinate); // Bar chart needs to
+	 * be plotted on a coordinate system
+	 * 
+	 * // Just to demonstrate it, we are creating a "Download" and a "Zoom" toolbox
+	 * button Toolbox toolbox = new Toolbox(); toolbox.addButton(new
+	 * Toolbox.Download(), new Toolbox.Zoom());
+	 * 
+	 * // Let's add some titles Title title = new Title("My First Chart");
+	 * title.setSubtext("2nd Line of the Title");
+	 * 
+	 * // Add the chart components to the chart display area soChart.add(nc, bc,
+	 * toolbox, title);
+	 * 
+	 * return soChart;
+	 * 
+	 * }
+	 */
+	private HorizontalLayout buildButtonPdf(FcCampionato campionato, Properties p) throws Exception {
 
 		Button stampapdf = new Button("Classifica pdf");
 		stampapdf.setIcon(VaadinIcon.DOWNLOAD.create());
-		FileDownloadWrapper button1Wrapper = new FileDownloadWrapper(new StreamResource("Classifica.pdf",() -> {
+		FileDownloadWrapper button1Wrapper = new FileDownloadWrapper(new StreamResource("Classifica.pdf", () -> {
 			try {
 				Map<String, Object> hm = new HashMap<String, Object>();
 				hm.put("ID_CAMPIONATO", "" + campionato.getIdCampionato());
@@ -272,15 +269,15 @@ public class ClassificaView extends VerticalLayout{
 		return horLayout;
 	}
 
-	private Grid<FcClassifica> buildTableClassifica(FcCampionato campionato)
-			throws Exception {
+	private Grid<FcClassifica> buildTableClassifica(FcCampionato campionato) throws Exception {
 
 		List<FcClassifica> items = classificaController.findByFcCampionatoOrderByPuntiDescIdPosizAsc(campionato);
 
 		Grid<FcClassifica> grid = new Grid<>();
 		grid.setItems(items);
 		// grid.setWidth("70%");
-		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS,
+				GridVariant.LUMO_ROW_STRIPES);
 		grid.setAllRowsVisible(true);
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setMultiSort(true);
@@ -327,13 +324,14 @@ public class ClassificaView extends VerticalLayout{
 
 		Column<FcClassifica> totPuntiRosaColumn = grid.addColumn(new ComponentRenderer<>(classifica -> {
 			DecimalFormat myFormatter = new DecimalFormat("#0.00");
-			Double dTotPunti = classifica.getTotPuntiRosa() != null ? classifica.getTotPuntiRosa() / Costants.DIVISORE_100 : 0;
+			Double dTotPunti = classifica.getTotPuntiRosa() != null
+					? classifica.getTotPuntiRosa() / Costants.DIVISORE_100
+					: 0;
 			String sTotPunti = myFormatter.format(dTotPunti);
 			return new Label(sTotPunti);
 		})).setHeader("Tot Pt");
 		totPuntiRosaColumn.setSortable(true);
-		totPuntiRosaColumn.setComparator((p1,
-				p2) -> p1.getTotPuntiRosa().compareTo(p2.getTotPuntiRosa()));
+		totPuntiRosaColumn.setComparator((p1, p2) -> p1.getTotPuntiRosa().compareTo(p2.getTotPuntiRosa()));
 		totPuntiRosaColumn.setAutoWidth(true);
 
 		Column<FcClassifica> totfmColumn = grid.addColumn(classifica -> classifica.getTotFm());
@@ -346,14 +344,14 @@ public class ClassificaView extends VerticalLayout{
 		// mercatofmColumn.setHeader("Mercato FM");
 
 		HeaderRow headerRow = grid.prependHeaderRow();
-		HeaderCell headerCell = headerRow.join(squadraColumn, puntiColumn, vinteColumn, pariColumn, perseColumn, gfColumn, gsColumn, drColumn, totPuntiRosaColumn, totfmColumn);
+		HeaderCell headerCell = headerRow.join(squadraColumn, puntiColumn, vinteColumn, pariColumn, perseColumn,
+				gfColumn, gsColumn, drColumn, totPuntiRosaColumn, totfmColumn);
 		headerCell.setText("Classifica Prima Fase");
 
 		return grid;
 	}
 
-	private Grid<FcClassificaTotPt> buildTableInfoClassifica(
-			FcCampionato campionato) throws Exception {
+	private Grid<FcClassificaTotPt> buildTableInfoClassifica(FcCampionato campionato) throws Exception {
 
 		String sql = " select a.desc_attore, ";
 		sql += " sum(pt.tot_pt) as tot18, ";
@@ -371,10 +369,9 @@ public class ClassificaView extends VerticalLayout{
 
 		List<FcClassificaTotPt> dm = new ArrayList<FcClassificaTotPt>();
 
-		jdbcTemplate.query(sql, new ResultSetExtractor<String>(){
+		jdbcTemplate.query(sql, new ResultSetExtractor<String>() {
 			@Override
-			public String extractData(ResultSet rs)
-					throws SQLException, DataAccessException {
+			public String extractData(ResultSet rs) throws SQLException, DataAccessException {
 				String descAttore = "";
 				double tot18 = 0;
 				double tot11 = 0;
@@ -411,25 +408,27 @@ public class ClassificaView extends VerticalLayout{
 
 		Grid<FcClassificaTotPt> grid = new Grid<>();
 		grid.setItems(dm);
-		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS,
+				GridVariant.LUMO_ROW_STRIPES);
 		grid.setAllRowsVisible(true);
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setMultiSort(true);
 
-		Column<FcClassificaTotPt> squadraColumn = grid.addColumn(classifica -> classifica.getFcAttore().getDescAttore());
+		Column<FcClassificaTotPt> squadraColumn = grid
+				.addColumn(classifica -> classifica.getFcAttore().getDescAttore());
 		squadraColumn.setSortable(false);
 		squadraColumn.setHeader("Squadra");
 
 		Column<FcClassificaTotPt> totPtRosaColumn = grid.addColumn(new ComponentRenderer<>(classifica -> {
 			DecimalFormat myFormatter = new DecimalFormat("#0.00");
-			Double dTotPunti = classifica.getTotPtRosa() != null ? classifica.getTotPtRosa() / Costants.DIVISORE_100 : 0;
+			Double dTotPunti = classifica.getTotPtRosa() != null ? classifica.getTotPtRosa() / Costants.DIVISORE_100
+					: 0;
 			String sTotPunti = myFormatter.format(dTotPunti);
 			return new Label(sTotPunti);
 		}));
 		totPtRosaColumn.setHeader("Tot Pt Rosa");
 		totPtRosaColumn.setSortable(true);
-		totPtRosaColumn.setComparator((p1,
-				p2) -> p1.getTotPtRosa().compareTo(p2.getTotPtRosa()));
+		totPtRosaColumn.setComparator((p1, p2) -> p1.getTotPtRosa().compareTo(p2.getTotPtRosa()));
 
 		Column<FcClassificaTotPt> totpuntiColumn = grid.addColumn(new ComponentRenderer<>(classifica -> {
 			DecimalFormat myFormatter = new DecimalFormat("#0.00");
@@ -439,8 +438,7 @@ public class ClassificaView extends VerticalLayout{
 		}));
 		totpuntiColumn.setHeader("Tot Pt 18");
 		totpuntiColumn.setSortable(true);
-		totpuntiColumn.setComparator((p1,
-				p2) -> p1.getTotPt().compareTo(p2.getTotPt()));
+		totpuntiColumn.setComparator((p1, p2) -> p1.getTotPt().compareTo(p2.getTotPt()));
 
 		Column<FcClassificaTotPt> totpuntioldColumn = grid.addColumn(new ComponentRenderer<>(classifica -> {
 			DecimalFormat myFormatter = new DecimalFormat("#0.00");
@@ -450,8 +448,7 @@ public class ClassificaView extends VerticalLayout{
 		}));
 		totpuntioldColumn.setHeader("Tot Pt 11");
 		totpuntioldColumn.setSortable(true);
-		totpuntioldColumn.setComparator((p1,
-				p2) -> p1.getTotPtOld().compareTo(p2.getTotPtOld()));
+		totpuntioldColumn.setComparator((p1, p2) -> p1.getTotPtOld().compareTo(p2.getTotPtOld()));
 
 		Column<FcClassificaTotPt> scoreColumn = grid.addColumn(classifica -> classifica.getScore());
 		scoreColumn.setHeader("GrandPrix G18");
@@ -466,7 +463,8 @@ public class ClassificaView extends VerticalLayout{
 		scoreGrandPrixColumn.setSortable(true);
 
 		HeaderRow headerRow = grid.prependHeaderRow();
-		HeaderCell headerCell = headerRow.join(squadraColumn, totpuntiColumn, totpuntioldColumn, totPtRosaColumn, scoreColumn, scoreoldColumn, scoreGrandPrixColumn);
+		HeaderCell headerCell = headerRow.join(squadraColumn, totpuntiColumn, totpuntioldColumn, totPtRosaColumn,
+				scoreColumn, scoreoldColumn, scoreGrandPrixColumn);
 		headerCell.setText("Info Classifiche Generali");
 
 		return grid;

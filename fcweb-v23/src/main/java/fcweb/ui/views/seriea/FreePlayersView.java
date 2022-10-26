@@ -2,6 +2,7 @@ package fcweb.ui.views.seriea;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcRuolo;
+import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
 import fcweb.backend.service.AccessoController;
 import fcweb.backend.service.FormazioneController;
@@ -253,9 +255,18 @@ public class FreePlayersView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (g != null) {
-				Image img = buildImage("classpath:/img/squadre/", g.getFcSquadra().getNomeSquadra() + ".png");
+//				Image img = buildImage("classpath:/img/squadre/", g.getFcSquadra().getNomeSquadra() + ".png");
+//				cellLayout.add(img);
+				FcSquadra sq = g.getFcSquadra();
+				if (sq != null && sq.getImg() != null) {
+					try {
+						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayout.add(img);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
 				Label lblSquadra = new Label(g.getFcSquadra().getNomeSquadra());
-				cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
