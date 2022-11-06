@@ -25,10 +25,10 @@ import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcClassifica;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.CampionatoController;
-import fcweb.backend.service.ClassificaController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.CampionatoService;
+import fcweb.backend.service.ClassificaService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "classificaAdmin", layout = MainAppLayout.class)
@@ -41,13 +41,13 @@ public class FcClassificaView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private ClassificaController classificaController;
+	private ClassificaService classificaController;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private CampionatoController campionatoController;
+	private CampionatoService campionatoController;
 
 	@Autowired
 	public Environment env;
@@ -56,7 +56,7 @@ public class FcClassificaView extends VerticalLayout{
 	private ComboBox<FcCampionato> campionatoFilter = new ComboBox<FcCampionato>();
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FcClassificaView() {
 		LOG.info("FcClassificaView()");

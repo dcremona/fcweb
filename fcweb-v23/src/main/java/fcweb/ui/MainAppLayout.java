@@ -36,7 +36,7 @@ import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.ui.views.admin.FcAccessoView;
-import fcweb.ui.views.admin.FcCalendarioTimView;
+import fcweb.ui.views.admin.FcCalendarioCompetizioneView;
 import fcweb.ui.views.admin.FcCampionatoView;
 import fcweb.ui.views.admin.FcClassificaView;
 import fcweb.ui.views.admin.FcExpStatView;
@@ -1034,7 +1034,7 @@ public class MainAppLayout extends AppLayout {
                         new MenuItemInfo("Impostazioni", "la la-tools", ImpostazioniView.class), //
                         new MenuItemInfo("Mercato", "la la-search-dollar", MercatoView.class), //
                         new MenuItemInfo("Free Players", "la la-free-code-camp", FreePlayersView.class), //
-                        new MenuItemInfo("Calendario Serie A", "la la-calendar-alt", FcCalendarioTimView.class), //
+                        new MenuItemInfo("Calendario Serie A", "la la-calendar-alt", FcCalendarioCompetizioneView.class), //
                         new MenuItemInfo("Utenti", "la la-user-edit", FcUserView.class), //
                         new MenuItemInfo("Proprieta", "la la-toolbox", FcPropertiesView.class), //
                         new MenuItemInfo("Campionato", "la la-brush", FcCampionatoView.class), //
@@ -1095,7 +1095,7 @@ public class MainAppLayout extends AppLayout {
                         new MenuItemInfo("Accesso", "la la-universal-access", FcAccessoView.class), //
                         new MenuItemInfo("Campionato", "la la-brush", FcCampionatoView.class), //
                         new MenuItemInfo("Squadre EM", "la la-users-cog", FcSquadraView.class), //
-                        new MenuItemInfo("Calendario EM", "la la-calendar-alt", FcCalendarioTimView.class), //
+                        new MenuItemInfo("Calendario EM", "la la-calendar-alt", FcCalendarioCompetizioneView.class), //
             	};
 
     		} else {

@@ -30,8 +30,8 @@ import com.wontlost.ckeditor.VaadinCKEditorBuilder;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcRegolamento;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.RegolamentoController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.RegolamentoService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.CustomMessageDialog;
 
@@ -46,10 +46,10 @@ public class EmRegolamentoView extends VerticalLayout
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@Autowired
-	private RegolamentoController regolamentoController;
+	private RegolamentoService regolamentoController;
 
 	@Autowired
 	private ResourceLoader resourceLoader;

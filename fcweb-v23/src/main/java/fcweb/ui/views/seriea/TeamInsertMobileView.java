@@ -61,7 +61,7 @@ import common.mail.ContentIdGenerator;
 import common.mail.MailClient;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
-import fcweb.backend.data.entity.FcCalendarioTim;
+import fcweb.backend.data.entity.FcCalendarioCompetizione;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
@@ -69,12 +69,12 @@ import fcweb.backend.data.entity.FcGiornataDett;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.CalendarioTimController;
-import fcweb.backend.service.FormazioneController;
-import fcweb.backend.service.GiornataDettController;
-import fcweb.backend.service.SquadraController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.CalendarioCompetizioneService;
+import fcweb.backend.service.FormazioneService;
+import fcweb.backend.service.GiornataDettService;
+import fcweb.backend.service.SquadraService;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
 
@@ -98,7 +98,7 @@ public class TeamInsertMobileView extends VerticalLayout
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	private int WIN_WIDTH = 400;
 	private int WIN_HEIGHT = 800;
@@ -144,9 +144,9 @@ public class TeamInsertMobileView extends VerticalLayout
 	private Grid<FcGiocatore> tableFormazione;
 
 	private Dialog dialogPartite = null;
-	private Grid<FcCalendarioTim> tablePartite;
-	private List<FcCalendarioTim> listPartiteGiocate = new ArrayList<FcCalendarioTim>();
-	private List<FcCalendarioTim> listPartite = new ArrayList<FcCalendarioTim>();
+	private Grid<FcCalendarioCompetizione> tablePartite;
+	private List<FcCalendarioCompetizione> listPartiteGiocate = new ArrayList<FcCalendarioCompetizione>();
+	private List<FcCalendarioCompetizione> listPartite = new ArrayList<FcCalendarioCompetizione>();
 
 	private AbsoluteLayout absLayout;
 
@@ -192,22 +192,22 @@ public class TeamInsertMobileView extends VerticalLayout
 	private List<FcGiocatore> modelPlayer18 = new ArrayList<FcGiocatore>();
 
 	@Autowired
-	private FormazioneController formazioneController;
+	private FormazioneService formazioneController;
 
 	@Autowired
-	private GiornataDettController giornataDettController;
+	private GiornataDettService giornataDettController;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private CalendarioTimController calendarioTimController;
+	private CalendarioCompetizioneService calendarioTimController;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 	
 	@Autowired
-	private SquadraController squadraController;
+	private SquadraService squadraController;
 
 	@PostConstruct
 	void init() throws Exception {
@@ -2164,16 +2164,16 @@ public class TeamInsertMobileView extends VerticalLayout
 		return img;
 	}
 
-	private Grid<FcCalendarioTim> getTablePartite(
-			List<FcCalendarioTim> listPartite) {
+	private Grid<FcCalendarioCompetizione> getTablePartite(
+			List<FcCalendarioCompetizione> listPartite) {
 
-		Grid<FcCalendarioTim> grid = new Grid<>();
+		Grid<FcCalendarioCompetizione> grid = new Grid<>();
 		grid.setItems(listPartite);
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setAllRowsVisible(true);
 		grid.setWidth("300px");
 
-		Column<FcCalendarioTim> nomeSquadraCasaColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+		Column<FcCalendarioCompetizione> nomeSquadraCasaColumn = grid.addColumn(new ComponentRenderer<>(s -> {
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
 			cellLayout.setPadding(false);
@@ -2201,7 +2201,7 @@ public class TeamInsertMobileView extends VerticalLayout
 		// nomeSquadraCasaColumn.setHeader("Casa");
 		nomeSquadraCasaColumn.setAutoWidth(true);
 
-		Column<FcCalendarioTim> nomeSquadraFuoriColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+		Column<FcCalendarioCompetizione> nomeSquadraFuoriColumn = grid.addColumn(new ComponentRenderer<>(s -> {
 
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
@@ -2233,9 +2233,9 @@ public class TeamInsertMobileView extends VerticalLayout
 		// nomeSquadraFuoriColumn.setHeader("Fuori");
 		nomeSquadraFuoriColumn.setAutoWidth(true);
 
-		Column<FcCalendarioTim> dataColumn = grid.addColumn(
+		Column<FcCalendarioCompetizione> dataColumn = grid.addColumn(
 				//new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
-				new LocalDateTimeRenderer<>(FcCalendarioTim::getData)
+				new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData)
 		);
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
@@ -2248,7 +2248,7 @@ public class TeamInsertMobileView extends VerticalLayout
 		// LOG.debug("isGiocatorePartitaGiocata");
 		String squadra = giocatore.getFcSquadra().getNomeSquadra();
 		// LOG.info("squadra " + squadra);
-		for (FcCalendarioTim partita : listPartiteGiocate) {
+		for (FcCalendarioCompetizione partita : listPartiteGiocate) {
 			String sqCasa = partita.getSquadraCasa();
 			String sqFuori = partita.getSquadraFuori();
 			// LOG.info("sqCasa " + sqCasa);

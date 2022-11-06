@@ -25,7 +25,7 @@ import com.vaadin.flow.router.Route;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAccesso;
-import fcweb.backend.service.AccessoController;
+import fcweb.backend.service.AccessoService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "fcAccesso", layout = MainAppLayout.class)
@@ -39,7 +39,7 @@ public class FcAccessoView extends VerticalLayout
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@Autowired
 	public Environment env;

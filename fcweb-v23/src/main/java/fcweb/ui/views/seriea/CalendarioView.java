@@ -37,8 +37,8 @@ import com.vaadin.flow.server.VaadinSession;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcGiornata;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.GiornataController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.GiornataService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.JasperReporUtils;
@@ -53,7 +53,7 @@ public class CalendarioView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private GiornataController giornataController;
+	private GiornataService giornataController;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -62,7 +62,7 @@ public class CalendarioView extends VerticalLayout{
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 	
 	private List<FcGiornata> model = new ArrayList<FcGiornata>();
 

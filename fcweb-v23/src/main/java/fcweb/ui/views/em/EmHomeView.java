@@ -34,14 +34,14 @@ import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 
 import common.util.Utils;
-import fcweb.backend.data.entity.FcCalendarioTim;
+import fcweb.backend.data.entity.FcCalendarioCompetizione;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcSquadra;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.CalendarioTimController;
-import fcweb.backend.service.GiornataInfoController;
-import fcweb.backend.service.SquadraController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.CalendarioCompetizioneService;
+import fcweb.backend.service.GiornataInfoService;
+import fcweb.backend.service.SquadraService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 
@@ -60,16 +60,16 @@ public class EmHomeView extends VerticalLayout{
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private CalendarioTimController calendarioTimController;
+	private CalendarioCompetizioneService calendarioTimController;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@Autowired
-	private SquadraController squadraController;
+	private SquadraService squadraController;
 
 	public EmHomeView() {
 		LOG.info("EmHomeView()");
@@ -108,8 +108,8 @@ public class EmHomeView extends VerticalLayout{
 		VerticalLayout container = new VerticalLayout();
 		PagedTabs tabs = new PagedTabs(container);
 		for (FcGiornataInfo g : giornate) {
-			List<FcCalendarioTim> listPartite = calendarioTimController.findByIdGiornataOrderByDataAsc(g.getCodiceGiornata());
-			Grid<FcCalendarioTim> tablePartite = getTablePartite(listPartite);
+			List<FcCalendarioCompetizione> listPartite = calendarioTimController.findByIdGiornataOrderByDataAsc(g.getCodiceGiornata());
+			Grid<FcCalendarioCompetizione> tablePartite = getTablePartite(listPartite);
 			final VerticalLayout layout = new VerticalLayout();
 			layout.setMargin(false);
 			layout.setPadding(false);
@@ -125,22 +125,22 @@ public class EmHomeView extends VerticalLayout{
 		this.add(tabs, container);
 	}
 
-	private Grid<FcCalendarioTim> getTablePartite(
-			List<FcCalendarioTim> listPartite) throws Exception {
+	private Grid<FcCalendarioCompetizione> getTablePartite(
+			List<FcCalendarioCompetizione> listPartite) throws Exception {
 
-		Grid<FcCalendarioTim> grid = new Grid<>();
+		Grid<FcCalendarioCompetizione> grid = new Grid<>();
 		grid.setItems(listPartite);
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setAllRowsVisible(true);
 
-		Column<FcCalendarioTim> dataColumn = grid.addColumn(
+		Column<FcCalendarioCompetizione> dataColumn = grid.addColumn(
 				//new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)))
-				new LocalDateTimeRenderer<>(FcCalendarioTim::getData));
+				new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData));
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
 		//dataColumn.setFlexGrow(2);
 
-		Column<FcCalendarioTim> nomeSquadraCasaColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+		Column<FcCalendarioCompetizione> nomeSquadraCasaColumn = grid.addColumn(new ComponentRenderer<>(s -> {
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			// cellLayout.setMargin(false);
 			// cellLayout.setPadding(false);
@@ -169,7 +169,7 @@ public class EmHomeView extends VerticalLayout{
 		nomeSquadraCasaColumn.setSortable(false);
 		nomeSquadraCasaColumn.setAutoWidth(true);
 
-		Column<FcCalendarioTim> nomeSquadraFuoriColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+		Column<FcCalendarioCompetizione> nomeSquadraFuoriColumn = grid.addColumn(new ComponentRenderer<>(s -> {
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			// cellLayout.setMargin(false);
 			// cellLayout.setPadding(false);
@@ -197,7 +197,7 @@ public class EmHomeView extends VerticalLayout{
 		nomeSquadraFuoriColumn.setSortable(false);
 		nomeSquadraFuoriColumn.setAutoWidth(true);
 
-		Column<FcCalendarioTim> risultatoColumn = grid.addColumn(c -> c != null && c.getRisultato() != null ? c.getRisultato() : "");
+		Column<FcCalendarioCompetizione> risultatoColumn = grid.addColumn(c -> c != null && c.getRisultato() != null ? c.getRisultato() : "");
 		risultatoColumn.setSortable(false);
 		risultatoColumn.setAutoWidth(true);
 		//risultatoColumn.setFlexGrow(2);

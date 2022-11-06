@@ -37,8 +37,8 @@ import com.vaadin.flow.server.VaadinSession;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcSquadra;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.SquadraController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.SquadraService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.CustomMessageDialog;
 
@@ -53,7 +53,7 @@ public class FcSquadraView extends VerticalLayout
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private SquadraController squadraController;
+	private SquadraService squadraController;
 
 	@Autowired
 	public Environment env;
@@ -64,7 +64,7 @@ public class FcSquadraView extends VerticalLayout
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FcSquadraView() {
 		LOG.info("FcSquadraView()");

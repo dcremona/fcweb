@@ -26,11 +26,11 @@ import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcMercatoDett;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.GiocatoreController;
-import fcweb.backend.service.GiornataInfoController;
-import fcweb.backend.service.MercatoController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.GiocatoreService;
+import fcweb.backend.service.GiornataInfoService;
+import fcweb.backend.service.MercatoService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "mercatodett", layout = MainAppLayout.class)
@@ -43,22 +43,22 @@ public class FcMercatoDettView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private MercatoController mercatoController;
+	private MercatoService mercatoController;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private GiocatoreController giocatoreController;
+	private GiocatoreService giocatoreController;
 
 	@Autowired
 	public Environment env;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FcMercatoDettView() {
 		LOG.info("FcMercatoDettView()");

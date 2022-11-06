@@ -49,13 +49,13 @@ import fcweb.backend.data.entity.FcPagelleId;
 import fcweb.backend.data.entity.FcRuolo;
 import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
-import fcweb.backend.repositories.AttoreRepository;
-import fcweb.backend.repositories.GiocatoreRepository;
-import fcweb.backend.repositories.GiornataDettRepository;
-import fcweb.backend.repositories.GiornataInfoRepository;
-import fcweb.backend.repositories.PagelleRepository;
-import fcweb.backend.repositories.SquadraRepository;
-import fcweb.backend.repositories.StatisticheRepository;
+import fcweb.backend.service.AttoreRepository;
+import fcweb.backend.service.GiocatoreRepository;
+import fcweb.backend.service.GiornataDettRepository;
+import fcweb.backend.service.GiornataInfoRepository;
+import fcweb.backend.service.PagelleRepository;
+import fcweb.backend.service.SquadraRepository;
+import fcweb.backend.service.StatisticheRepository;
 import fcweb.utils.Costants;
 
 @Controller

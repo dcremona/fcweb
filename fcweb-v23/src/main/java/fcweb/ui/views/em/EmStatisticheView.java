@@ -68,11 +68,11 @@ import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
 import fcweb.backend.job.JobProcessGiornata;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.ClassificaTotalePuntiController;
-import fcweb.backend.service.SquadraController;
-import fcweb.backend.service.StatisticheController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.ClassificaTotalePuntiService;
+import fcweb.backend.service.SquadraService;
+import fcweb.backend.service.StatisticheService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
@@ -92,19 +92,19 @@ public class EmStatisticheView extends VerticalLayout
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	private ClassificaTotalePuntiController classificaTotalePuntiController;
+	private ClassificaTotalePuntiService classificaTotalePuntiController;
 
 	@Autowired
-	private StatisticheController statisticheController;
+	private StatisticheService statisticheController;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
 	private JobProcessGiornata jobProcessGiornata;
 
 	@Autowired
-	private SquadraController squadraController;
+	private SquadraService squadraController;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -130,7 +130,7 @@ public class EmStatisticheView extends VerticalLayout
 	private VerticalLayout verticalLayoutGrafico = new VerticalLayout();
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@PostConstruct
 	void init() {

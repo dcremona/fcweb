@@ -48,8 +48,8 @@ import com.vaadin.flow.server.VaadinSession;
 import common.util.Utils;
 import fcweb.backend.data.ClassificaBean;
 import fcweb.backend.data.entity.FcGiornataInfo;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.ClassificaTotalePuntiController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.ClassificaTotalePuntiService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.JasperReporUtils;
@@ -64,7 +64,7 @@ public class EmClassificaView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private ClassificaTotalePuntiController classificaTotalePuntiController;
+	private ClassificaTotalePuntiService classificaTotalePuntiController;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -73,7 +73,7 @@ public class EmClassificaView extends VerticalLayout{
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@PostConstruct
 	void init() {

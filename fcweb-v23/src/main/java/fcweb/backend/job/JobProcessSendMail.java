@@ -45,13 +45,13 @@ import fcweb.backend.data.entity.FcGiornataDett;
 import fcweb.backend.data.entity.FcGiornataDettInfo;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcPagelle;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.ClassificaController;
-import fcweb.backend.service.ClassificaTotalePuntiController;
-import fcweb.backend.service.GiornataController;
-import fcweb.backend.service.GiornataDettController;
-import fcweb.backend.service.GiornataDettInfoController;
-import fcweb.backend.service.GiornataInfoController;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.ClassificaService;
+import fcweb.backend.service.ClassificaTotalePuntiService;
+import fcweb.backend.service.GiornataService;
+import fcweb.backend.service.GiornataDettService;
+import fcweb.backend.service.GiornataDettInfoService;
+import fcweb.backend.service.GiornataInfoService;
 import fcweb.utils.Costants;
 import fcweb.utils.JasperReporUtils;
 
@@ -67,25 +67,25 @@ public class JobProcessSendMail{
 	private JavaMailSender javaMailSender;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private GiornataController giornataController;
+	private GiornataService giornataController;
 
 	@Autowired
-	private GiornataDettController giornataDettController;
+	private GiornataDettService giornataDettController;
 
 	@Autowired
-	private ClassificaController classificaController;
+	private ClassificaService classificaController;
 
 	@Autowired
-	private ClassificaTotalePuntiController classificaTotalePuntiController;
+	private ClassificaTotalePuntiService classificaTotalePuntiController;
 
 	@Autowired
-	private GiornataDettInfoController giornataDettInfoController;
+	private GiornataDettInfoService giornataDettInfoController;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;

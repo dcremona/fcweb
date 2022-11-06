@@ -76,14 +76,14 @@ import fcweb.backend.data.entity.FcMercatoDettInfo;
 import fcweb.backend.data.entity.FcProperties;
 import fcweb.backend.data.entity.FcRuolo;
 import fcweb.backend.data.entity.FcSquadra;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.FormazioneController;
-import fcweb.backend.service.GiocatoreController;
-import fcweb.backend.service.MercatoController;
-import fcweb.backend.service.MercatoInfoController;
-import fcweb.backend.service.RuoloController;
-import fcweb.backend.service.SquadraController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.FormazioneService;
+import fcweb.backend.service.GiocatoreService;
+import fcweb.backend.service.MercatoService;
+import fcweb.backend.service.MercatoInfoService;
+import fcweb.backend.service.RuoloService;
+import fcweb.backend.service.SquadraService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
@@ -213,31 +213,31 @@ public class EmMercatoView extends VerticalLayout
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	private GiocatoreController giocatoreController;
+	private GiocatoreService giocatoreController;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private RuoloController ruoloController;
+	private RuoloService ruoloController;
 
 	@Autowired
-	private SquadraController squadraController;
+	private SquadraService squadraController;
 
 	@Autowired
-	private FormazioneController formazioneController;
+	private FormazioneService formazioneController;
 
 	@Autowired
-	private MercatoController mercatoController;
+	private MercatoService mercatoController;
 
 	@Autowired
-	private MercatoInfoController mercatoInfoController;
+	private MercatoInfoService mercatoInfoController;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@PostConstruct
 	void init() throws Exception {
@@ -352,11 +352,11 @@ public class EmMercatoView extends VerticalLayout
 			return container;
 		}));
 
-		comboNazione = new ComboBox<>();
+		comboNazione = new ComboBox<>("Nazione");
 		comboNazione.setItems(squadre);
 		comboNazione.setItemLabelGenerator(s -> s.getNomeSquadra());
 		comboNazione.setClearButtonVisible(true);
-		comboNazione.setPlaceholder("Nazione");
+		//comboNazione.setPlaceholder("Nazione");
 		comboNazione.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
 //			Image imgSq = buildImage("classpath:/img/nazioni/", item.getNomeSquadra() + ".png");
@@ -450,7 +450,7 @@ public class EmMercatoView extends VerticalLayout
 		left = 500;
 		absLayout.add(saveSendMail, left, top);
 
-		top = 40;
+		top = 45;
 		absLayout.add(comboAttore, left, top);
 
 		final HorizontalLayout layoutAvviso = new HorizontalLayout();

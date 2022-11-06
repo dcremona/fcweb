@@ -58,8 +58,8 @@ import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcClassifica;
 import fcweb.backend.data.entity.FcClassificaTotPt;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.ClassificaController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.ClassificaService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.JasperReporUtils;
@@ -74,7 +74,7 @@ public class ClassificaView extends VerticalLayout {
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private ClassificaController classificaController;
+	private ClassificaService classificaController;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -83,7 +83,7 @@ public class ClassificaView extends VerticalLayout {
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@PostConstruct
 	void init() {

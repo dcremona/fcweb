@@ -21,8 +21,8 @@ import com.vaadin.flow.router.Route;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcExpStat;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.ExpStatController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.ExpStatService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "fcExpStat", layout = MainAppLayout.class)
@@ -36,13 +36,13 @@ public class FcExpStatView extends VerticalLayout
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private ExpStatController expStatController;
+	private ExpStatService expStatController;
 
 	@Autowired
 	public Environment env;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FcExpStatView() {
 		LOG.info("FcExpStatView()");

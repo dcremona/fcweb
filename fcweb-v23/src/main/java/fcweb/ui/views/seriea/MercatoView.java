@@ -45,12 +45,12 @@ import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcProperties;
 import fcweb.backend.data.entity.FcSquadra;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.ClassificaController;
-import fcweb.backend.service.FormazioneController;
-import fcweb.backend.service.GiocatoreController;
-import fcweb.backend.service.SquadraController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.ClassificaService;
+import fcweb.backend.service.FormazioneService;
+import fcweb.backend.service.GiocatoreService;
+import fcweb.backend.service.SquadraService;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
 
@@ -70,16 +70,16 @@ public class MercatoView extends VerticalLayout
 	private String idCampionato = null;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private GiocatoreController giocatoreController;
+	private GiocatoreService giocatoreController;
 
 	@Autowired
-	private FormazioneController formazioneController;
+	private FormazioneService formazioneController;
 
 	@Autowired
-	private ClassificaController classificaController;
+	private ClassificaService classificaController;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -101,10 +101,10 @@ public class MercatoView extends VerticalLayout
 	public List<FcClassifica> creditiFm = new ArrayList<FcClassifica>();
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@Autowired
-	private SquadraController squadraController;
+	private SquadraService squadraController;
 
 	public MercatoView() {
 		LOG.info("MercatoView");

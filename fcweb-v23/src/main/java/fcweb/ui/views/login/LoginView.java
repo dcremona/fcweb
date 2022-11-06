@@ -39,12 +39,12 @@ import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcPagelle;
 import fcweb.backend.data.entity.FcProperties;
-import fcweb.backend.repositories.GiornataInfoRepository;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.CampionatoController;
-import fcweb.backend.service.PagelleController;
-import fcweb.backend.service.ProprietaController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.CampionatoService;
+import fcweb.backend.service.GiornataInfoRepository;
+import fcweb.backend.service.PagelleService;
+import fcweb.backend.service.ProprietaService;
 import fcweb.ui.views.em.EmHomeView;
 import fcweb.ui.views.seriea.HomeView;
 import fcweb.utils.Costants;
@@ -63,22 +63,22 @@ public class LoginView extends VerticalLayout {
 	private Environment env;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private CampionatoController campionatoController;
+	private CampionatoService campionatoController;
 
 	@Autowired
-	private ProprietaController proprietaController;
+	private ProprietaService proprietaController;
 
 	@Autowired
-	private PagelleController pagelleController;
+	private PagelleService pagelleController;
 
 	@Autowired
 	private GiornataInfoRepository giornataInfoRepository;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@Autowired
 	private ResourceLoader resourceLoader;

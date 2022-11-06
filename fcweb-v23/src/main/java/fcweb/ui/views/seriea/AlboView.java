@@ -24,9 +24,9 @@ import com.vaadin.flow.server.VaadinSession;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcExpStat;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AlboController;
-import fcweb.backend.service.AttoreController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AlboService;
+import fcweb.backend.service.AttoreService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;;
 
@@ -40,13 +40,13 @@ public class AlboView extends VerticalLayout {
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private AlboController alboController;
+	private AlboService alboController;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public AlboView() {
 		LOG.info("AlboView()");

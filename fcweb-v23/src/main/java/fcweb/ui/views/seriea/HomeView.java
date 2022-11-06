@@ -38,11 +38,11 @@ import fcweb.backend.data.entity.FcClassificaTotPt;
 import fcweb.backend.data.entity.FcGiornata;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcGiornataRis;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.ClassificaTotalePuntiController;
-import fcweb.backend.service.GiornataController;
-import fcweb.backend.service.GiornataInfoController;
-import fcweb.backend.service.GiornataRisController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.ClassificaTotalePuntiService;
+import fcweb.backend.service.GiornataService;
+import fcweb.backend.service.GiornataInfoService;
+import fcweb.backend.service.GiornataRisService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 
@@ -56,19 +56,19 @@ public class HomeView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private GiornataController giornataController;
+	private GiornataService giornataController;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private GiornataRisController giornataRisController;
+	private GiornataRisService giornataRisController;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@Autowired
-	private ClassificaTotalePuntiController classificaTotalePuntiController;
+	private ClassificaTotalePuntiService classificaTotalePuntiController;
 
 	public HomeView() {
 		LOG.info("HomeView()");

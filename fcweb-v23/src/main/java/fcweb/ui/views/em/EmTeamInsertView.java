@@ -56,7 +56,7 @@ import common.mail.ContentIdGenerator;
 import common.mail.MailClient;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
-import fcweb.backend.data.entity.FcCalendarioTim;
+import fcweb.backend.data.entity.FcCalendarioCompetizione;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
@@ -64,12 +64,12 @@ import fcweb.backend.data.entity.FcGiornataDett;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.CalendarioTimController;
-import fcweb.backend.service.FormazioneController;
-import fcweb.backend.service.GiornataDettController;
-import fcweb.backend.service.SquadraController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.CalendarioCompetizioneService;
+import fcweb.backend.service.FormazioneService;
+import fcweb.backend.service.GiornataDettService;
+import fcweb.backend.service.SquadraService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
@@ -177,28 +177,28 @@ public class EmTeamInsertView extends VerticalLayout
 	private List<FcGiocatore> modelPlayer23 = new ArrayList<FcGiocatore>();
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private FormazioneController formazioneController;
+	private FormazioneService formazioneController;
 
 	@Autowired
-	private GiornataDettController giornataDettController;
+	private GiornataDettService giornataDettController;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
 
 	@Autowired
-	private CalendarioTimController calendarioTimController;
-	private Grid<FcCalendarioTim> tablePartite;
+	private CalendarioCompetizioneService calendarioTimController;
+	private Grid<FcCalendarioCompetizione> tablePartite;
 
 	private AbsoluteLayout absLayout;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@Autowired
-	private SquadraController squadraController;
+	private SquadraService squadraController;
 
 	@PostConstruct
 	void init() throws Exception {
@@ -402,7 +402,7 @@ public class EmTeamInsertView extends VerticalLayout
 		tablePlayer22 = getTableGiocatore(modelPlayer22);
 		tablePlayer23 = getTableGiocatore(modelPlayer23);
 
-		List<FcCalendarioTim> listPartite = calendarioTimController.findByIdGiornataOrderByDataAsc(giornataInfo.getCodiceGiornata());
+		List<FcCalendarioCompetizione> listPartite = calendarioTimController.findByIdGiornataOrderByDataAsc(giornataInfo.getCodiceGiornata());
 		tablePartite = getTablePartite(listPartite);
 
 		Image panchina = buildImage("classpath:images/", "panchina.jpg");
@@ -2002,16 +2002,16 @@ public class EmTeamInsertView extends VerticalLayout
 		return img;
 	}
 
-	private Grid<FcCalendarioTim> getTablePartite(
-			List<FcCalendarioTim> listPartite) {
+	private Grid<FcCalendarioCompetizione> getTablePartite(
+			List<FcCalendarioCompetizione> listPartite) {
 
-		Grid<FcCalendarioTim> grid = new Grid<>();
+		Grid<FcCalendarioCompetizione> grid = new Grid<>();
 		grid.setItems(listPartite);
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setAllRowsVisible(true);
 		grid.setWidth("300px");
 
-		Column<FcCalendarioTim> nomeSquadraCasaColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+		Column<FcCalendarioCompetizione> nomeSquadraCasaColumn = grid.addColumn(new ComponentRenderer<>(s -> {
 
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
@@ -2044,7 +2044,7 @@ public class EmTeamInsertView extends VerticalLayout
 		// nomeSquadraCasaColumn.setHeader("Casa");
 		nomeSquadraCasaColumn.setAutoWidth(true);
 
-		Column<FcCalendarioTim> nomeSquadraFuoriColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+		Column<FcCalendarioCompetizione> nomeSquadraFuoriColumn = grid.addColumn(new ComponentRenderer<>(s -> {
 
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
@@ -2077,9 +2077,9 @@ public class EmTeamInsertView extends VerticalLayout
 		// nomeSquadraFuoriColumn.setHeader("Fuori");
 		nomeSquadraFuoriColumn.setAutoWidth(true);
 
-		Column<FcCalendarioTim> dataColumn = grid.addColumn(
+		Column<FcCalendarioCompetizione> dataColumn = grid.addColumn(
 				//new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
-				new LocalDateTimeRenderer<>(FcCalendarioTim::getData)
+				new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData)
 		);
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);

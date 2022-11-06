@@ -26,8 +26,8 @@ import com.wontlost.dicebear.Options;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.CustomMessageDialog;
 
@@ -42,7 +42,7 @@ public class SettingsView extends VerticalLayout
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	private static final String[] styles = new String[] { Style.adventurer.toString(), Style.avataaars.toString(), Style.big_ears.toString(), Style.big_smile.toString(), Style.bottts.toString(), Style.croodles.toString(), Style.identicon.toString(), Style.micah.toString(), Style.miniavs.toString(), Style.open_peeps.toString(), Style.personas.toString(), Style.pixel_art.toString() };
 
@@ -65,7 +65,7 @@ public class SettingsView extends VerticalLayout
 	private Button saveButton;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	private FcAttore attore = null;
 
@@ -109,7 +109,9 @@ public class SettingsView extends VerticalLayout
 			});
 
 			cellulare = new TextField("Cellulare:");
-			cellulare.setValue(attore.getCellulare());
+			if (attore.getCellulare() != null) {
+				cellulare.setValue(attore.getCellulare());	
+			}
 
 			dicebearVaadin = new DicebearVaadin();
 			dicebearVaadin.setStyle(Style.avataaars);

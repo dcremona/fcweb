@@ -51,7 +51,7 @@ import com.vaadin.flow.server.VaadinSession;
 import common.mail.MailClient;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
-import fcweb.backend.data.entity.FcCalendarioTim;
+import fcweb.backend.data.entity.FcCalendarioCompetizione;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornata;
@@ -61,15 +61,15 @@ import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.job.JobProcessFileCsv;
 import fcweb.backend.job.JobProcessGiornata;
 import fcweb.backend.job.JobProcessSendMail;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.CalendarioTimController;
-import fcweb.backend.service.ClassificaController;
-import fcweb.backend.service.FormazioneController;
-import fcweb.backend.service.GiornataController;
-import fcweb.backend.service.GiornataInfoController;
-import fcweb.backend.service.ProprietaController;
-import fcweb.backend.service.SquadraController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.CalendarioCompetizioneService;
+import fcweb.backend.service.ClassificaService;
+import fcweb.backend.service.FormazioneService;
+import fcweb.backend.service.GiornataService;
+import fcweb.backend.service.GiornataInfoService;
+import fcweb.backend.service.ProprietaService;
+import fcweb.backend.service.SquadraService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
@@ -95,10 +95,10 @@ public class ImpostazioniView extends VerticalLayout
 	private JavaMailSender javaMailSender;
 
 	@Autowired
-	private CalendarioTimController calendarioTimController;
+	private CalendarioCompetizioneService calendarioTimController;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
 	private JobProcessFileCsv jobProcessFileCsv;
@@ -110,19 +110,19 @@ public class ImpostazioniView extends VerticalLayout
 	private JobProcessSendMail jobProcessSendMail;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private SquadraController squadraController;
+	private SquadraService squadraController;
 
 	@Autowired
-	private ClassificaController classificaController;
+	private ClassificaService classificaController;
 
 	@Autowired
-	private FormazioneController formazioneController;
+	private FormazioneService formazioneController;
 
 	@Autowired
-	private ProprietaController proprietaController;
+	private ProprietaService proprietaController;
 
 	private Button initDb;
 	private Button generaCalendar;
@@ -162,7 +162,7 @@ public class ImpostazioniView extends VerticalLayout
 	private DateTimePicker dp;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@PostConstruct
 	void init() {
@@ -745,10 +745,10 @@ public class ImpostazioniView extends VerticalLayout
 				LOG.info("1 " + dg.getValue());
 				LOG.info("1 " + dp.getValue());
 
-				List<FcCalendarioTim> listCalend = calendarioTimController.findCustom(giornataInfo);
+				List<FcCalendarioCompetizione> listCalend = calendarioTimController.findCustom(giornataInfo);
 				LocalDateTime appo = listCalend.get(0).getData();
 				ArrayList<LocalDateTime> listDate = new ArrayList<LocalDateTime>();
-				for (FcCalendarioTim c : listCalend) {
+				for (FcCalendarioCompetizione c : listCalend) {
 					LOG.info("" + appo.getDayOfWeek());
 					if (appo.getDayOfWeek() != (c.getData().getDayOfWeek())) {
 						listDate.add(appo);
@@ -789,7 +789,7 @@ public class ImpostazioniView extends VerticalLayout
 	}
 
 	@Autowired
-	private GiornataController giornataController;
+	private GiornataService giornataController;
 
 	private void sendMailInfoGiornata(FcGiornataInfo ggInfo)
 			throws AddressException, IOException, MessagingException,

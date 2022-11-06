@@ -20,8 +20,8 @@ import com.vaadin.flow.router.Route;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcCampionato;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.CampionatoController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.CampionatoService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "campionato", layout = MainAppLayout.class)
@@ -34,13 +34,13 @@ public class FcCampionatoView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private CampionatoController campionatoController;
+	private CampionatoService campionatoController;
 
 	@Autowired
 	public Environment env;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FcCampionatoView() {
 		LOG.info("FcCampionatoView()");

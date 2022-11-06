@@ -40,7 +40,7 @@ import common.mail.MailClient;
 import common.util.Buffer;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
-import fcweb.backend.data.entity.FcCalendarioTim;
+import fcweb.backend.data.entity.FcCalendarioCompetizione;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
@@ -53,17 +53,17 @@ import fcweb.backend.data.entity.FcPagelleId;
 import fcweb.backend.data.entity.FcRuolo;
 import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
-import fcweb.backend.repositories.AttoreRepository;
-import fcweb.backend.repositories.CalendarioTimRepository;
-import fcweb.backend.repositories.CampionatoRepository;
-import fcweb.backend.repositories.FormazioneRepository;
-import fcweb.backend.repositories.GiocatoreRepository;
-import fcweb.backend.repositories.GiornataDettRepository;
-import fcweb.backend.repositories.GiornataInfoRepository;
-import fcweb.backend.repositories.GiornataRepository;
-import fcweb.backend.repositories.PagelleRepository;
-import fcweb.backend.repositories.SquadraRepository;
-import fcweb.backend.repositories.StatisticheRepository;
+import fcweb.backend.service.AttoreRepository;
+import fcweb.backend.service.CalendarioCompetizioneRepository;
+import fcweb.backend.service.CampionatoRepository;
+import fcweb.backend.service.FormazioneRepository;
+import fcweb.backend.service.GiocatoreRepository;
+import fcweb.backend.service.GiornataDettRepository;
+import fcweb.backend.service.GiornataInfoRepository;
+import fcweb.backend.service.GiornataRepository;
+import fcweb.backend.service.PagelleRepository;
+import fcweb.backend.service.SquadraRepository;
+import fcweb.backend.service.StatisticheRepository;
 import fcweb.utils.Costants;
 
 @Controller
@@ -108,7 +108,7 @@ public class JobProcessGiornata{
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	private CalendarioTimRepository calendarioTimRepository;
+	private CalendarioCompetizioneRepository calendarioTimRepository;
 
 	public HashMap<Object, Object> initDbGiocatori(String httpUrlImg,
 			String imgPath, String fileName, boolean updateQuotazioni,
@@ -3995,7 +3995,7 @@ public class JobProcessGiornata{
 			for (int i = 0; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
 
-				FcCalendarioTim calendarioTim = new FcCalendarioTim();
+				FcCalendarioCompetizione calendarioTim = new FcCalendarioCompetizione();
 				String idGiornata = record.get(0);
 				String data = record.get(1);
 				String ora = record.get(2);
@@ -4065,7 +4065,7 @@ public class JobProcessGiornata{
 			// Get a list of CSV file records
 			List<CSVRecord> csvRecords = csvFileParser.getRecords();
 
-			List<FcCalendarioTim> listCalendarioTim = calendarioTimRepository.findByIdGiornata(idGiornata);
+			List<FcCalendarioCompetizione> listCalendarioTim = calendarioTimRepository.findByIdGiornata(idGiornata);
 
 			for (int i = 0; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
@@ -4103,7 +4103,7 @@ public class JobProcessGiornata{
 				String squadraFuori = record.get(3).toUpperCase();
 				LOG.debug("data " + dataOra + " squadraCasa " + squadraCasa + " squadraFuori " + squadraFuori);
 
-				for (FcCalendarioTim cTim : listCalendarioTim) {
+				for (FcCalendarioCompetizione cTim : listCalendarioTim) {
 					if (cTim.getSquadraCasa().substring(0, 3).toUpperCase().equals(squadraCasa.substring(0, 3))) {
 						String data = dataOra.substring(0, 6) + "20" + dataOra.substring(6, 8);
 						String ora = dataOra.substring(dataOra.length() - 5, dataOra.length());
@@ -4203,7 +4203,7 @@ public class JobProcessGiornata{
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH.mm");
 				LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
 
-				FcCalendarioTim calendarioTim = new FcCalendarioTim();
+				FcCalendarioCompetizione calendarioTim = new FcCalendarioCompetizione();
 				calendarioTim.setIdGiornata(idGiornata);
 				calendarioTim.setData(dateTime);
 

@@ -46,9 +46,9 @@ import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcRuolo;
 import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.FormazioneController;
-import fcweb.backend.service.GiocatoreController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.FormazioneService;
+import fcweb.backend.service.GiocatoreService;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
 
@@ -63,10 +63,10 @@ public class FreePlayersView extends VerticalLayout
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private GiocatoreController giocatoreController;
+	private GiocatoreService giocatoreController;
 
 	@Autowired
-	private FormazioneController formazioneController;
+	private FormazioneService formazioneController;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -81,7 +81,7 @@ public class FreePlayersView extends VerticalLayout
 	private Grid<FcGiocatore> gridA = new Grid<FcGiocatore>();
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FreePlayersView() {
 		LOG.info("FreePlayersView");

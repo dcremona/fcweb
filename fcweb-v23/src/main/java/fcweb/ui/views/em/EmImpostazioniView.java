@@ -81,12 +81,12 @@ import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.job.EmJobProcessFileCsv;
 import fcweb.backend.job.EmJobProcessGiornata;
 import fcweb.backend.job.JobProcessFileCsv;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.ClassificaTotalePuntiController;
-import fcweb.backend.service.FormazioneController;
-import fcweb.backend.service.GiornataDettController;
-import fcweb.backend.service.GiornataInfoController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.ClassificaTotalePuntiService;
+import fcweb.backend.service.FormazioneService;
+import fcweb.backend.service.GiornataDettService;
+import fcweb.backend.service.GiornataInfoService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
@@ -112,19 +112,19 @@ public class EmImpostazioniView extends VerticalLayout
 	private List<FcGiornataInfo> giornate = null;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
 	private EmJobProcessGiornata emjobProcessGiornata;
 
 	@Autowired
-	private ClassificaTotalePuntiController classificaTotalePuntiController;
+	private ClassificaTotalePuntiService classificaTotalePuntiController;
 
 	@Autowired
-	private FormazioneController formazioneController;
+	private FormazioneService formazioneController;
 
 	// @Autowired
 	// private GiornataController giornataController;
@@ -139,7 +139,7 @@ public class EmImpostazioniView extends VerticalLayout
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	private GiornataDettController giornataDettController;
+	private GiornataDettService giornataDettController;
 
 	private ComboBox<FcGiornataInfo> comboGiornata;
 
@@ -169,7 +169,7 @@ public class EmImpostazioniView extends VerticalLayout
 	private Button notifica;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	@PostConstruct
 	void init() {

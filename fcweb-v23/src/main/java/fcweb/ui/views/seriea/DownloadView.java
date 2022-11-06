@@ -49,10 +49,10 @@ import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcExpFreePl;
 import fcweb.backend.data.entity.FcExpRosea;
 import fcweb.backend.job.JobProcessGiornata;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.ExpFreePlController;
-import fcweb.backend.service.ExpRoseAController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.ExpFreePlService;
+import fcweb.backend.service.ExpRoseAService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.CustomMessageDialog;
 
@@ -69,13 +69,13 @@ public class DownloadView extends VerticalLayout implements ComponentEventListen
 	private Grid<FcExpRosea> gridRosea = new Grid<FcExpRosea>();
 
 	@Autowired
-	private ExpRoseAController expRoseAController;
+	private ExpRoseAService expRoseAController;
 
 	@Autowired
-	private ExpFreePlController expFreePlController;
+	private ExpFreePlService expFreePlController;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
 	private JobProcessGiornata jobProcessGiornata;
@@ -89,7 +89,7 @@ public class DownloadView extends VerticalLayout implements ComponentEventListen
 	private Button salvaFreePl = null;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	int resX = 0;
 	int resY = 0;

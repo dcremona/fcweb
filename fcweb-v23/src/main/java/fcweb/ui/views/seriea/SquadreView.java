@@ -53,10 +53,10 @@ import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcMercatoDett;
 import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.data.entity.FcStatistiche;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.FormazioneController;
-import fcweb.backend.service.MercatoController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.FormazioneService;
+import fcweb.backend.service.MercatoService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.JasperReporUtils;
@@ -71,13 +71,13 @@ public class SquadreView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private FormazioneController formazioneController;
+	private FormazioneService formazioneController;
 
 	@Autowired
-	private MercatoController mercatoController;
+	private MercatoService mercatoController;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -88,7 +88,7 @@ public class SquadreView extends VerticalLayout{
 	private List<FcAttore> squadre = new ArrayList<FcAttore>();
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public SquadreView() {
 		LOG.info("SquadreView()");

@@ -18,8 +18,8 @@ import com.vaadin.flow.router.Route;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcProperties;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.ProprietaController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.ProprietaService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "proprieta", layout = MainAppLayout.class)
@@ -32,13 +32,13 @@ public class FcPropertiesView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private ProprietaController proprietaController;
+	private ProprietaService proprietaController;
 
 	@Autowired
 	public Environment env;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FcPropertiesView() {
 		LOG.info("FcPropertiesView()");

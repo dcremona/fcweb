@@ -45,12 +45,12 @@ import fcweb.backend.data.entity.FcGiornataDett;
 import fcweb.backend.data.entity.FcGiornataDettInfo;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcSquadra;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.ClassificaTotalePuntiController;
-import fcweb.backend.service.GiornataDettController;
-import fcweb.backend.service.GiornataDettInfoController;
-import fcweb.backend.service.GiornataInfoController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.ClassificaTotalePuntiService;
+import fcweb.backend.service.GiornataDettService;
+import fcweb.backend.service.GiornataDettInfoService;
+import fcweb.backend.service.GiornataInfoService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;;
 
@@ -77,16 +77,16 @@ public class EmFormazioniView extends VerticalLayout{
 	private Image iconGolVittoria_ = null;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private GiornataDettController giornataDettController;
+	private GiornataDettService giornataDettController;
 
 	@Autowired
-	private GiornataDettInfoController giornataDettInfoController;
+	private GiornataDettInfoService giornataDettInfoController;
 
 	@Autowired
-	private ClassificaTotalePuntiController classificaTotalePuntiController;
+	private ClassificaTotalePuntiService classificaTotalePuntiController;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -98,12 +98,12 @@ public class EmFormazioniView extends VerticalLayout{
 	private ComboBox<FcGiornataInfo> comboGiornata;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	public List<FcAttore> squadre = new ArrayList<FcAttore>();
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public EmFormazioniView() {
 		LOG.info("EmFormazioniView()");

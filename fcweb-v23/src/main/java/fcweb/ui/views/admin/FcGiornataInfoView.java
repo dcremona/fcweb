@@ -22,8 +22,8 @@ import com.vaadin.flow.router.Route;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcGiornataInfo;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.GiornataInfoController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.GiornataInfoService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "giornataInfo", layout = MainAppLayout.class)
@@ -36,13 +36,13 @@ public class FcGiornataInfoView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
 	public Environment env;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FcGiornataInfoView() {
 		LOG.info("FcGiornataInfoView()");

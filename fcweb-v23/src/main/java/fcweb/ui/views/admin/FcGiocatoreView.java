@@ -36,10 +36,10 @@ import common.util.Utils;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcRuolo;
 import fcweb.backend.data.entity.FcSquadra;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.GiocatoreController;
-import fcweb.backend.service.RuoloController;
-import fcweb.backend.service.SquadraController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.GiocatoreService;
+import fcweb.backend.service.RuoloService;
+import fcweb.backend.service.SquadraService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
@@ -54,19 +54,19 @@ public class FcGiocatoreView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private GiocatoreController giocatoreController;
+	private GiocatoreService giocatoreController;
 
 	@Autowired
-	private SquadraController squadraController;
+	private SquadraService squadraController;
 
 	@Autowired
-	private RuoloController ruoloController;
+	private RuoloService ruoloController;
 
 	@Autowired
 	public Environment env;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	private ComboBox<FcRuolo> ruoloFilter = new ComboBox<FcRuolo>();
 	private ComboBox<FcSquadra> squadraFilter = new ComboBox<FcSquadra>();

@@ -23,11 +23,11 @@ import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcGiornata;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcTipoGiornata;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.GiornataController;
-import fcweb.backend.service.GiornataInfoController;
-import fcweb.backend.service.TipoGiornataController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.GiornataService;
+import fcweb.backend.service.GiornataInfoService;
+import fcweb.backend.service.TipoGiornataService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "giornata", layout = MainAppLayout.class)
@@ -40,22 +40,22 @@ public class FcGiornataView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private GiornataController giornataController;
+	private GiornataService giornataController;
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private TipoGiornataController tipoGiornataController;
+	private TipoGiornataService tipoGiornataController;
 
 	@Autowired
 	public Environment env;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FcGiornataView() {
 		LOG.info("FcGiornataView()");

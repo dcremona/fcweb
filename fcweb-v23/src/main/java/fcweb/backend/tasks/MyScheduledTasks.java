@@ -22,9 +22,9 @@ import fcweb.backend.data.entity.FcProperties;
 import fcweb.backend.job.JobProcessFileCsv;
 import fcweb.backend.job.JobProcessGiornata;
 import fcweb.backend.job.JobProcessSendMail;
-import fcweb.backend.service.CampionatoController;
-import fcweb.backend.service.PagelleController;
-import fcweb.backend.service.ProprietaController;
+import fcweb.backend.service.CampionatoService;
+import fcweb.backend.service.PagelleService;
+import fcweb.backend.service.ProprietaService;
 
 @Component
 public class MyScheduledTasks{
@@ -37,13 +37,13 @@ public class MyScheduledTasks{
 	private Environment env;
 
 	@Autowired
-	private ProprietaController proprietaController;
+	private ProprietaService proprietaController;
 
 	@Autowired
-	private CampionatoController campionatoController;
+	private CampionatoService campionatoController;
 
 	@Autowired
-	private PagelleController pagelleController;
+	private PagelleService pagelleController;
 
 	@Autowired
 	private JobProcessFileCsv jobProcessFileCsv;

@@ -29,12 +29,12 @@ import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornataDett;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcStatoGiocatore;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.AttoreController;
-import fcweb.backend.service.GiocatoreController;
-import fcweb.backend.service.GiornataDettController;
-import fcweb.backend.service.GiornataInfoController;
-import fcweb.backend.service.StatoGiocatoreController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.GiocatoreService;
+import fcweb.backend.service.GiornataDettService;
+import fcweb.backend.service.GiornataInfoService;
+import fcweb.backend.service.StatoGiocatoreService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "giornatadett", layout = MainAppLayout.class)
@@ -47,25 +47,25 @@ public class FcGiornataDettView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private AttoreController attoreController;
+	private AttoreService attoreController;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private GiocatoreController giocatoreController;
+	private GiocatoreService giocatoreController;
 
 	@Autowired
-	private StatoGiocatoreController statoGiocatoreController;
+	private StatoGiocatoreService statoGiocatoreController;
 
 	@Autowired
-	private GiornataDettController giornataDettController;
+	private GiornataDettService giornataDettController;
 
 	@Autowired
 	public Environment env;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	private ComboBox<FcAttore> attoreFilter = new ComboBox<FcAttore>();
 	private ComboBox<FcGiornataInfo> giornataInfoFilter = new ComboBox<FcGiornataInfo>();

@@ -28,10 +28,10 @@ import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcPagelle;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.GiocatoreController;
-import fcweb.backend.service.GiornataInfoController;
-import fcweb.backend.service.PagelleController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.GiocatoreService;
+import fcweb.backend.service.GiornataInfoService;
+import fcweb.backend.service.PagelleService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "pagelle", layout = MainAppLayout.class)
@@ -44,19 +44,19 @@ public class FcPagelleView extends VerticalLayout{
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private GiocatoreController giocatoreController;
+	private GiocatoreService giocatoreController;
 
 	@Autowired
-	private PagelleController pagelleController;
+	private PagelleService pagelleController;
 
 	@Autowired
 	public Environment env;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	private ComboBox<FcGiornataInfo> giornataInfoFilter = new ComboBox<FcGiornataInfo>();
 	private ComboBox<FcGiocatore> giocatoreFilter = new ComboBox<FcGiocatore>();

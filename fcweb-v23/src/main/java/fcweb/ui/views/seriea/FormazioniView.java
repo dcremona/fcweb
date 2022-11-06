@@ -53,13 +53,13 @@ import fcweb.backend.data.entity.FcGiornataDettInfo;
 import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcProperties;
 import fcweb.backend.job.JobProcessSendMail;
-import fcweb.backend.service.AccessoController;
-import fcweb.backend.service.ClassificaController;
-import fcweb.backend.service.ClassificaTotalePuntiController;
-import fcweb.backend.service.GiornataController;
-import fcweb.backend.service.GiornataDettController;
-import fcweb.backend.service.GiornataDettInfoController;
-import fcweb.backend.service.GiornataInfoController;
+import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.ClassificaService;
+import fcweb.backend.service.ClassificaTotalePuntiService;
+import fcweb.backend.service.GiornataService;
+import fcweb.backend.service.GiornataDettService;
+import fcweb.backend.service.GiornataDettInfoService;
+import fcweb.backend.service.GiornataInfoService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;;
 
@@ -86,22 +86,22 @@ public class FormazioniView extends VerticalLayout{
 	private Image iconBonusPortiere_ = null;
 
 	@Autowired
-	private GiornataInfoController giornataInfoController;
+	private GiornataInfoService giornataInfoController;
 
 	@Autowired
-	private GiornataController giornataController;
+	private GiornataService giornataController;
 
 	@Autowired
-	private GiornataDettController giornataDettController;
+	private GiornataDettService giornataDettController;
 
 	@Autowired
-	private GiornataDettInfoController giornataDettInfoController;
+	private GiornataDettInfoService giornataDettInfoController;
 
 	@Autowired
-	private ClassificaTotalePuntiController classificaTotalePuntiController;
+	private ClassificaTotalePuntiService classificaTotalePuntiController;
 
 	@Autowired
-	private ClassificaController classificaController;
+	private ClassificaService classificaController;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -113,7 +113,7 @@ public class FormazioniView extends VerticalLayout{
 	private ComboBox<FcGiornataInfo> comboGiornata;
 
 	@Autowired
-	private AccessoController accessoController;
+	private AccessoService accessoController;
 
 	public FormazioniView() {
 		LOG.info("FormazioniView()");
