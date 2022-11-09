@@ -851,8 +851,8 @@ public class TeamInsertMobileView extends VerticalLayout
 				FcSquadra sq = p.getFcSquadra();
 				if (sq != null && sq.getImg() != null) {
 					try {
-						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
-						cellLayout.add(img);
+						Image imgSq = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+						cellLayoutImg.add(imgSq);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
