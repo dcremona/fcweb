@@ -162,7 +162,7 @@ public class StatisticheView extends VerticalLayout
 
 		VerticalLayout container = new VerticalLayout();
 		PagedTabs tabs = new PagedTabs(container);
-		tabs.add("Statistiche A", layoutStat, false);
+		tabs.add("Statistiche", layoutStat, false);
 		tabs.add("Confronti", layoutConfornti, false);
 
 		add(tabs, container);
@@ -344,11 +344,11 @@ public class StatisticheView extends VerticalLayout
 		toggleA.setLabel("A");
 		toggleA.setValue(true);
 
-		comboSqudreA = new ComboBox<>();
+		comboSqudreA = new ComboBox<>("Squadra");
 		comboSqudreA.setItems(squadreSerieA);
 		comboSqudreA.setItemLabelGenerator(ss -> ss.getNomeSquadra());
 		comboSqudreA.setClearButtonVisible(true);
-		comboSqudreA.setPlaceholder("Seleziona squadra Serie A");
+		comboSqudreA.setPlaceholder("Squadra");
 		comboSqudreA.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
 //			Image img = buildImage("classpath:/img/squadre/", item.getNomeSquadra() + ".png");

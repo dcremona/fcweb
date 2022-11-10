@@ -1,5 +1,9 @@
 package fcweb.ui.views.admin;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
+
 import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
@@ -102,12 +106,9 @@ public class FcMercatoDettView extends VerticalLayout{
 		crud.getGrid().addColumn(new TextRenderer<>(g -> g != null && g.getFcGiocatoreByIdGiocVen() != null ? "" + g.getFcGiocatoreByIdGiocVen().getCognGiocatore() : "")).setHeader("Gioc Ven");
 		crud.getGrid().addColumn(new TextRenderer<>(g -> g != null && g.getFcGiocatoreByIdGiocAcq() != null ? "" + g.getFcGiocatoreByIdGiocAcq().getCognGiocatore() : "")).setHeader("Gioc Acq");
 
-		Column<FcMercatoDett> dataColumn = crud.getGrid().addColumn(
-				//new LocalDateTimeRenderer<>(FcMercatoDett::getDataCambio,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.MEDIUM).withLocale(Locale.ITALY))
-				new LocalDateTimeRenderer<>(FcMercatoDett::getDataCambio)
-		);
+		Column<FcMercatoDett> dataColumn = crud.getGrid().addColumn(new LocalDateTimeRenderer<>(FcMercatoDett::getDataCambio,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.MEDIUM).withLocale(Locale.ITALY)));
 		dataColumn.setHeader("Data Cambio");
-		dataColumn.setSortable(true);
+		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
 		dataColumn.setFlexGrow(2);
 

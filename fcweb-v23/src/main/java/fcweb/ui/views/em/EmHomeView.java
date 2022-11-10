@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 
@@ -133,9 +136,7 @@ public class EmHomeView extends VerticalLayout{
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setAllRowsVisible(true);
 
-		Column<FcCalendarioCompetizione> dataColumn = grid.addColumn(
-				//new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)))
-				new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData));
+		Column<FcCalendarioCompetizione> dataColumn = grid.addColumn(new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)));
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
 		//dataColumn.setFlexGrow(2);

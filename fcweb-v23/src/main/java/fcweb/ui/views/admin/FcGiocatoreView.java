@@ -33,6 +33,7 @@ import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 
 import common.util.Utils;
+import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcRuolo;
 import fcweb.backend.data.entity.FcSquadra;
@@ -97,91 +98,90 @@ public class FcGiocatoreView extends VerticalLayout{
 		crud.setCrudFormFactory(formFactory);
 		formFactory.setUseBeanValidation(false);
 
-		// formFactory.setVisibleProperties("idGiocatore", "cognGiocatore",
-		// "quotazione", "flagAttivo", "fcSquadra", "fcRuolo");
-
 		formFactory.setVisibleProperties(CrudOperation.READ, "idGiocatore", "cognGiocatore", "quotazione", "nomeImg", "fcSquadra", "fcRuolo", "flagAttivo");
 		formFactory.setVisibleProperties(CrudOperation.ADD, "idGiocatore", "cognGiocatore", "nomeImg", "fcSquadra", "fcRuolo", "flagAttivo");
 		formFactory.setVisibleProperties(CrudOperation.UPDATE, "cognGiocatore", "quotazione", "nomeImg", "fcSquadra", "fcRuolo", "flagAttivo");
 		formFactory.setVisibleProperties(CrudOperation.DELETE, "idGiocatore", "cognGiocatore");
 
-		// crud.getGrid().setColumns("idGiocatore", "cognGiocatore",
-		// "quotazione", "nomeImg");
 		crud.getGrid().removeAllColumns();
-		Column<FcGiocatore> giocatreColumn = crud.getGrid().addColumn(new ComponentRenderer<>(g -> {
-			HorizontalLayout cellLayout = new HorizontalLayout();
-			cellLayout.setSizeFull();
-			if (g != null && g.getNomeImg() != null) {
-				StreamResource resource = new StreamResource(g.getNomeImg(),() -> {
-					InputStream inputStream = null;
-					try {
-						inputStream = g.getImg().getBinaryStream();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					return inputStream;
-				});
-				Image img = new Image(resource,"");
-				img.setSrc(resource);
-				cellLayout.add(img);
-
-				Image imgOnline = new Image(Costants.HTTP_URL_IMG + g.getNomeImg(),g.getNomeImg());
-				cellLayout.add(imgOnline);
-
-				Button updateImg = new Button("Salva");
-				updateImg.setIcon(VaadinIcon.DATABASE.create());
-				updateImg.addClickListener(event -> {
-					try {
-						Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
-						String basePathData = (String) p.get("PATH_TMP");
-						LOG.info("basePathData " + basePathData);
-						
-						File f = new File(basePathData);
-						if (!f.exists()) {
-							CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, "Impossibile trovare il percorso specificato "+basePathData);
-							return;
+		
+		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+		if ("1".equals(campionato.getType())) {
+			Column<FcGiocatore> giocatreColumn = crud.getGrid().addColumn(new ComponentRenderer<>(g -> {
+				HorizontalLayout cellLayout = new HorizontalLayout();
+				cellLayout.setSizeFull();
+				if (g != null && g.getNomeImg() != null) {
+					StreamResource resource = new StreamResource(g.getNomeImg(),() -> {
+						InputStream inputStream = null;
+						try {
+							inputStream = g.getImg().getBinaryStream();
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
+						return inputStream;
+					});
+					Image img = new Image(resource,"");
+					img.setSrc(resource);
+					cellLayout.add(img);
 
-						String newImg = g.getNomeImg();
-						LOG.info("newImg " + newImg);
-						LOG.info("httpUrlImg " + Costants.HTTP_URL_IMG);
-						String imgPath = basePathData;
+					Image imgOnline = new Image(Costants.HTTP_URL_IMG + g.getNomeImg(),g.getNomeImg());
+					cellLayout.add(imgOnline);
 
-						boolean flag = Utils.downloadFile(Costants.HTTP_URL_IMG + newImg, imgPath + newImg);
-						LOG.info("bResult 1 " + flag);
-						flag = Utils.buildFileSmall(imgPath + newImg, imgPath + "small-" + newImg);
-						LOG.info("bResult 2 " + flag);
+					Button updateImg = new Button("Salva");
+					updateImg.setIcon(VaadinIcon.DATABASE.create());
+					updateImg.addClickListener(event -> {
+						try {
+							Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
+							String basePathData = (String) p.get("PATH_TMP");
+							LOG.info("basePathData " + basePathData);
 
-						g.setImg(BlobProxy.generateProxy(Utils.getImage(imgPath + newImg)));
-						g.setImgSmall(BlobProxy.generateProxy(Utils.getImage(imgPath + "small-" + newImg)));
+							File f = new File(basePathData);
+							if (!f.exists()) {
+								CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, "Impossibile trovare il percorso specificato " + basePathData);
+								return;
+							}
 
-						LOG.info("SAVE GIOCATORE ");
-						giocatoreController.updateGiocatore(g);
+							String newImg = g.getNomeImg();
+							LOG.info("newImg " + newImg);
+							LOG.info("httpUrlImg " + Costants.HTTP_URL_IMG);
+							String imgPath = basePathData;
 
-						CustomMessageDialog.showMessageInfo(CustomMessageDialog.MSG_OK);
-					} catch (Exception e) {
-						CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC,e.getMessage());
-					}
-				});
+							boolean flag = Utils.downloadFile(Costants.HTTP_URL_IMG + newImg, imgPath + newImg);
+							LOG.info("bResult 1 " + flag);
+							flag = Utils.buildFileSmall(imgPath + newImg, imgPath + "small-" + newImg);
+							LOG.info("bResult 2 " + flag);
 
-				cellLayout.add(updateImg);
-			}
-			return cellLayout;
-		}));
-		giocatreColumn.setWidth("350px");
+							g.setImg(BlobProxy.generateProxy(Utils.getImage(imgPath + newImg)));
+							g.setImgSmall(BlobProxy.generateProxy(Utils.getImage(imgPath + "small-" + newImg)));
+
+							LOG.info("SAVE GIOCATORE ");
+							giocatoreController.updateGiocatore(g);
+
+							CustomMessageDialog.showMessageInfo(CustomMessageDialog.MSG_OK);
+						} catch (Exception e) {
+							CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, e.getMessage());
+						}
+					});
+
+					cellLayout.add(updateImg);
+				}
+				return cellLayout;
+			}));
+			giocatreColumn.setWidth("350px");
+		}
 
 		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : "" + g.getIdGiocatore())).setHeader("Id");
 		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : g.getFcRuolo().getIdRuolo())).setHeader("Ruolo");
-		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : "" + g.getCognGiocatore())).setHeader("Giocatore");
-		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : g.getFcSquadra().getNomeSquadra())).setHeader("Squadra");
+
+		Column<FcGiocatore> giocatoreColumn = crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : "" + g.getCognGiocatore())).setHeader("Giocatore");
+		giocatoreColumn.setSortable(false);
+		giocatoreColumn.setAutoWidth(true);
+
+		Column<FcGiocatore> squadraColumn = crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : g.getFcSquadra().getNomeSquadra())).setHeader("Squadra");
+		squadraColumn.setSortable(false);
+		squadraColumn.setAutoWidth(true);
+
 		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : "" + g.getQuotazione())).setHeader("Quotazione");
-		// crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : ""
-		// + g.getNomeImg())).setHeader("Nome Img");
-		// crud.getGrid().addColumn(new ComponentRenderer<>(g -> {
-		// Checkbox check = new Checkbox();
-		// check.setValue(g.isFlagAttivo());
-		// return check;
-		// })).setHeader("Attivo");
 
 		crud.getGrid().setColumnReorderingAllowed(true);
 

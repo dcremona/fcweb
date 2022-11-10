@@ -8,9 +8,12 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -2233,10 +2236,7 @@ public class TeamInsertMobileView extends VerticalLayout
 		// nomeSquadraFuoriColumn.setHeader("Fuori");
 		nomeSquadraFuoriColumn.setAutoWidth(true);
 
-		Column<FcCalendarioCompetizione> dataColumn = grid.addColumn(
-				//new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
-				new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData)
-		);
+		Column<FcCalendarioCompetizione> dataColumn = grid.addColumn(new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)));
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
 		dataColumn.setFlexGrow(2);

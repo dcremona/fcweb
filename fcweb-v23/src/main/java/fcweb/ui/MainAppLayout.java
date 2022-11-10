@@ -1034,10 +1034,8 @@ public class MainAppLayout extends AppLayout {
                         new MenuItemInfo("Impostazioni", "la la-tools", ImpostazioniView.class), //
                         new MenuItemInfo("Mercato", "la la-search-dollar", MercatoView.class), //
                         new MenuItemInfo("Free Players", "la la-free-code-camp", FreePlayersView.class), //
-                        new MenuItemInfo("Calendario Serie A", "la la-calendar-alt", FcCalendarioCompetizioneView.class), //
-                        new MenuItemInfo("Utenti", "la la-user-edit", FcUserView.class), //
                         new MenuItemInfo("Proprieta", "la la-toolbox", FcPropertiesView.class), //
-                        new MenuItemInfo("Campionato", "la la-brush", FcCampionatoView.class), //
+                        new MenuItemInfo("Utenti", "la la-user-edit", FcUserView.class), //
                         new MenuItemInfo("Giocatore", "la la-users", FcGiocatoreView.class), //
                         new MenuItemInfo("GiornataInfo", "la la-calendar-week", FcGiornataInfoView.class), //
                         new MenuItemInfo("Giornata", "la la-calendar-day", FcGiornataView.class), //
@@ -1046,9 +1044,11 @@ public class MainAppLayout extends AppLayout {
                         new MenuItemInfo("Classifica", "la la-table", FcClassificaView.class), //
                         new MenuItemInfo("MercatoDett", "la la-border-all", FcMercatoDettView.class), //
                         new MenuItemInfo("Pagelle", "la la-poll", FcPagelleView.class), //
-                        new MenuItemInfo("Accesso", "la la-universal-access", FcAccessoView.class), //
-                        new MenuItemInfo("Squadre Serie A", "la la-users-cog", FcSquadraView.class), //
                         new MenuItemInfo("ExpStat", "la la-keyboard", FcExpStatView.class), //
+                        new MenuItemInfo("Campionato", "la la-brush", FcCampionatoView.class), //
+                        new MenuItemInfo("Squadre Serie A", "la la-users-cog", FcSquadraView.class), //
+                        new MenuItemInfo("Calendario Serie A", "la la-calendar-alt", FcCalendarioCompetizioneView.class), //
+                        new MenuItemInfo("Accesso", "la la-universal-access", FcAccessoView.class), //
             	};
     			
     		} else {
@@ -1092,10 +1092,10 @@ public class MainAppLayout extends AppLayout {
                         new MenuItemInfo("Formazione", "la la-users-cog", FcFormazioneView.class), //
                         new MenuItemInfo("MercatoDett", "la la-border-all", FcMercatoDettView.class), //
                         new MenuItemInfo("Pagelle", "la la-poll", FcPagelleView.class), //
-                        new MenuItemInfo("Accesso", "la la-universal-access", FcAccessoView.class), //
                         new MenuItemInfo("Campionato", "la la-brush", FcCampionatoView.class), //
                         new MenuItemInfo("Squadre EM", "la la-users-cog", FcSquadraView.class), //
                         new MenuItemInfo("Calendario EM", "la la-calendar-alt", FcCalendarioCompetizioneView.class), //
+                        new MenuItemInfo("Accesso", "la la-universal-access", FcAccessoView.class), //                        
             	};
 
     		} else {

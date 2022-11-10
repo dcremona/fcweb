@@ -1,5 +1,9 @@
 package fcweb.ui.views.admin;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
+
 import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
@@ -8,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridCrud;
+import org.vaadin.crudui.form.impl.field.provider.ComboBoxProvider;
 import org.vaadin.crudui.form.impl.form.factory.DefaultCrudFormFactory;
 import org.vaadin.crudui.layout.impl.HorizontalSplitCrudLayout;
 
@@ -25,7 +30,11 @@ import com.vaadin.flow.router.Route;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAccesso;
+import fcweb.backend.data.entity.FcAttore;
+import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.service.AccessoService;
+import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.CampionatoService;
 import fcweb.ui.MainAppLayout;
 
 @Route(value = "fcAccesso", layout = MainAppLayout.class)
@@ -40,6 +49,12 @@ public class FcAccessoView extends VerticalLayout
 
 	@Autowired
 	private AccessoService accessoController;
+
+	@Autowired
+	private AttoreService attoreController;
+
+	@Autowired
+	private CampionatoService campionatoController;
 
 	@Autowired
 	public Environment env;
@@ -75,26 +90,27 @@ public class FcAccessoView extends VerticalLayout
 		crud.getCrudFormFactory().setVisibleProperties(CrudOperation.UPDATE, "id", "fcAttore", "data", "note", "fcCampionato");
 		crud.getCrudFormFactory().setVisibleProperties(CrudOperation.DELETE, "id", "fcAttore");
 
-		crud.getGrid().setColumns("id", "fcAttore", "data", "note", "fcCampionato");
 		crud.getGrid().removeAllColumns();
 		crud.getGrid().addColumn(new TextRenderer<>(f -> f != null ? "" + f.getId() : "")).setHeader("Id");
 		crud.getGrid().addColumn(new TextRenderer<>(f -> f != null && f.getFcAttore() != null ? f.getFcAttore().getDescAttore() : "")).setHeader("Attore");
-		Column<FcAccesso> dataColumn = crud.getGrid().addColumn(
-				// new LocalDateTimeRenderer<>(FcAccesso::getData,
-				// DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT,
-				// FormatStyle.MEDIUM).withLocale(Locale.ITALY))
-				new LocalDateTimeRenderer<>(FcAccesso::getData));
-		crud.getGrid().addColumn(new TextRenderer<>(s -> s == null ? "" : "" + s.getNote())).setHeader("Info");
+
+		Column<FcAccesso> dataColumn = crud.getGrid().addColumn(new LocalDateTimeRenderer<>(FcAccesso::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.MEDIUM).withLocale(Locale.ITALY))).setHeader("Data");
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
-		dataColumn.setFlexGrow(2);
+		//dataColumn.setFlexGrow(2);
+
+		Column<FcAccesso> noteColumn = crud.getGrid().addColumn(new TextRenderer<>(s -> s == null ? "" : "" + s.getNote())).setHeader("Info");
+		noteColumn.setSortable(false);
+		noteColumn.setAutoWidth(true);
 
 		crud.getGrid().setColumnReorderingAllowed(true);
 
+		crud.getCrudFormFactory().setFieldProvider("fcAttore", new ComboBoxProvider<>("Attore",attoreController.findByActive(true),new TextRenderer<>(FcAttore::getDescAttore),FcAttore::getDescAttore));
 		crud.getCrudFormFactory().setFieldProvider("data", a -> {
 			DateTimePicker data = new DateTimePicker();
 			return data;
 		});
+		crud.getCrudFormFactory().setFieldProvider("fcCampionato", new ComboBoxProvider<>("Camionato",campionatoController.findAll(),new TextRenderer<>(FcCampionato::getDescCampionato),FcCampionato::getDescCampionato));
 
 		crud.setRowCountCaption("%d Accesso(s) found");
 		crud.setClickRowToUpdate(true);

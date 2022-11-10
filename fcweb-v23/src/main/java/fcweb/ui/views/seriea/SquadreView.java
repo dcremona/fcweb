@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -310,8 +313,9 @@ public class SquadreView extends VerticalLayout{
 			// cellLayout.setAlignItems(Alignment.STRETCH);
 			// cellLayout.setSizeFull();
 			if (f != null && f.getFcGiocatore() != null && f.getFcGiocatore().getFcSquadra() != null) {
-//				Image img = buildImage("classpath:/img/squadre/", f.getFcGiocatore().getFcSquadra().getNomeSquadra() + ".png");
-//				cellLayout.add(img);
+				// Image img = buildImage("classpath:/img/squadre/",
+				// f.getFcGiocatore().getFcSquadra().getNomeSquadra() + ".png");
+				// cellLayout.add(img);
 				FcSquadra sq = f.getFcGiocatore().getFcSquadra();
 				if (sq != null && sq.getImg() != null) {
 					try {
@@ -461,10 +465,7 @@ public class SquadreView extends VerticalLayout{
 		giornataColumn.setHeader("Giornata");
 		giornataColumn.setAutoWidth(true);
 
-		Column<FcMercatoDett> dataCambioColumn = grid.addColumn(
-				//new LocalDateTimeRenderer<>(FcMercatoDett::getDataCambio,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
-				new LocalDateTimeRenderer<>(FcMercatoDett::getDataCambio)
-		);
+		Column<FcMercatoDett> dataCambioColumn = grid.addColumn(new LocalDateTimeRenderer<>(FcMercatoDett::getDataCambio,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM).withLocale(Locale.ITALY)));
 		dataCambioColumn.setSortable(false);
 		dataCambioColumn.setHeader("Data");
 		dataCambioColumn.setAutoWidth(true);

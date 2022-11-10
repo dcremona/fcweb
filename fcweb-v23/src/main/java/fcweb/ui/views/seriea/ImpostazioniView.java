@@ -361,7 +361,7 @@ public class ImpostazioniView extends VerticalLayout
 		comboSqudreA.setItems(squadreSerieA);
 		comboSqudreA.setItemLabelGenerator(p -> p.getNomeSquadra());
 		comboSqudreA.setClearButtonVisible(true);
-		comboSqudreA.setPlaceholder("Seleziona squadra Serie A");
+		comboSqudreA.setPlaceholder("Squadra");
 		comboSqudreA.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
 //			Image img = buildImage("classpath:/img/squadre/", item.getNomeSquadra() + ".png");

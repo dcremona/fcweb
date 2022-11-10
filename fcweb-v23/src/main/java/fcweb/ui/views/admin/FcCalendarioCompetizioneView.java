@@ -2,6 +2,9 @@ package fcweb.ui.views.admin;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -128,8 +131,7 @@ public class FcCalendarioCompetizioneView extends VerticalLayout
 		crud.getGrid().removeAllColumns();
 		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : "" + g.getIdGiornata()));
 		Column<FcCalendarioCompetizione> dataColumn = crud.getGrid().addColumn(
-				//new LocalDateTimeRenderer<>(FcCalendarioTim::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
-				new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData)
+				new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
 		);
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);

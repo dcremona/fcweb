@@ -163,7 +163,7 @@ public class EmStatisticheView extends VerticalLayout
 
 		VerticalLayout container = new VerticalLayout();
 		PagedTabs tabs = new PagedTabs(container);
-		tabs.add("Statistiche A", layoutStat, false);
+		tabs.add("Statistiche", layoutStat, false);
 		tabs.add("Confronti", layoutConfornti, false);
 
 		add(tabs, container);
@@ -310,7 +310,7 @@ public class EmStatisticheView extends VerticalLayout
 		toggleA.setLabel("A");
 		toggleA.setValue(true);
 
-		comboNazione = new ComboBox<>();
+		comboNazione = new ComboBox<>("Nazione");
 		comboNazione.setItems(squadre);
 		comboNazione.setItemLabelGenerator(s -> s.getNomeSquadra());
 		comboNazione.setClearButtonVisible(true);
