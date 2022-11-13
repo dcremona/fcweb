@@ -667,6 +667,17 @@ public class TeamInsertView extends VerticalLayout
 
 				String title = getInfoPlayer(p);
 
+				String ruolo = p.getFcRuolo().getIdRuolo();
+				if ("P".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_P);
+				} else if ("D".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_D);
+				} else if ("C".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_C);
+				} else if ("A".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_A);
+				}
+
 				HorizontalLayout cellLayoutImg = new HorizontalLayout();
 				cellLayoutImg.setMargin(false);
 				cellLayoutImg.setPadding(false);
@@ -675,10 +686,7 @@ public class TeamInsertView extends VerticalLayout
 				Image imgR = buildImage("classpath:images/", p.getFcRuolo().getIdRuolo().toLowerCase() + ".png");
 				imgR.setTitle(title);
 				cellLayoutImg.add(imgR);
-//				if (p.getFcSquadra().getNomeSquadra() != null) {
-//					Image imgSq = buildImage("classpath:/img/squadre/", p.getFcSquadra().getNomeSquadra() + ".png");
-//					cellLayoutImg.add(imgSq);
-//				}
+
 				FcSquadra sq = p.getFcSquadra();
 				if (sq != null && sq.getImg() != null) {
 					try {
@@ -1820,9 +1828,21 @@ public class TeamInsertView extends VerticalLayout
 			RUOLO = bean.getFcRuolo().getDescRuolo();
 			SQUADRA = bean.getFcSquadra().getNomeSquadra();
 
-			Resource resourceNomeSq = resourceLoader.getResource("classpath:img/squadre/" + bean.getFcSquadra().getNomeSquadra() + ".png");
+//			Resource resourceNomeSq = resourceLoader.getResource("classpath:img/squadre/" + bean.getFcSquadra().getNomeSquadra() + ".png");
+//			String cidNomeSq = ContentIdGenerator.getContentId();
+//			listImg.put(cidNomeSq, resourceNomeSq.getInputStream());
+
+			String cidNomeSq = ContentIdGenerator.getContentId();			
+			FcSquadra sq = bean.getFcSquadra();
+			if (sq.getImg() != null) {
+				try {
+					listImg.put(cidNomeSq, sq.getImg().getBinaryStream());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
 			String cidNomeImg = ContentIdGenerator.getContentId();
-			String cidNomeSq = ContentIdGenerator.getContentId();
 			InputStream inputStream = null;
 			try {
 				inputStream = bean.getImg().getBinaryStream();
@@ -1830,7 +1850,6 @@ public class TeamInsertView extends VerticalLayout
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			listImg.put(cidNomeSq, resourceNomeSq.getInputStream());
 
 			if (i < 11) {
 				STATO = "Titolare";
@@ -1874,10 +1893,21 @@ public class TeamInsertView extends VerticalLayout
 			SQUADRA = bean.getFcSquadra().getNomeSquadra();
 			STATO = "Non Convocato";
 
-			Resource resourceNomeSq = resourceLoader.getResource("classpath:img/squadre/" + bean.getFcSquadra().getNomeSquadra() + ".png");
+//			Resource resourceNomeSq = resourceLoader.getResource("classpath:img/squadre/" + bean.getFcSquadra().getNomeSquadra() + ".png");
+//			String cidNomeSq = ContentIdGenerator.getContentId();
+//			listImg.put(cidNomeSq, resourceNomeSq.getInputStream());
+
+			String cidNomeSq = ContentIdGenerator.getContentId();			
+			FcSquadra sq = bean.getFcSquadra();
+			if (sq.getImg() != null) {
+				try {
+					listImg.put(cidNomeSq, sq.getImg().getBinaryStream());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
 			String cidNomeImg = ContentIdGenerator.getContentId();
-			String cidNomeSq = ContentIdGenerator.getContentId();
-			// listImg.put(cidNomeImg, resourceNomeImg.getInputStream());
 			InputStream inputStream = null;
 			try {
 				inputStream = bean.getImg().getBinaryStream();
@@ -1885,9 +1915,7 @@ public class TeamInsertView extends VerticalLayout
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-			listImg.put(cidNomeSq, resourceNomeSq.getInputStream());
-
+			
 			String color = "BGCOLOR=\"" + Costants.BG_N + "\"";
 			if (Integer.parseInt(ORDINAMENTO) >= 1 && Integer.parseInt(ORDINAMENTO) <= 11) {
 				color = "BGCOLOR=\"" + Costants.BG_T + "\"";

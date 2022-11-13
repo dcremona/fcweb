@@ -51,8 +51,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.dom.Element;
@@ -80,8 +78,8 @@ import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.AttoreService;
 import fcweb.backend.service.FormazioneService;
 import fcweb.backend.service.GiocatoreService;
-import fcweb.backend.service.MercatoService;
 import fcweb.backend.service.MercatoInfoService;
+import fcweb.backend.service.MercatoService;
 import fcweb.backend.service.RuoloService;
 import fcweb.backend.service.SquadraService;
 import fcweb.ui.MainAppLayout;
@@ -105,7 +103,7 @@ public class EmMercatoView extends VerticalLayout
 	private JavaMailSender javaMailSender;
 
 	private static final String width = "100px";
-	private static final String height = "130px";
+	private static final String height = "120px";
 
 	private final int MAX_CAMBI = 12;
 	private final int MAX_CHANGE_SQUADRA = 6;
@@ -131,8 +129,8 @@ public class EmMercatoView extends VerticalLayout
 	private ComboBox<FcSquadra> comboNazione;
 	private NumberField txtQuotaz;
 
-	private TextField txtCrediti;
-	private TextField txtCambi;
+	private Label txtCrediti;
+	private Label txtCambi;
 	private Label lblInfoP;
 	private Label lblInfoD;
 	private Label lblInfoC;
@@ -263,9 +261,6 @@ public class EmMercatoView extends VerticalLayout
 
 	public void initLayout() {
 
-		this.getStyle().set("border", Costants.BORDER_COLOR);
-		this.getStyle().set("background", Costants.LOWER_GRAY);
-
 		Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 		attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
 		campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
@@ -278,9 +273,9 @@ public class EmMercatoView extends VerticalLayout
 
 		CREDITI_MERCATO = (String) p.get("CREDITI_MERCATO");
 
-		absLayout = new AbsoluteLayout(1600,1280);
-		// absLayout.setWidth("1380px");
-		// absLayout.setHeight("1024px");
+		absLayout = new AbsoluteLayout(1600,1200);
+		absLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR);
+		absLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
 
 		saveSendMail = new Button("Salva e Invia Mail");
 		saveSendMail.addClickListener(this);
@@ -303,8 +298,8 @@ public class EmMercatoView extends VerticalLayout
 				}
 				TOT_CAMBI_EFFETTUATI = MAX_CAMBI;
 				CHECK_TOT_CAMBI_EFFETTUATI = TOT_CAMBI_EFFETTUATI;
-				txtCambi.setValue("" + CHECK_TOT_CAMBI_EFFETTUATI);
-				txtCrediti.setValue("" + CREDITI_MERCATO);
+				txtCambi.setText("" + CHECK_TOT_CAMBI_EFFETTUATI);
+				txtCrediti.setText("" + CREDITI_MERCATO);
 				lblInfoP.setText("0");
 				lblInfoD.setText("0");
 				lblInfoC.setText("0");
@@ -330,7 +325,7 @@ public class EmMercatoView extends VerticalLayout
 					int cambiEff = getCambiEffettuati();
 					TOT_CAMBI_EFFETTUATI = MAX_CAMBI - cambiEff;
 					CHECK_TOT_CAMBI_EFFETTUATI = TOT_CAMBI_EFFETTUATI;
-					txtCambi.setValue("" + CHECK_TOT_CAMBI_EFFETTUATI);
+					txtCambi.setText("" + CHECK_TOT_CAMBI_EFFETTUATI);
 				} catch (Exception e) {
 					LOG.error(e.getMessage());
 					CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, e.getMessage());
@@ -356,11 +351,12 @@ public class EmMercatoView extends VerticalLayout
 		comboNazione.setItems(squadre);
 		comboNazione.setItemLabelGenerator(s -> s.getNomeSquadra());
 		comboNazione.setClearButtonVisible(true);
-		//comboNazione.setPlaceholder("Nazione");
+		// comboNazione.setPlaceholder("Nazione");
 		comboNazione.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
-//			Image imgSq = buildImage("classpath:/img/nazioni/", item.getNomeSquadra() + ".png");
-//			container.add(imgSq);
+			// Image imgSq = buildImage("classpath:/img/nazioni/",
+			// item.getNomeSquadra() + ".png");
+			// container.add(imgSq);
 			if (item.getImg() != null) {
 				try {
 					Image img = Utils.getImage(item.getNomeSquadra(), item.getImg().getBinaryStream());
@@ -369,7 +365,7 @@ public class EmMercatoView extends VerticalLayout
 					e.printStackTrace();
 				}
 			}
-			Label lblSquadra = new Label(item.getNomeSquadra());			
+			Label lblSquadra = new Label(item.getNomeSquadra());
 			container.add(lblSquadra);
 			return container;
 		}));
@@ -454,12 +450,11 @@ public class EmMercatoView extends VerticalLayout
 		absLayout.add(comboAttore, left, top);
 
 		final HorizontalLayout layoutAvviso = new HorizontalLayout();
+		layoutAvviso.setPadding(true);
+		layoutAvviso.setSpacing(true);
 		layoutAvviso.getStyle().set("border", Costants.BORDER_COLOR);
 		layoutAvviso.getStyle().set("background", Costants.LIGHT_GRAY);
 		layoutAvviso.setAlignItems(FlexComponent.Alignment.END);
-
-		Label lblInfo = new Label();
-		lblInfo.setText("Hai ancora a disposizione:");
 
 		int cambiEff = getCambiEffettuati();
 		TOT_CAMBI_EFFETTUATI = MAX_CAMBI - cambiEff;
@@ -469,61 +464,39 @@ public class EmMercatoView extends VerticalLayout
 			this.saveSendMail.setEnabled(false);
 		}
 
-		txtCrediti = new TextField();
-		txtCrediti.setLabel("Crediti");
-		txtCrediti.setValue("" + CREDITI_MERCATO);
-		txtCrediti.setReadOnly(true);
-		txtCrediti.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
+		Label lblInfo = new Label();
+		lblInfo.setText("Hai ancora a disposizione:");
+
+		Label lblCrediti = new Label();
+		lblCrediti.setText("Crediti:");
+		lblCrediti.getElement().getStyle().set("color", Costants.RED);
+		lblCrediti.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
+
+		txtCrediti = new Label();
+		txtCrediti.setText("" + CREDITI_MERCATO);
+		// txtCrediti.setReadOnly(true);
+		// txtCrediti.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
 		txtCrediti.getElement().getStyle().set("color", Costants.RED);
 		txtCrediti.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 
-		txtCambi = new TextField();
-		txtCambi.setLabel("Cambi");
-		txtCambi.setValue("" + CHECK_TOT_CAMBI_EFFETTUATI);
-		txtCambi.setReadOnly(true);
-		txtCambi.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
+		Label lblCanmbi = new Label();
+		lblCanmbi.setText("Cambi:");
+		lblCanmbi.getElement().getStyle().set("color", Costants.BLUE);
+		lblCanmbi.getElement().getStyle().set("-webkit-text-fill-color", Costants.BLUE);
+
+		txtCambi = new Label();
+		txtCambi.setText("" + CHECK_TOT_CAMBI_EFFETTUATI);
+		// txtCambi.setReadOnly(true);
+		// txtCambi.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
 		txtCambi.getElement().getStyle().set("color", Costants.BLUE);
 		txtCambi.getElement().getStyle().set("-webkit-text-fill-color", Costants.BLUE);
-
-		final HorizontalLayout layoutInfoRuolo = new HorizontalLayout();
-		layoutInfoRuolo.setPadding(false);
-		layoutInfoRuolo.getStyle().set("border", Costants.BORDER_COLOR);
-		layoutInfoRuolo.getStyle().set("background", Costants.LIGHT_GRAY);
-		layoutInfoRuolo.setAlignItems(FlexComponent.Alignment.END);
-
-		Image imgP = buildImage("classpath:images/", "p.png");
-		Image imgD = buildImage("classpath:images/", "d.png");
-		Image imgC = buildImage("classpath:images/", "c.png");
-		Image imgA = buildImage("classpath:images/", "a.png");
-		lblInfoP = new Label();
-		lblInfoD = new Label();
-		lblInfoC = new Label();
-		lblInfoA = new Label();
-		lblInfoP.setText("0");
-		lblInfoD.setText("0");
-		lblInfoC.setText("0");
-		lblInfoA.setText("0");
-
-		layoutInfoRuolo.add(imgP);
-		layoutInfoRuolo.add(lblInfoP);
-		layoutInfoRuolo.add(imgD);
-		layoutInfoRuolo.add(lblInfoD);
-		layoutInfoRuolo.add(imgC);
-		layoutInfoRuolo.add(lblInfoC);
-		layoutInfoRuolo.add(imgA);
-		layoutInfoRuolo.add(lblInfoA);
-
-		layoutAvviso.add(lblInfo);
-		layoutAvviso.add(txtCrediti);
-		layoutAvviso.add(txtCambi);
-		layoutAvviso.add(layoutInfoRuolo);
 
 		top = 5;
 		left = 700;
 
 		absLayout.add(layoutAvviso, left, top);
 
-		top = 100;
+		top = 110;
 		left = 500;
 
 		absLayout.add(tablePlayer1, left, top);
@@ -653,7 +626,50 @@ public class EmMercatoView extends VerticalLayout
 
 		tableContaPlayer = buildTableContaPlayer(modelContaPlayer);
 
-		top = 100;
+		final HorizontalLayout layoutInfoRuolo = new HorizontalLayout();
+		layoutInfoRuolo.setClassName("sidemenu-header");
+		layoutInfoRuolo.getThemeList().set("dark", true);
+		layoutInfoRuolo.setPadding(true);
+		layoutInfoRuolo.setSpacing(true);
+		//layoutInfoRuolo.getStyle().set("border", Costants.BORDER_COLOR);
+		//layoutInfoRuolo.getStyle().set("background", Costants.LIGHT_BLUE);
+		layoutInfoRuolo.setAlignItems(FlexComponent.Alignment.END);
+
+		Image imgP = buildImage("classpath:images/", "p.png");
+		Image imgD = buildImage("classpath:images/", "d.png");
+		Image imgC = buildImage("classpath:images/", "c.png");
+		Image imgA = buildImage("classpath:images/", "a.png");
+		lblInfoP = new Label();
+		lblInfoD = new Label();
+		lblInfoC = new Label();
+		lblInfoA = new Label();
+		lblInfoP.setText("0");
+		lblInfoD.setText("0");
+		lblInfoC.setText("0");
+		lblInfoA.setText("0");
+
+		layoutInfoRuolo.add(imgP);
+		layoutInfoRuolo.add(lblInfoP);
+		layoutInfoRuolo.add(imgD);
+		layoutInfoRuolo.add(lblInfoD);
+		layoutInfoRuolo.add(imgC);
+		layoutInfoRuolo.add(lblInfoC);
+		layoutInfoRuolo.add(imgA);
+		layoutInfoRuolo.add(lblInfoA);
+
+		layoutAvviso.add(lblInfo);
+		layoutAvviso.add(lblCrediti);
+		layoutAvviso.add(txtCrediti);
+		layoutAvviso.add(lblCanmbi);
+		layoutAvviso.add(txtCambi);
+		// layoutAvviso.add(layoutInfoRuolo);
+
+		top = 5;
+		left = 1300;
+
+		absLayout.add(layoutInfoRuolo, left, top);
+
+		top = 80;
 		left = 1300;
 
 		Label lblInfoGiocatori = new Label();
@@ -663,7 +679,7 @@ public class EmMercatoView extends VerticalLayout
 
 		absLayout.add(lblInfoGiocatori, left, top);
 
-		top = 150;
+		top = 110;
 		left = 1300;
 
 		absLayout.add(tableContaPlayer, left, top);
@@ -695,7 +711,7 @@ public class EmMercatoView extends VerticalLayout
 
 		LOG.debug("totaleCambi " + totaleCambi);
 		CHECK_TOT_CAMBI_EFFETTUATI = TOT_CAMBI_EFFETTUATI - totaleCambi;
-		txtCambi.setValue("" + CHECK_TOT_CAMBI_EFFETTUATI);
+		txtCambi.setText("" + CHECK_TOT_CAMBI_EFFETTUATI);
 
 		LOG.info("END updateLabelCambi ");
 	}
@@ -1208,7 +1224,7 @@ public class EmMercatoView extends VerticalLayout
 			refreshContaGiocatori(map, bean.getFcSquadra().getNomeSquadra());
 		}
 
-		txtCrediti.setValue("" + (Integer.parseInt(CREDITI_MERCATO) - tot));
+		txtCrediti.setText("" + (Integer.parseInt(CREDITI_MERCATO) - tot));
 		lblInfoP.setText("" + countP);
 		lblInfoD.setText("" + countD);
 		lblInfoC.setText("" + countC);
@@ -1495,7 +1511,7 @@ public class EmMercatoView extends VerticalLayout
 			// -> Notification.show("Discarded.")).closeOnClick();
 			messageDialog.addButton().text(CustomMessageDialog.LABEL_SALVA).primary().onClick(ev -> {
 
-				//messageDialog.getButtonBar().setVisible(false);
+				// messageDialog.getButtonBar().setVisible(false);
 				try {
 					insertFormazione();
 
@@ -1528,7 +1544,7 @@ public class EmMercatoView extends VerticalLayout
 					int cambiEff = getCambiEffettuati();
 					TOT_CAMBI_EFFETTUATI = MAX_CAMBI - cambiEff;
 					CHECK_TOT_CAMBI_EFFETTUATI = TOT_CAMBI_EFFETTUATI;
-					txtCambi.setValue("" + CHECK_TOT_CAMBI_EFFETTUATI);
+					txtCambi.setText("" + CHECK_TOT_CAMBI_EFFETTUATI);
 
 					String info = "Operazione effettuata con succcesso.";
 					info += "Se hai attiva la notifica email sul profilo, a breve riceverai una email di conferma.";
@@ -2366,10 +2382,20 @@ public class EmMercatoView extends VerticalLayout
 				color = "BGCOLOR=\"#FFFF84\"";
 			}
 
-			Resource resourceNomeSq = resourceLoader.getResource("classpath:img/nazioni/" + bean.getFcSquadra().getNomeSquadra() + ".png");
-			String cidNomeSq = ContentIdGenerator.getContentId();
-			listImg.put(cidNomeSq, resourceNomeSq.getInputStream());
-
+//			Resource resourceNomeSq = resourceLoader.getResource("classpath:img/nazioni/" + bean.getFcSquadra().getNomeSquadra() + ".png");
+//			String cidNomeSq = ContentIdGenerator.getContentId();
+//			listImg.put(cidNomeSq, resourceNomeSq.getInputStream());
+			
+			String cidNomeSq = ContentIdGenerator.getContentId();			
+			FcSquadra sq = bean.getFcSquadra();
+			if (sq.getImg() != null) {
+				try {
+					listImg.put(cidNomeSq, sq.getImg().getBinaryStream());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
 			formazioneHtml += "<tr " + color + ">";
 
 			formazioneHtml += "<td>";
@@ -2441,7 +2467,7 @@ public class EmMercatoView extends VerticalLayout
 						GIOC_VEN = m.getFcGiocatoreByIdGiocVen().getCognGiocatore();
 					}
 
-					//String DATA_CAMBIO = m.getDataCambio().toString();
+					// String DATA_CAMBIO = m.getDataCambio().toString();
 					String DATA_CAMBIO = Utils.formatLocalDateTime(m.getDataCambio(), "dd/MM/yyyy HH:mm");
 
 					formazioneHtml += "<tr " + color + ">";
@@ -2467,44 +2493,45 @@ public class EmMercatoView extends VerticalLayout
 				}
 
 				// CESSIONI
-//				for (FcMercatoDett m : modelCambi) {
-//
-//					String GIOC_ACQ = "";
-//					String GIOC_VEN = "";
-//
-//					String ID_GIORNATA = "" + m.getFcGiornataInfo().getIdGiornataFc();
-//
-//					if (m.getFcGiocatoreByIdGiocAcq() != null) {
-//						continue;
-//					}
-//
-//					if (m.getFcGiocatoreByIdGiocVen() != null) {
-//						GIOC_VEN = m.getFcGiocatoreByIdGiocVen().getCognGiocatore();
-//					}
-//
-//					String DATA_CAMBIO = m.getDataCambio().toString();
-//
-//					formazioneHtml += "<tr " + color + ">";
-//
-//					formazioneHtml += "<td>";
-//					formazioneHtml += ID_GIORNATA;
-//					formazioneHtml += "</td>";
-//
-//					formazioneHtml += "<td>";
-//					formazioneHtml += DATA_CAMBIO;
-//					formazioneHtml += "</td>";
-//
-//					formazioneHtml += "<td>";
-//					formazioneHtml += GIOC_ACQ;
-//					formazioneHtml += "</td>";
-//
-//					formazioneHtml += "<td>";
-//					formazioneHtml += GIOC_VEN;
-//					formazioneHtml += "</td>";
-//
-//					formazioneHtml += "</tr>";
-//
-//				}
+				// for (FcMercatoDett m : modelCambi) {
+				//
+				// String GIOC_ACQ = "";
+				// String GIOC_VEN = "";
+				//
+				// String ID_GIORNATA = "" +
+				// m.getFcGiornataInfo().getIdGiornataFc();
+				//
+				// if (m.getFcGiocatoreByIdGiocAcq() != null) {
+				// continue;
+				// }
+				//
+				// if (m.getFcGiocatoreByIdGiocVen() != null) {
+				// GIOC_VEN = m.getFcGiocatoreByIdGiocVen().getCognGiocatore();
+				// }
+				//
+				// String DATA_CAMBIO = m.getDataCambio().toString();
+				//
+				// formazioneHtml += "<tr " + color + ">";
+				//
+				// formazioneHtml += "<td>";
+				// formazioneHtml += ID_GIORNATA;
+				// formazioneHtml += "</td>";
+				//
+				// formazioneHtml += "<td>";
+				// formazioneHtml += DATA_CAMBIO;
+				// formazioneHtml += "</td>";
+				//
+				// formazioneHtml += "<td>";
+				// formazioneHtml += GIOC_ACQ;
+				// formazioneHtml += "</td>";
+				//
+				// formazioneHtml += "<td>";
+				// formazioneHtml += GIOC_VEN;
+				// formazioneHtml += "</td>";
+				//
+				// formazioneHtml += "</tr>";
+				//
+				// }
 
 				formazioneHtml += "<table>\n";
 			}
@@ -2535,7 +2562,7 @@ public class EmMercatoView extends VerticalLayout
 		String[] bcc = null;
 
 		String from = (String) env.getProperty("spring.mail.username");
-		
+
 		client.sendMail2(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
 
 		LOG.info("END sendNewMail");
@@ -2565,36 +2592,56 @@ public class EmMercatoView extends VerticalLayout
 
 				String title = getInfoPlayer(p);
 
+				String ruolo = p.getFcRuolo().getIdRuolo();
+				if ("P".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_P);
+					//cellLayout.getElement().getStyle().set("background", Costants.COLOR_P);
+				} else if ("D".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_D);
+					//cellLayout.getElement().getStyle().set("background", Costants.COLOR_D);
+				} else if ("C".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_C);
+					//cellLayout.getElement().getStyle().set("background", Costants.COLOR_C);
+				} else if ("A".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_A);
+					//cellLayout.getElement().getStyle().set("background", Costants.COLOR_A);
+				}
+
 				Image imgR = buildImage("classpath:images/", p.getFcRuolo().getIdRuolo().toLowerCase() + ".png");
 				imgR.setTitle(title);
 				cellLayout.add(imgR);
+				cellLayout.setAlignSelf(Alignment.START, imgR);
 
 				if (p.getFcSquadra() != null) {
-//					Image img = buildImage("classpath:/img/nazioni/", p.getFcSquadra().getNomeSquadra() + ".png");
-//					cellLayout.add(img);
+					
+					Label lblInfoNomeSquadra = new Label(p.getFcSquadra().getNomeSquadra());
+					lblInfoNomeSquadra.getStyle().set("font-size", "11px");
+					lblInfoNomeSquadra.setTitle(title);
+					cellLayout.add(lblInfoNomeSquadra);
+					cellLayout.setAlignSelf(Alignment.STRETCH, lblInfoNomeSquadra);
+					
 					FcSquadra sq = p.getFcSquadra();
 					if (sq.getImg40() != null) {
 						try {
 							Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg40().getBinaryStream());
 							cellLayout.add(img);
+							cellLayout.setAlignSelf(Alignment.START, img);
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
 					}
-					Label lblInfoNomeSquadra = new Label(p.getFcSquadra().getNomeSquadra());
-					lblInfoNomeSquadra.getStyle().set("font-size", "11px");
-					lblInfoNomeSquadra.setTitle(title);
-					cellLayout.add(lblInfoNomeSquadra);
 				}
 
 				Label lblGiocatore = new Label(p.getCognGiocatore());
 				lblGiocatore.getStyle().set("font-size", "11px");
 				lblGiocatore.setTitle(title);
 				cellLayout.add(lblGiocatore);
+				cellLayout.setAlignSelf(Alignment.STRETCH, lblGiocatore);
 
 				Label lblInfoQuotazione = new Label("" + p.getQuotazione());
 				lblInfoQuotazione.getStyle().set("font-size", "14px");
 				cellLayout.add(lblInfoQuotazione);
+				cellLayout.setAlignSelf(Alignment.CENTER, lblInfoQuotazione);
 
 				Element element = cellLayout.getElement(); // DOM element
 				element.addEventListener("click", e -> {
@@ -2825,7 +2872,7 @@ public class EmMercatoView extends VerticalLayout
 		Grid<FcGiocatore> grid = new Grid<>();
 
 		ListDataProvider<FcGiocatore> dataProvider = new ListDataProvider<>(items);
-		//grid.setDataProvider(dataProvider);
+		// grid.setDataProvider(dataProvider);
 		grid.setItems(dataProvider);
 
 		// comboRuolo.addValueChangeListener(event -> {
@@ -2877,8 +2924,9 @@ public class EmMercatoView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (f != null && f.getFcSquadra() != null) {
-//				Image img = buildImage("classpath:/img/nazioni/", f.getFcSquadra().getNomeSquadra() + ".png");
-//				cellLayout.add(img);
+				// Image img = buildImage("classpath:/img/nazioni/",
+				// f.getFcSquadra().getNomeSquadra() + ".png");
+				// cellLayout.add(img);
 				FcSquadra sq = f.getFcSquadra();
 				if (sq.getImg() != null) {
 					try {
@@ -2888,7 +2936,7 @@ public class EmMercatoView extends VerticalLayout
 						e.printStackTrace();
 					}
 				}
-				Label lblSquadra = new Label(f.getFcSquadra().getNomeSquadra());				
+				Label lblSquadra = new Label(f.getFcSquadra().getNomeSquadra());
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
@@ -3110,8 +3158,9 @@ public class EmMercatoView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (f != null && f.getKey() != null) {
-//				Image img = buildImage("classpath:/img/nazioni/", f.getKey() + ".png");
-//				cellLayout.add(img);				
+				// Image img = buildImage("classpath:/img/nazioni/", f.getKey()
+				// + ".png");
+				// cellLayout.add(img);
 				FcSquadra sq = squadraController.findByNomeSquadra(f.getKey());
 				if (sq.getImg40() != null) {
 					try {

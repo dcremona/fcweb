@@ -106,8 +106,8 @@ public class TeamInsertMobileView extends VerticalLayout
 	private int WIN_WIDTH = 400;
 	private int WIN_HEIGHT = 800;
 
-	private static final String width = "82px";
-	private static final String height = "102px";
+	private static final String width = "85px";
+	private static final String height = "105px";
 
 	private static final int _P = 60;
 	private static final int _D = 180;
@@ -837,6 +837,17 @@ public class TeamInsertMobileView extends VerticalLayout
 
 				String title = getInfoPlayer(p);
 
+				String ruolo = p.getFcRuolo().getIdRuolo();
+				if ("P".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_P);
+				} else if ("D".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_D);
+				} else if ("C".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_C);
+				} else if ("A".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_A);
+				}
+
 				HorizontalLayout cellLayoutImg = new HorizontalLayout();
 				cellLayoutImg.setMargin(false);
 				cellLayoutImg.setPadding(false);
@@ -847,10 +858,7 @@ public class TeamInsertMobileView extends VerticalLayout
 				Image imgR = buildImage("classpath:images/", p.getFcRuolo().getIdRuolo().toLowerCase() + ".png");
 				imgR.setTitle(title);
 				cellLayoutImg.add(imgR);
-//				if (p.getFcSquadra().getNomeSquadra() != null) {
-//					Image imgSq = buildImage("classpath:/img/squadre/", p.getFcSquadra().getNomeSquadra() + ".png");
-//					cellLayoutImg.add(imgSq);
-//				}
+
 				FcSquadra sq = p.getFcSquadra();
 				if (sq != null && sq.getImg() != null) {
 					try {

@@ -97,7 +97,7 @@ public class EmTeamInsertView extends VerticalLayout
 	private JdbcTemplate jdbcTemplate;
 
 	private static final String width = "100px";
-	private static final String height = "130px";
+	private static final String height = "120px";
 
 	private static final int _P = 210;
 	private static final int _D = 360;
@@ -113,12 +113,16 @@ public class EmTeamInsertView extends VerticalLayout
 	private static final int _650px = 650;
 	private static final int _700px = 700;
 	private static final int _750px = 750;
-	private static final int _900px = 900;
-	private static final int _1000px = 1000;
-	private static final int _1100px = 1100;
+	private static final int _860px = 860;
+	private static final int _960px = 960;
+	private static final int _1060px = 1060;
 	private static final int _1200px = 1200;
-	private static final int _1250px = 1250;
 
+	private FcAttore attore = null;
+	private FcGiornataInfo giornataInfo = null;
+	private FcCampionato campionato = null;
+	private String nextDate = null;
+	private long millisDiff = 0;
 	private String idAttore = "";
 	private String descAttore = "";
 
@@ -210,26 +214,31 @@ public class EmTeamInsertView extends VerticalLayout
 			return;
 		}
 		accessoController.insertAccesso(this.getClass().getName());
+
+		initData();
+		
 		initLayout();
+	}
+	
+	private void initData() throws Exception {
+
+		attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+		giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
+		campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+		nextDate = (String) VaadinSession.getCurrent().getAttribute("NEXTDATE");
+		millisDiff = (long) VaadinSession.getCurrent().getAttribute("MILLISDIFF");
+
+		idAttore = "" + attore.getIdAttore();
+		descAttore = attore.getDescAttore();
+
+		modelFormazione = getModelFormazione(attore, campionato);
 	}
 
 	private void initLayout() throws Exception {
 
-		this.getStyle().set("border", Costants.BORDER_COLOR);
-		this.getStyle().set("background", Costants.LOWER_GRAY);
-
-		absLayout = new AbsoluteLayout(1600,1280);
-		// absLayout.setWidth("1024px");
-		// absLayout.setHeight("1580px");
-
-		FcAttore attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
-		FcGiornataInfo giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
-		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
-		String nextDate = (String) VaadinSession.getCurrent().getAttribute("NEXTDATE");
-		long millisDiff = (long) VaadinSession.getCurrent().getAttribute("MILLISDIFF");
-
-		idAttore = "" + attore.getIdAttore();
-		descAttore = attore.getDescAttore();
+		absLayout = new AbsoluteLayout(1600,1200);
+		absLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR);
+		absLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
 
 		save = new Button("Save");
 		save.setIcon(VaadinIcon.DATABASE.create());
@@ -253,21 +262,21 @@ public class EmTeamInsertView extends VerticalLayout
 
 				absLayout.add(tablePlayer1, _550px, _P);
 
-				absLayout.add(tablePlayer12, _900px, _P);
+				absLayout.add(tablePlayer12, _860px, _P);
+				absLayout.add(tablePlayer13, _960px, _P);
+				absLayout.add(tablePlayer14, _1060px, _P);
 
-				absLayout.add(tablePlayer13, _900px, _D);
-				absLayout.add(tablePlayer14, _1000px, _D);
-				absLayout.add(tablePlayer15, _1100px, _D);
+				absLayout.add(tablePlayer15, _860px, _D);
+				absLayout.add(tablePlayer16, _960px, _D);
+				absLayout.add(tablePlayer17, _1060px, _D);
 
-				absLayout.add(tablePlayer16, _900px, _C);
-				absLayout.add(tablePlayer17, _1000px, _C);
-				absLayout.add(tablePlayer18, _1100px, _C);
-				absLayout.add(tablePlayer19, _1200px, _C);
+				absLayout.add(tablePlayer18, _860px, _C);
+				absLayout.add(tablePlayer19, _960px, _C);
+				absLayout.add(tablePlayer20, _1060px, _C);
 
-				absLayout.add(tablePlayer20, _900px, _A);
-				absLayout.add(tablePlayer21, _1000px, _A);
-				absLayout.add(tablePlayer22, _1100px, _A);
-				absLayout.add(tablePlayer23, _1200px, _A);
+				absLayout.add(tablePlayer21, _860px, _A);
+				absLayout.add(tablePlayer22, _960px, _A);
+				absLayout.add(tablePlayer23, _1060px, _A);
 
 				// 5-4-1 5-3-2 4-5-1 4-4-2 4-3-3 3-5-2 3-4-3
 				if (modulo.equals("5-4-1")) {
@@ -378,7 +387,6 @@ public class EmTeamInsertView extends VerticalLayout
 			}
 		});
 
-		modelFormazione = getModelFormazione(attore, campionato);
 		tableFormazione = getTableFormazione(modelFormazione);
 
 		tablePlayer1 = getTableGiocatore(modelPlayer1);
@@ -429,8 +437,8 @@ public class EmTeamInsertView extends VerticalLayout
 		absLayout.add(save, 20, top);
 		absLayout.add(checkMail, 110, top + 5);
 		absLayout.add(layoutAvviso, _350px, top);
-		absLayout.add(panchina, _900px, top);
-		absLayout.add(tablePartite, _1250px, top);
+		absLayout.add(panchina, _860px, top);
+		absLayout.add(tablePartite, _1200px, top);
 
 		absLayout.add(comboModulo, 20, 50);
 
@@ -703,37 +711,52 @@ public class EmTeamInsertView extends VerticalLayout
 			if (p != null) {
 
 				String title = getInfoPlayer(p);
+				
+				String ruolo = p.getFcRuolo().getIdRuolo();
+				if ("P".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_P);
+				} else if ("D".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_D);
+				} else if ("C".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_C);
+				} else if ("A".equals(ruolo)) {
+					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_A);
+				}
 
 				Label lblOrdinamento = new Label("" + getOrdinamento(p));
 				lblOrdinamento.getStyle().set("font-size", "14px");
 				lblOrdinamento.setTitle(title);
 				cellLayout.add(lblOrdinamento);
-
+				cellLayout.setAlignSelf(Alignment.CENTER, lblOrdinamento);
+				
 				Image imgR = buildImage("classpath:images/", p.getFcRuolo().getIdRuolo().toLowerCase() + ".png");
 				imgR.setTitle(title);
 				cellLayout.add(imgR);
 
 				if (p.getFcSquadra() != null) {
-					FcSquadra sq = p.getFcSquadra();
-					if (sq.getImg() != null) {
-						try {
-							Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
-							cellLayout.add(img);
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
-					}
-
 					Label lblInfoNomeSquadra = new Label(p.getFcSquadra().getNomeSquadra());
 					lblInfoNomeSquadra.getStyle().set("font-size", "11px");
 					lblInfoNomeSquadra.setTitle(title);
 					cellLayout.add(lblInfoNomeSquadra);
+					cellLayout.setAlignSelf(Alignment.STRETCH, lblInfoNomeSquadra);
+					
+					FcSquadra sq = p.getFcSquadra();
+					if (sq.getImg40() != null) {
+						try {
+							Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg40().getBinaryStream());
+							cellLayout.add(img);
+							cellLayout.setAlignSelf(Alignment.START, img);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 
 				Label lblGiocatore = new Label(p.getCognGiocatore());
 				lblGiocatore.getStyle().set("font-size", "11px");
 				lblGiocatore.setTitle(title);
 				cellLayout.add(lblGiocatore);
+				cellLayout.setAlignSelf(Alignment.STRETCH, lblGiocatore);
 
 				Element element = cellLayout.getElement(); // DOM element
 				element.addEventListener("click", e -> {

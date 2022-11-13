@@ -9,6 +9,16 @@ public class Costants{
 	public static String HTTP_URL_IMG_CARD = "https://content.fantacalcio.it/web/campioncini/card/";
 
 	public static String BORDER_COLOR = "1px solid #9E9E9E";
+	
+	public static String BORDER_COLOR_P = "2px solid #FFA500";
+	public static String BORDER_COLOR_D = "2px solid #008000";
+	public static String BORDER_COLOR_C = "2px solid #56A5EC";
+	public static String BORDER_COLOR_A = "2px solid #FF0000";
+
+	public static String COLOR_P = "#FFA500";
+	public static String COLOR_D = "#008000";
+	public static String COLOR_C = "#56A5EC";
+	public static String COLOR_A = "#FF0000";
 
 	// bianco
 	public static String WHITE = "#FFFFFF";

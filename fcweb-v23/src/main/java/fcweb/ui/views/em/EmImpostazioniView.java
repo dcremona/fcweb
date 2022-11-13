@@ -307,7 +307,7 @@ public class EmImpostazioniView extends VerticalLayout
 		initDb.setIcon(VaadinIcon.ADD_DOCK.create());
 		initDb.addClickListener(this);
 
-		initDbAttore = new Button("Init DB ");
+		initDbAttore = new Button("Init DB Attre");
 		initDbAttore.setIcon(VaadinIcon.ADD_DOCK.create());
 		initDbAttore.addClickListener(this);
 
