@@ -133,6 +133,7 @@ public class TeamInsertMobileView extends VerticalLayout
 	private long millisDiff = 0;
 	private String idAttore = "";
 	private String descAttore = "";
+	private Properties p = null;
 
 	// COMPONENT
 	private Button cancelButtonPartite;
@@ -228,6 +229,7 @@ public class TeamInsertMobileView extends VerticalLayout
 
 	private void initData() throws Exception {
 
+		p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 		attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
 		giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
 		campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
@@ -1734,7 +1736,6 @@ public class TeamInsertMobileView extends VerticalLayout
 
 			if (check()) {
 
-				FcGiornataInfo giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
 				int GIORNATA_SERIEA = giornataInfo.getCodiceGiornata();
 				String DESC_GIORNATA = giornataInfo.getDescGiornataFc();
 
@@ -2128,8 +2129,6 @@ public class TeamInsertMobileView extends VerticalLayout
 		formazioneHtml += "<p>Ciao " + descAttore + "</p>\n";
 		formazioneHtml += "</body>\n";
 		formazioneHtml += "<html>";
-
-		Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 
 		MailClient client = new MailClient(javaMailSender);
 		String email_destinatario = "";

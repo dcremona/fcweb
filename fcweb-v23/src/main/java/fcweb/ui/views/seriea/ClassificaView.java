@@ -282,6 +282,9 @@ public class ClassificaView extends VerticalLayout {
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setMultiSort(true);
 
+		Column<FcClassifica> posizioneColumn = grid.addColumn(classifica -> classifica.getIdPosiz());
+		posizioneColumn.setSortable(false);
+		
 		Column<FcClassifica> squadraColumn = grid.addColumn(classifica -> classifica.getFcAttore().getDescAttore());
 		squadraColumn.setSortable(false);
 		squadraColumn.setHeader("Squadra");
