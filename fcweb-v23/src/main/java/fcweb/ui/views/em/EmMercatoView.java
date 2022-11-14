@@ -166,6 +166,9 @@ public class EmMercatoView extends VerticalLayout
 	private List<FcAttore> attori = null;
 	private List<FcRuolo> ruoli = null;
 	private List<FcSquadra> squadre = null;
+	private String nextDate = null;
+	private long millisDiff = 0;
+	private Properties p = null;
 
 	private List<FcGiocatore> modelFormazione = new ArrayList<FcGiocatore>();
 
@@ -249,6 +252,19 @@ public class EmMercatoView extends VerticalLayout
 	}
 
 	private void initData() {
+		
+		p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
+		attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+		campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+		giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
+		nextDate = (String) VaadinSession.getCurrent().getAttribute("NEXTDATE");
+		millisDiff = (long) VaadinSession.getCurrent().getAttribute("MILLISDIFF");
+
+		currentGiornata = "" + giornataInfo.getCodiceGiornata();
+		currentDescGiornata = giornataInfo.getDescGiornataFc();
+
+		CREDITI_MERCATO = (String) p.get("CREDITI_MERCATO");
+		
 		attori = attoreController.findAll();
 		ruoli = ruoloController.findAll();
 		squadre = squadraController.findAll();
@@ -260,18 +276,6 @@ public class EmMercatoView extends VerticalLayout
 	}
 
 	public void initLayout() {
-
-		Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
-		attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
-		campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
-		giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
-		String nextDate = (String) VaadinSession.getCurrent().getAttribute("NEXTDATE");
-		long millisDiff = (long) VaadinSession.getCurrent().getAttribute("MILLISDIFF");
-
-		currentGiornata = "" + giornataInfo.getCodiceGiornata();
-		currentDescGiornata = giornataInfo.getDescGiornataFc();
-
-		CREDITI_MERCATO = (String) p.get("CREDITI_MERCATO");
 
 		absLayout = new AbsoluteLayout(1600,1200);
 		absLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR);

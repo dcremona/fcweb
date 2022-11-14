@@ -1642,8 +1642,6 @@ public class EmTeamInsertView extends VerticalLayout
 
 		if (check()) {
 
-			FcGiornataInfo giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
-
 			try {
 				insert(giornataInfo.getCodiceGiornata());
 			} catch (Exception exi) {
