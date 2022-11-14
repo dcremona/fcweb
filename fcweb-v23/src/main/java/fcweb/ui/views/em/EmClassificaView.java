@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -75,17 +76,34 @@ public class EmClassificaView extends VerticalLayout{
 	@Autowired
 	private AccessoService accessoController;
 
+	@Autowired
+	private Environment env;
+
+	private List<ClassificaBean> items = null;
+	private FcGiornataInfo giornataInfo = null;
+	private Properties p = null;
+
 	@PostConstruct
-	void init() {
+	void init() throws Exception {
 		LOG.info("init");
 		if (!Utils.isValidVaadinSession()) {
 			return;
 		}
 		accessoController.insertAccesso(this.getClass().getName());
+
+		initData();
 		initLayout();
 	}
 
-	private void initLayout() {
+	private void initData() throws Exception {
+
+		p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
+		giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
+
+		items = classificaTotalePuntiController.getModelClassifica(giornataInfo.getIdGiornataFc());
+	}
+
+	private void initLayout() throws Exception {
 
 		LOG.info("initLayout");
 
@@ -94,11 +112,6 @@ public class EmClassificaView extends VerticalLayout{
 		layoutGrid.setPadding(false);
 		layoutGrid.setSpacing(false);
 		layoutGrid.setSizeFull();
-
-		FcGiornataInfo giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
-		Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
-
-		List<ClassificaBean> items = classificaTotalePuntiController.getModelClassifica(giornataInfo.getIdGiornataFc());
 
 		Grid<ClassificaBean> grid;
 		try {
@@ -163,9 +176,10 @@ public class EmClassificaView extends VerticalLayout{
 		stampapdf.setIcon(VaadinIcon.DOWNLOAD.create());
 		FileDownloadWrapper button1Wrapper = new FileDownloadWrapper(new StreamResource("Classifica.pdf",() -> {
 			try {
+				String imgLog = (String) env.getProperty("img.logo");
 				Map<String, Object> hm = new HashMap<String, Object>();
-				hm.put("DIVISORE", ""+Costants.DIVISORE_10);
-				hm.put("PATH_IMG", "images/logofcmundial2018.jpg");
+				hm.put("DIVISORE", "" + Costants.DIVISORE_10);
+				hm.put("PATH_IMG", "images/" + imgLog);
 				Resource resource = resourceLoader.getResource("classpath:reports/em/classifica.jasper");
 				InputStream inputStream = resource.getInputStream();
 				Connection conn = jdbcTemplate.getDataSource().getConnection();
@@ -179,7 +193,7 @@ public class EmClassificaView extends VerticalLayout{
 		HorizontalLayout horLayout = new HorizontalLayout();
 		horLayout.setSpacing(true);
 		horLayout.add(button1Wrapper);
-		
+
 		return horLayout;
 	}
 
@@ -194,6 +208,13 @@ public class EmClassificaView extends VerticalLayout{
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setMultiSort(true);
 
+		Column<ClassificaBean> posizioneColumn = grid.addColumn(new ComponentRenderer<>(classifica -> {
+			int x = items.indexOf(classifica) + 1;
+			Label lblPosizione = new Label("" + x);
+			return lblPosizione;
+		})).setHeader("");
+		posizioneColumn.setSortable(false);
+
 		Column<ClassificaBean> squadraColumn = grid.addColumn(classifica -> classifica.getSquadra());
 		squadraColumn.setSortable(false);
 		squadraColumn.setHeader("Squadra");
@@ -202,7 +223,14 @@ public class EmClassificaView extends VerticalLayout{
 			DecimalFormat myFormatter = new DecimalFormat("#0.00");
 			Double dTotPunti = classifica.getTotPunti() != null ? classifica.getTotPunti() / Costants.DIVISORE_10 : 0;
 			String sTotPunti = myFormatter.format(dTotPunti);
-			return new Label(sTotPunti);
+
+			Label lblTotPunti = new Label(sTotPunti);
+
+			lblTotPunti.getStyle().set("font-size", "14px");
+			lblTotPunti.getStyle().set("color", Costants.BLUE);
+			lblTotPunti.getElement().getStyle().set("-webkit-text-fill-color", Costants.BLUE);
+			return lblTotPunti;
+
 		})).setHeader("Totale Punti");
 		totPuntiColumn.setSortable(true);
 		totPuntiColumn.setComparator((p1,

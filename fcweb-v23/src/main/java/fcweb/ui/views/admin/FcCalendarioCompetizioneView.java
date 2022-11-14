@@ -282,7 +282,7 @@ public class FcCalendarioCompetizioneView extends VerticalLayout
 					}
 
 				} else {
-					jobProcessGiornata.initDbCalendarioTim(basePathData + "calendarioEuro2021.csv");
+					jobProcessGiornata.initDbCalendarioCompetizione(basePathData + "calendarioMondiale2022.csv");
 				}
 
 			} else if (event.getSource() == updateGiornata) {

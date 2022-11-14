@@ -526,7 +526,8 @@ public class EmImpostazioniView extends VerticalLayout
 				String urlFanta = (String) p.get("URL_FANTA");
 				String basePath = basePathData;
 				String quotaz = "Europei-Giocatori-Quotazioni-Excel";
-				// https://www.pianetafanta.it/Europei-Giocatori-Quotazioni-Excel.asp?giornata=0&Nome=&Squadre=&Ruolo=&Ruolo2=&Quota=&Quota1=
+				quotaz = "Mondiale-Giocatori-Quotazioni-Excel";
+				// https://www.pianetafanta.it/Mondiale-Giocatori-Quotazioni-Excel.asp?giornata=0&Nome=&Squadre=&Ruolo=&Ruolo2=&Quota=&Quota1=
 				String httpUrl = urlFanta + quotaz + ".asp?giornata=" + giornata;
 				LOG.info("httpUrl " + httpUrl);
 				String fileName = "Q_" + giornata;
@@ -564,10 +565,10 @@ public class EmImpostazioniView extends VerticalLayout
 
 				String urlFanta = (String) p.get("URL_FANTA");
 
-				String votiExcel = "Voti-Ufficiali-Mondiale-Excel";
-				votiExcel = "Voti-Ufficiosi-Europei-Excel";
+				String votiExcel = "Voti-Ufficiali-Europei-Excel";
+				votiExcel = "Voti-Ufficiosi-Mondiale-Excel";
 				if (chkUfficiali.getValue()) {
-					votiExcel = "Voti-Ufficiali-Europei-Excel";
+					votiExcel = "Voti-Ufficiali-Mondiale-Excel";
 				}
 
 				String httpUrl = urlFanta + votiExcel + ".asp?giornataScelta=" + giornata;

@@ -153,7 +153,7 @@ public class EmHomeView extends VerticalLayout{
 //				Image img = buildImage("classpath:/img/nazioni/", s.getSquadraCasa() + ".png");
 //				cellLayout.add(img);
 				FcSquadra sq = squadraController.findByNomeSquadra(s.getSquadraCasa());
-				if (sq.getImg() != null) {
+				if (sq != null && sq.getImg() != null) {
 					try {
 						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
 						cellLayout.add(img);
@@ -182,7 +182,7 @@ public class EmHomeView extends VerticalLayout{
 //				Image img = buildImage("classpath:/img/nazioni/", s.getSquadraFuori() + ".png");
 //				cellLayout.add(img);
 				FcSquadra sq = squadraController.findByNomeSquadra(s.getSquadraFuori());
-				if (sq.getImg() != null) {
+				if (sq != null && sq.getImg() != null) {
 					try {
 						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
 						cellLayout.add(img);

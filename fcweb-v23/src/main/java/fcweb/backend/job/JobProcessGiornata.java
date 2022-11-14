@@ -3968,9 +3968,9 @@ public class JobProcessGiornata{
 		return partita;
 	}
 
-	public void initDbCalendarioTim(String fileName) throws Exception {
+	public void initDbCalendarioCompetizione(String fileName) throws Exception {
 
-		LOG.info("START initDbCalendarioTim");
+		LOG.info("START initDbCalendarioCompetizione");
 
 		FileReader fileReader = null;
 		CSVParser csvFileParser = null;
@@ -3992,45 +3992,40 @@ public class JobProcessGiornata{
 
 			calendarioTimRepository.deleteAll();
 
-			for (int i = 0; i < csvRecords.size(); i++) {
+			for (int i = 1; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
 
 				FcCalendarioCompetizione calendarioTim = new FcCalendarioCompetizione();
 				String idGiornata = record.get(0);
 				String data = record.get(1);
-				String ora = record.get(2);
-				if (StringUtils.isEmpty(ora)) {
-					ora = "00:00";
-				}
-				String squadraCasa = record.get(3);
-				String squadraFuori = record.get(4);
+				String squadraCasa = record.get(2);
+				String squadraFuori = record.get(3);
+				int idSquadraCasa = Integer.parseInt(record.get(4));
+				int idSquadraFuori = Integer.parseInt(record.get(5));
+				String risultato = record.get(6);
 
 				LOG.debug("idGiornata " + idGiornata + " squadraCasa " + squadraCasa + " squadraFuori " + squadraFuori);
 
 				calendarioTim.setIdGiornata(Integer.parseInt(idGiornata));
 
-				String str = data + " " + ora;
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-				LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				LocalDateTime dateTime = LocalDateTime.parse(data, formatter);
 				calendarioTim.setData(dateTime);
-
-				FcSquadra squadra = squadraRepository.findByNomeSquadra(squadraCasa);
-				calendarioTim.setIdSquadraCasa(squadra.getIdSquadra());
+				calendarioTim.setIdSquadraCasa(idSquadraCasa);
 				calendarioTim.setSquadraCasa(squadraCasa);
-
-				squadra = squadraRepository.findByNomeSquadra(squadraFuori);
-				calendarioTim.setIdSquadraFuori(squadra.getIdSquadra());
+				calendarioTim.setIdSquadraFuori(idSquadraFuori);
 				calendarioTim.setSquadraFuori(squadraFuori);
+				calendarioTim.setRisultato(risultato);
 
 				calendarioTimRepository.save(calendarioTim);
 
 			}
 
-			LOG.info("END initDbCalendarioTim");
+			LOG.info("END initDbCalendarioCompetizione");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error("Error in initDbCalendarioTim !!!");
+			LOG.error("Error in initDbCalendarioCompetizione !!!");
 			throw e;
 		} finally {
 			if (fileReader != null) {
