@@ -527,6 +527,7 @@ public class EmImpostazioniView extends VerticalLayout
 				String basePath = basePathData;
 				String quotaz = "Europei-Giocatori-Quotazioni-Excel";
 				quotaz = "Mondiale-Giocatori-Quotazioni-Excel";
+				quotaz = "Mondiale-giocatori-quotazioni-Excel";
 				// https://www.pianetafanta.it/Mondiale-Giocatori-Quotazioni-Excel.asp?giornata=0&Nome=&Squadre=&Ruolo=&Ruolo2=&Quota=&Quota1=
 				String httpUrl = urlFanta + quotaz + ".asp?giornata=" + giornata;
 				LOG.info("httpUrl " + httpUrl);

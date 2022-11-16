@@ -501,6 +501,9 @@ public class JobProcessGiornata{
 		if (ls.size() > 20) {
 			numRighe = 121;
 		}
+		if (ls.size() > 30) {
+			numRighe = 161;
+		}
 
 		String ORDINAMENTO = "";
 		String update = "";
@@ -534,6 +537,8 @@ public class JobProcessGiornata{
 				c = c - 10;
 			} else if (i > 19 && i < 30) {
 				c = c - 20;
+			} else if (i > 29 && i < 40) {
+				c = c - 30;
 			}
 
 			String up1 = "S" + c + "='" + s.getNomeSquadra() + "'";
@@ -546,6 +551,9 @@ public class JobProcessGiornata{
 			}
 			if (i > 19) {
 				id = "81";
+			}
+			if (i > 29) {
+				id = "121";
 			}
 
 			update = "update " + table + " set " + up1 + " , " + up2 + " , " + up3 + " WHERE ID=" + id;
@@ -578,17 +586,16 @@ public class JobProcessGiornata{
 				key = 42;
 			} else if (i > 19 && i < 30) {
 				key = 82;
+			} else if (i > 29 && i < 40) {
+				key = 122;
 			}
 
 			for (int i2 = 0; i2 < 40; i2++) {
-
 				if (i2 < newRec) {
-
 					FcGiocatore giocatore = (FcGiocatore) giocatores.get(i2);
 					cognGiocatore = giocatore.getCognGiocatore();
 					ruolo = giocatore.getFcRuolo().getIdRuolo();
 					sQuot = giocatore.getQuotazione().toString();
-
 				} else {
 					cognGiocatore = "";
 					ruolo = "";
@@ -608,9 +615,7 @@ public class JobProcessGiornata{
 
 			i++;
 		}
-
 		LOG.info("END executeUpdateDbFcExpRoseA");
-
 	}
 
 	@RequestMapping(value = "/aggiornamentoPFGiornata", method = RequestMethod.POST)

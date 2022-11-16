@@ -564,7 +564,7 @@ public class EmJobProcessGiornata{
 			}
 
 			MailClient client = new MailClient(javaMailSender);
-			//String from = (String) p.get("from");
+			// String from = (String) p.get("from");
 			String email_destinatario = (String) p.getProperty("to");
 			String[] to = null;
 			if (email_destinatario != null && !email_destinatario.equals("")) {
@@ -596,7 +596,7 @@ public class EmJobProcessGiornata{
 			formazioneHtml += "<html>";
 
 			String from = (String) env.getProperty("spring.mail.username");
-			
+
 			client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", att);
 
 			LOG.info("END emaggiornamentoPFGiornata");
@@ -721,12 +721,12 @@ public class EmJobProcessGiornata{
 			for (FcGiornataDett nvp : novotoProcess) {
 				novoto.remove(nvp);
 			}
-			
-			
-			// START FORZA CAMBI RIMASTI IN BASE ORDINE INSERITI (NON VIENE CONSIDERATO IL RUOLO  
-			// AVVIENE IL CAMBIO DI SCHEMA 
+
+			// START FORZA CAMBI RIMASTI IN BASE ORDINE INSERITI (NON VIENE
+			// CONSIDERATO IL RUOLO
+			// AVVIENE IL CAMBIO DI SCHEMA
 			if (countCambi < 3) {
-				
+
 				for (FcGiornataDett ris : riserve) {
 
 					int votoGiocatore = buildFantaMedia(ris.getFcPagelle());
@@ -785,7 +785,7 @@ public class EmJobProcessGiornata{
 				}
 				nextSchema = countP + "-" + countD + "-" + countC + "-" + countA;
 			}
-			LOG.debug("NUOVO SCHEMA " +attore.getDescAttore() + " " + nextSchema);
+			LOG.debug("NUOVO SCHEMA " + attore.getDescAttore() + " " + nextSchema);
 
 			String query = "DELETE FROM fc_classifica_tot_pt WHERE ID_CAMPIONATO=" + campionato.getIdCampionato() + " AND ID_ATTORE=" + attore.getIdAttore() + " AND ID_GIORNATA=" + giornata + "";
 			jdbcTemplate.update(query);
@@ -1021,10 +1021,10 @@ public class EmJobProcessGiornata{
 		statistiche.setFlagAttivo(appoFcGiocatore.isFlagAttivo());
 
 		statisticheRepository.save(statistiche);
-		
+
 		jdbcTemplate.update("update fc_statistiche set flag_attivo = 0");
-		jdbcTemplate.update("update fc_statistiche set flag_attivo = 1 where nome_squadra in (select squadra_casa from fc_calendario_tim where codice_giornata = "+giornata+")");
-		jdbcTemplate.update("update fc_statistiche set flag_attivo = 1 where nome_squadra in (select squadra_fuori from fc_calendario_tim where codice_giornata = "+giornata+")");
+		jdbcTemplate.update("update fc_statistiche set flag_attivo = 1 where nome_squadra in (select squadra_casa from fc_calendario_tim where codice_giornata = " + giornata + ")");
+		jdbcTemplate.update("update fc_statistiche set flag_attivo = 1 where nome_squadra in (select squadra_fuori from fc_calendario_tim where codice_giornata = " + giornata + ")");
 
 		LOG.info("END emstatistiche");
 
@@ -1235,9 +1235,9 @@ public class EmJobProcessGiornata{
 
 				FcGiocatore giocatore = null;
 				String idGiocatore = record.get(0);
-				String cognGiocatore = record.get(1);
+				String cognGiocatore = record.get(1).trim();
 				String idRuolo = record.get(2);
-				String nomeSquadra = record.get(4);
+				String nomeSquadra = record.get(4).trim();
 				String quotazioneIniziale = record.get(5);
 				String quotazioneAttuale = record.get(6);
 				LOG.debug("giocatore " + cognGiocatore + " qI " + quotazioneIniziale + " qA " + quotazioneAttuale);
@@ -1245,9 +1245,6 @@ public class EmJobProcessGiornata{
 					giocatore = this.giocatoreRepository.findByIdGiocatore(Integer.parseInt(idGiocatore));
 					if (giocatore == null) {
 						giocatore = new FcGiocatore();
-						// int newQuotaz = calcolaQuotazione(quotazioneAttuale,
-						// idRuolo);
-						// giocatore.setQuotazione(Integer.valueOf(newQuotaz));
 						giocatore.setQuotazione(5);
 						LOG.info("NEW GIOCATORE " + idGiocatore + " " + cognGiocatore + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);
 						listGiocatoriAdd.add(giocatore);
@@ -1255,10 +1252,8 @@ public class EmJobProcessGiornata{
 				}
 
 				if (updateQuotazioni) {
-					// int newQuotaz = calcolaQuotazione(quotazioneAttuale,
-					// idRuolo);
-					// giocatore.setQuotazione(Integer.valueOf(newQuotaz));
-					giocatore.setQuotazione(Integer.valueOf(quotazioneAttuale));
+					int newQuotaz = calcolaQuotazione(quotazioneAttuale, idRuolo, "50");
+					giocatore.setQuotazione(Integer.valueOf(newQuotaz));
 				}
 
 				giocatore.setIdGiocatore(Integer.parseInt(idGiocatore));
@@ -1269,6 +1264,9 @@ public class EmJobProcessGiornata{
 				giocatore.setFcRuolo(ruolo);
 
 				FcSquadra squadra = squadraRepository.findByNomeSquadra(nomeSquadra);
+				if (squadra == null) {
+					LOG.info("NEW GIOCATORE " + idGiocatore + " " + cognGiocatore + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);	
+				}
 				giocatore.setFcSquadra(squadra);
 
 				giocatore.setFlagAttivo(true);
@@ -1576,6 +1574,36 @@ public class EmJobProcessGiornata{
 			LOG.error("Error in initDbGiocatori !!!");
 			throw e;
 		}
+	}
+
+	private int calcolaQuotazione(String quotazione, String idRuolo,
+			String percentuale) {
+
+		String q = Utils.replaceString(quotazione, ",", ".");
+		BigDecimal bgQ = new BigDecimal(q);
+		// bgQ.setScale(BigDecimal.ROUND_HALF_UP);
+
+		long new_quot = 0;
+		double appo = 0;
+		// if ("A".equals(idRuolo)) {
+		// appo = (Double.parseDouble(bgQ.toString()) *
+		// Double.parseDouble("30")) / Costants.DIVISORE_100;
+		// new_quot = Math.round(Double.parseDouble(bgQ.toString()) - appo);
+		// } else {
+		// appo = (Double.parseDouble(bgQ.toString()) * Double.parseDouble("2"))
+		// / 3;
+		// new_quot = Math.round(appo);
+		// }
+		appo = (Double.parseDouble(bgQ.toString()) * Double.parseDouble(percentuale)) / Costants.DIVISORE_100;
+		double newQuotazione = Double.parseDouble(bgQ.toString()) - appo;
+		// LOG.debug(" newQuotazione " + newQuotazione);
+		new_quot = Math.round(newQuotazione);
+		if (new_quot < 1) {
+			new_quot = 1;
+		}
+		LOG.debug(" new_quot " + new_quot);
+
+		return (int) new_quot;
 	}
 
 }

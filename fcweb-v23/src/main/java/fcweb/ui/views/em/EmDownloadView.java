@@ -212,8 +212,8 @@ public class EmDownloadView extends VerticalLayout
 
 		}
 
-		Anchor downloadAsExcel = new Anchor(new StreamResource("roseA.xlsx",Exporter.exportAsExcel(gridRosea)),"Download As Excel");
-		Anchor downloadAsCSV = new Anchor(new StreamResource("roseA.csv",Exporter.exportAsCSV(gridRosea)),"Download As CSV");
+		Anchor downloadAsExcel = new Anchor(new StreamResource("Nazionali.xlsx",Exporter.exportAsExcel(gridRosea)),"Download As Excel");
+		Anchor downloadAsCSV = new Anchor(new StreamResource("Nazionali.csv",Exporter.exportAsCSV(gridRosea)),"Download As CSV");
 
 		layout.add(new HorizontalLayout(downloadAsExcel,downloadAsCSV));
 

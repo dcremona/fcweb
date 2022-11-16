@@ -31,18 +31,16 @@ public class JobProcessFileCsv {
 	final static int size = 1024;
 
 	public void downloadCsv(String http_url, String path_csv, String fileName, int headCount) throws Exception {
+		File input = null;
 		try {
 			LOG.debug(http_url);
 			fileDownload(http_url, fileName + ".html", path_csv);
+			input = new File(path_csv + fileName + ".html");
+			input = new File(path_csv + "Quotazioni Giocatori - 15 giornata - 2022_2023 - QATAR 2022.html");
 		} catch (Exception ex) {
 			LOG.error(ex.getMessage());
-//			File f = new File(path_csv + fileName + ".html");
-//			if (f.exists()) {
-//				f.deleteOnExit();
-//			}
 		}
 
-		File input = new File(path_csv + fileName + ".html");
 		Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
 
 		// select all <tr> or Table Row Elements
@@ -77,7 +75,6 @@ public class JobProcessFileCsv {
 		
 		FileOutputStream outputStream = null;
 		try {
-			
 			// DELETE
 			File f = new File(path_csv + fileName + ".csv");
 			if (f.exists()) {
@@ -94,50 +91,6 @@ public class JobProcessFileCsv {
 				outputStream.close();
 			}
 		}
-
-	    /*
-		BufferedWriter output = null;
-		try {
-			// Create temp file.
-			//File temp = File.createTempFile("temp_" + fileName, ".csv");
-			// Delete temp file when program exits.
-			//temp.deleteOnExit();
-
-			
-			// Write to temp file
-			output = new BufferedWriter(new FileWriter(temp));
-			output.write(data);
-			if (output != null) {
-				output.close();
-			}
-
-			// DELETE
-			File f = new File(path_csv + fileName + ".csv");
-			if (f.exists()) {
-				f.delete();
-			}
-
-			// Destination directory
-			// File dir = new File(path_csv);
-			// create the destination file object
-			File dest = new File(path_csv + fileName + ".csv");
-
-			// Move file to new directory
-			boolean success = temp.renameTo(dest);
-			if (!success) {
-				// File was not successfully moved
-				LOG.error("File was not successfully moved " + success);
-			}
-
-		} catch (Exception e) {
-			LOG.error(e.getMessage());
-		} finally {
-			if (output != null) {
-				output.close();
-			}
-		}
-		*/
-
 	}
 
 	public void fileDownload(String fAddress, String localFileName, String destinationDir) throws Exception {
