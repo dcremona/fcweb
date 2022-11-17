@@ -105,23 +105,41 @@ public class EmFormazioniView extends VerticalLayout{
 	@Autowired
 	private AccessoService accessoController;
 
-	public EmFormazioniView() {
+	public EmFormazioniView() throws Exception {
 		LOG.info("EmFormazioniView()");
 		initImg();
 	}
 
 	@PostConstruct
-	void init() {
+	void init() throws Exception {
 		LOG.info("init");
 		if (!Utils.isValidVaadinSession()) {
 			return;
 		}
 		accessoController.insertAccesso(this.getClass().getName());
-		squadre = attoreController.findAll();
+
+		initData();
+
 		initLayout();
 	}
 
-	private void initImg() {
+	private FcGiornataInfo giornataInfo = null;
+	private FcCampionato campionato = null;
+	private List<FcGiornataInfo> giornate = null;
+
+	private void initData() throws Exception {
+
+		giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
+		campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+
+		Integer from = campionato.getStart();
+		Integer to = campionato.getEnd();
+		giornate = giornataInfoController.findByCodiceGiornataGreaterThanEqualAndCodiceGiornataLessThanEqual(from, to);
+
+		squadre = attoreController.findAll();
+	}
+
+	private void initImg() throws Exception {
 
 		LOG.info("initImg()");
 
@@ -143,13 +161,6 @@ public class EmFormazioniView extends VerticalLayout{
 	private void initLayout() {
 
 		LOG.info("initLayout()");
-
-		FcGiornataInfo giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
-		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
-
-		Integer from = campionato.getStart();
-		Integer to = campionato.getEnd();
-		List<FcGiornataInfo> giornate = giornataInfoController.findByCodiceGiornataGreaterThanEqualAndCodiceGiornataLessThanEqual(from, to);
 
 		Button stampapdf = new Button("Risultati pdf");
 		stampapdf.setIcon(VaadinIcon.DOWNLOAD.create());
@@ -193,42 +204,31 @@ public class EmFormazioniView extends VerticalLayout{
 	private void buildTabGiornata(VerticalLayout layout, String giornata) {
 
 		Integer currGG = Integer.valueOf(giornata);
-		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
 		FcGiornataInfo giornataInfo = giornataInfoController.findByCodiceGiornata(currGG);
 
 		Accordion accordion = new Accordion();
 		accordion.setSizeFull();
 		for (FcAttore a : squadre) {
 
-			HashMap<String, Object> mapCasa = buildData(a, giornataInfo);
-
-			// @SuppressWarnings("unchecked")
-			// List<FcGiornataDett> itemsCasa = (List<FcGiornataDett>)
-			// mapCasa.get("items");
-			// String schemaCasa = (String) mapCasa.get("schema");
-			// Grid<FcGiornataDett> tableSqCasa = buildResultSquadra(itemsCasa,
-			// schemaCasa);
-			// Grid<FcProperties> tableInfoCasa = buildResultInfo(a,
-			// giornataInfo);
-			//
-			// VerticalLayout vCasa = new VerticalLayout();
-			// vCasa.add(tableSqCasa);
-			// vCasa.add(tableInfoCasa);
-			// vCasa.setSizeFull();
-
-			// List<FcGiornataDett> itemsCasa = (List<FcGiornataDett>)
-			// mapCasa.get("items");
-			List<FcGiornataDett> itemsCasaTitolari = (List<FcGiornataDett>) mapCasa.get("itemsTitolari");
-			List<FcGiornataDett> itemsCasaPanchina = (List<FcGiornataDett>) mapCasa.get("itemsPanchina");
-			String schemaCasa = (String) mapCasa.get("schema");
-
-			Grid<FcGiornataDett> tableSqCasaTitolari = buildResultSquadra(itemsCasaTitolari, "Titolari", schemaCasa);
-			Grid<FcGiornataDett> tableSqCasaPanchina = buildResultSquadra(itemsCasaPanchina, "Panchina", "");
-			VerticalLayout layoutTotaliCasa = buildTotaliInfo(campionato, a, giornataInfo);
-
 			VerticalLayout vCasa = new VerticalLayout();
-			vCasa.add(tableSqCasaTitolari);
-			vCasa.add(tableSqCasaPanchina);
+			HashMap<String, Object> mapCasa;
+			try {
+				mapCasa = buildData(a, giornataInfo);
+
+				List<FcGiornataDett> itemsCasaTitolari = (List<FcGiornataDett>) mapCasa.get("itemsTitolari");
+				List<FcGiornataDett> itemsCasaPanchina = (List<FcGiornataDett>) mapCasa.get("itemsPanchina");
+				String schemaCasa = (String) mapCasa.get("schema");
+
+				Grid<FcGiornataDett> tableSqCasaTitolari = buildResultSquadra(itemsCasaTitolari, "Titolari", schemaCasa);
+				Grid<FcGiornataDett> tableSqCasaPanchina = buildResultSquadra(itemsCasaPanchina, "Panchina", "");
+
+				vCasa.add(tableSqCasaTitolari);
+				vCasa.add(tableSqCasaPanchina);
+
+			} catch (Exception e) {
+				LOG.info("NO DATA " + a.getDescAttore());
+			}
+			VerticalLayout layoutTotaliCasa = buildTotaliInfo(campionato, a, giornataInfo);
 			vCasa.add(layoutTotaliCasa);
 			vCasa.setSizeFull();
 
@@ -240,7 +240,7 @@ public class EmFormazioniView extends VerticalLayout{
 	}
 
 	private HashMap<String, Object> buildData(FcAttore attore,
-			FcGiornataInfo giornataInfo) {
+			FcGiornataInfo giornataInfo) throws Exception {
 
 		LOG.info("START buildData " + attore.getDescAttore());
 
@@ -376,8 +376,10 @@ public class EmFormazioniView extends VerticalLayout{
 						e.printStackTrace();
 					}
 				}
-//				Image img = buildImage("classpath:/img/nazioni/", gd.getFcGiocatore().getFcSquadra().getNomeSquadra() + ".png");
-//				cellLayout.add(img);
+				// Image img = buildImage("classpath:/img/nazioni/",
+				// gd.getFcGiocatore().getFcSquadra().getNomeSquadra() +
+				// ".png");
+				// cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
