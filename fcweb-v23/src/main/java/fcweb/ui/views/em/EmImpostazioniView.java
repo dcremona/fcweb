@@ -488,7 +488,10 @@ public class EmImpostazioniView extends VerticalLayout
 						classificaTotalePuntiController.createEm(a, campionato, Double.valueOf(0));
 					}
 				}
-
+				
+				if (giornata == 0) {
+					giornata = 1;
+				}
 				emjobProcessGiornata.eminitDb(giornata);
 
 			} else if (event.getSource() == initDbAttore) {

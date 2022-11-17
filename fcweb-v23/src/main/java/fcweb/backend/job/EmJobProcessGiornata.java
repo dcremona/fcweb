@@ -1252,7 +1252,7 @@ public class EmJobProcessGiornata{
 				}
 
 				if (updateQuotazioni) {
-					int newQuotaz = calcolaQuotazione(quotazioneAttuale, idRuolo, "50");
+					int newQuotaz = calcolaQuotazione(quotazioneAttuale, idRuolo, "30");
 					giocatore.setQuotazione(Integer.valueOf(newQuotaz));
 				}
 

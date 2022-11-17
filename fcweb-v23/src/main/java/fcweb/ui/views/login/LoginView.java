@@ -211,6 +211,11 @@ public class LoginView extends VerticalLayout {
 				CustomMessageDialog.showMessageError("Email o Password non valide");
 				return false;
 			}
+			
+			if (!attore.isActive()){
+				CustomMessageDialog.showMessageError("Utenza non attiva");
+				return false;
+			}
 		}
 
 		List<FcProperties> lProprieta = proprietaController.findAll();
