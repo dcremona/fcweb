@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
@@ -125,6 +126,7 @@ public class EmTeamInsertView extends VerticalLayout
 	private long millisDiff = 0;
 	private String idAttore = "";
 	private String descAttore = "";
+	private Properties p = null;
 
 	private Button save;
 
@@ -222,6 +224,7 @@ public class EmTeamInsertView extends VerticalLayout
 	
 	private void initData() throws Exception {
 
+		p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 		attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
 		giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
 		campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
@@ -1989,13 +1992,24 @@ public class EmTeamInsertView extends VerticalLayout
 		MailClient client = new MailClient(javaMailSender);
 
 		String email_destinatario = "";
-		List<FcAttore> att = attoreController.findAll();
-		for (FcAttore a : att) {
-			if (a.isNotifiche()) {
-				email_destinatario += a.getEmail() + ";";
+//		List<FcAttore> att = attoreController.findAll();
+//		for (FcAttore a : att) {
+//			if (a.isNotifiche()) {
+//				email_destinatario += a.getEmail() + ";";
+//			}
+//		}
+		String ACTIVE_MAIL = (String) p.getProperty("ACTIVE_MAIL");
+		if ("true".equals(ACTIVE_MAIL)) {
+			List<FcAttore> attori = attoreController.findByActive(true);
+			for (FcAttore a : attori) {
+				if (a.isNotifiche()) {
+					email_destinatario += a.getEmail() + ";";
+				}
 			}
+		} else {
+			email_destinatario = (String) p.getProperty("to");
 		}
-
+		
 		String[] to = null;
 		if (email_destinatario != null && !email_destinatario.equals("")) {
 			to = Utils.tornaArrayString(email_destinatario, ";");

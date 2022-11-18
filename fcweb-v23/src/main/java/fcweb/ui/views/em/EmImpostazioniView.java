@@ -57,6 +57,7 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
@@ -160,6 +161,7 @@ public class EmImpostazioniView extends VerticalLayout
 	private Button download;
 	private Button calcola;
 	private Checkbox chkUfficiali;
+	private NumberField txtPerc;
 
 	private Button calcolaStatistiche;
 	private Button pdfAndMail;
@@ -268,7 +270,6 @@ public class EmImpostazioniView extends VerticalLayout
 			try {
 
 				HashMap<Object, Object> map = emjobProcessGiornata.initDbGiocatoriExcel(buffer.getInputStream());
-				;
 
 				@SuppressWarnings("unchecked")
 				ArrayList<FcGiocatore> listGiocatoriAdd = (ArrayList<FcGiocatore>) map.get("listAdd");
@@ -354,12 +355,20 @@ public class EmImpostazioniView extends VerticalLayout
 		updateGiocatori.addClickListener(this);
 
 		chkUpdateQuotaz = new Checkbox("Update Quotazioni");
+		
+		
+		txtPerc = new NumberField();
+		txtPerc.setMin(0d);
+		txtPerc.setMax(100d);
+		txtPerc.setHasControls(true);
+		txtPerc.setValue(50d);
 
 		HorizontalLayout layoutUpdateRow2 = new HorizontalLayout();
 		layoutUpdateRow2.setMargin(true);
 
 		layoutUpdateRow2.add(downloadQuotaz);
 		layoutUpdateRow2.add(updateGiocatori);
+		layoutUpdateRow2.add(txtPerc);
 		layoutUpdateRow2.add(chkUpdateQuotaz);
 
 		HorizontalLayout layoutUpdateRow3 = new HorizontalLayout();
@@ -549,7 +558,8 @@ public class EmImpostazioniView extends VerticalLayout
 				String fileName = "Q_" + giornata;
 				fileName = basePathData + fileName + ".csv";
 				boolean updateQuotazioni = chkUpdateQuotaz.getValue().booleanValue();
-				HashMap<Object, Object> map = emjobProcessGiornata.initDbGiocatori(Costants.HTTP_URL_IMG, imgPath, fileName, updateQuotazioni);
+				String percentuale = "" + txtPerc.getValue().intValue();
+				HashMap<Object, Object> map = emjobProcessGiornata.initDbGiocatori(Costants.HTTP_URL_IMG, imgPath, fileName, updateQuotazioni,percentuale);
 
 				@SuppressWarnings("unchecked")
 				ArrayList<FcGiocatore> listGiocatoriAdd = (ArrayList<FcGiocatore>) map.get("listAdd");
