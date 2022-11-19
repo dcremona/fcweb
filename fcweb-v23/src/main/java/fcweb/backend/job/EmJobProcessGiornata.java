@@ -1489,65 +1489,65 @@ public class EmJobProcessGiornata{
 				}
 			}
 
-//			if (giocatores.size() > 0) {
-//
-//				for (FcGiocatore gioc : listG) {
-//					String sql = "UPDATE fc_giocatore SET ";
-//					sql += " FLAG_ATTIVO=0";
-//					sql += " WHERE ID_GIOCATORE=" + gioc.getIdGiocatore();
-//					this.jdbcTemplate.execute(sql);
-//				}
-//
-//				for (FcGiocatore giocatore : giocatores) {
-//
-//					// LOG.info("SAVE GIOCATORE ");
-//					giocatoreRepository.save(giocatore);
-//
-//					FcStatistiche statistiche = new FcStatistiche();
-//					// statistiche.setFcGiocatore(giocatore);
-//					statistiche.setIdGiocatore(giocatore.getIdGiocatore());
-//					statistiche.setCognGiocatore(giocatore.getCognGiocatore());
-//					statistiche.setIdRuolo(giocatore.getFcRuolo().getIdRuolo());
-//					statistiche.setNomeSquadra(giocatore.getFcSquadra().getNomeSquadra());
-//					statistiche.setAmmonizione(0);
-//					statistiche.setAssist(0);
-//					statistiche.setEspulsione(0);
-//					statistiche.setFantaMedia(0.0);
-//					statistiche.setGiocate(0);
-//					statistiche.setGoalFatto(0);
-//					statistiche.setGoalSubito(0);
-//					statistiche.setMediaVoto(0.0);
-//					statistiche.setRigoreSbagliato(0);
-//					statistiche.setRigoreSegnato(0);
-//					statistiche.setFlagAttivo(giocatore.isFlagAttivo());
-//
-//					// LOG.info(" GIOCATORE " + giocatore.getIdGiocatore() + " "
-//					// + giocatore.getCognGiocatore() + " " +
-//					// giocatore.getFcRuolo().getIdRuolo());
-//
-//					// LOG.info("SAVE STATISTICA ");
-//					statisticheRepository.save(statistiche);
-//
-//				}
-//
-//				String sql = " select id_giocatore,cogn_giocatore from fc_giocatore where flag_attivo=0 and id_giocatore not in (select distinct id_giocatore from fc_giornata_dett where id_giocatore is not null) ";
-//				jdbcTemplate.query(sql, new ResultSetExtractor<ArrayList<FcGiocatore>>(){
-//					@Override
-//					public ArrayList<FcGiocatore> extractData(ResultSet rs)
-//							throws SQLException, DataAccessException {
-//						int idGiocatore = 0;
-//						String cognGiocatore = "";
-//						while (rs.next()) {
-//							idGiocatore = rs.getInt(1);
-//							cognGiocatore = rs.getString(2);
-//							LOG.info("idGiocatore " + idGiocatore + " cognGiocatore " + cognGiocatore);
-//							FcGiocatore giocatore = giocatoreRepository.findByIdGiocatore(idGiocatore);
-//							listGiocatoriDel.add(giocatore);
-//						}
-//						return null;
-//					}
-//				});
-//			}
+			if (giocatores.size() > 0) {
+
+				for (FcGiocatore gioc : listG) {
+					String sql = "UPDATE fc_giocatore SET ";
+					sql += " FLAG_ATTIVO=0";
+					sql += " WHERE ID_GIOCATORE=" + gioc.getIdGiocatore();
+					this.jdbcTemplate.execute(sql);
+				}
+
+				for (FcGiocatore giocatore : giocatores) {
+
+					// LOG.info("SAVE GIOCATORE ");
+					giocatoreRepository.save(giocatore);
+
+					FcStatistiche statistiche = new FcStatistiche();
+					// statistiche.setFcGiocatore(giocatore);
+					statistiche.setIdGiocatore(giocatore.getIdGiocatore());
+					statistiche.setCognGiocatore(giocatore.getCognGiocatore());
+					statistiche.setIdRuolo(giocatore.getFcRuolo().getIdRuolo());
+					statistiche.setNomeSquadra(giocatore.getFcSquadra().getNomeSquadra());
+					statistiche.setAmmonizione(0);
+					statistiche.setAssist(0);
+					statistiche.setEspulsione(0);
+					statistiche.setFantaMedia(0.0);
+					statistiche.setGiocate(0);
+					statistiche.setGoalFatto(0);
+					statistiche.setGoalSubito(0);
+					statistiche.setMediaVoto(0.0);
+					statistiche.setRigoreSbagliato(0);
+					statistiche.setRigoreSegnato(0);
+					statistiche.setFlagAttivo(giocatore.isFlagAttivo());
+
+					// LOG.info(" GIOCATORE " + giocatore.getIdGiocatore() + " "
+					// + giocatore.getCognGiocatore() + " " +
+					// giocatore.getFcRuolo().getIdRuolo());
+
+					// LOG.info("SAVE STATISTICA ");
+					statisticheRepository.save(statistiche);
+
+				}
+
+				String sql = " select id_giocatore,cogn_giocatore from fc_giocatore where flag_attivo=0 and id_giocatore not in (select distinct id_giocatore from fc_giornata_dett where id_giocatore is not null) ";
+				jdbcTemplate.query(sql, new ResultSetExtractor<ArrayList<FcGiocatore>>(){
+					@Override
+					public ArrayList<FcGiocatore> extractData(ResultSet rs)
+							throws SQLException, DataAccessException {
+						int idGiocatore = 0;
+						String cognGiocatore = "";
+						while (rs.next()) {
+							idGiocatore = rs.getInt(1);
+							cognGiocatore = rs.getString(2);
+							LOG.info("idGiocatore " + idGiocatore + " cognGiocatore " + cognGiocatore);
+							FcGiocatore giocatore = giocatoreRepository.findByIdGiocatore(idGiocatore);
+							listGiocatoriDel.add(giocatore);
+						}
+						return null;
+					}
+				});
+			}
 
 			LOG.info("END initDbGiocatori");
 
