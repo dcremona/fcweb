@@ -908,23 +908,7 @@ public class EmImpostazioniView extends VerticalLayout
 			cellLayout.setSizeFull();
 
 			if (g != null) {
-
-				// StreamResource resource = new
-				// StreamResource(g.getNomeImg(),() -> {
-				// InputStream inputStream = null;
-				// try {
-				// inputStream = g.getImgSmall().getBinaryStream();
-				// } catch (Exception e) {
-				// e.printStackTrace();
-				// }
-				// return inputStream;
-				// });
-				// Image img = new Image(resource,"");
-				// img.setSrc(resource);
-
 				Label lblGiocatore = new Label(g.getCognGiocatore());
-
-				// cellLayout.add(img);
 				cellLayout.add(lblGiocatore);
 			}
 
@@ -943,8 +927,6 @@ public class EmImpostazioniView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (g != null && g.getFcSquadra() != null) {
-//				Image img = buildImage("classpath:/img/nazioni/", g.getFcSquadra().getNomeSquadra() + ".png");
-//				cellLayout.add(img);
 				FcSquadra sq = g.getFcSquadra();
 				if (sq.getImg() != null) {
 					try {

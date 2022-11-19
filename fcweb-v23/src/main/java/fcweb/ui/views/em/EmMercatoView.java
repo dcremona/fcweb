@@ -673,7 +673,7 @@ public class EmMercatoView extends VerticalLayout
 
 		tableContaPlayer = buildTableContaPlayer(modelContaPlayer);
 
-		top = 210;
+		top = 200;
 		left = 1250;
 
 		Label lblInfoGiocatori = new Label();
