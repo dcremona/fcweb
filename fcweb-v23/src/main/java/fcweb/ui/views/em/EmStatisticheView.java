@@ -44,9 +44,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
-import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -317,8 +317,6 @@ public class EmStatisticheView extends VerticalLayout
 		comboNazione.setPlaceholder("Nazione");
 		comboNazione.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
-//			Image imgSq = buildImage("classpath:/img/nazioni/", item.getNomeSquadra() + ".png");
-//			container.add(imgSq);
 			if (item.getImg() != null) {
 				try {
 					Image img = Utils.getImage(item.getNomeSquadra(), item.getImg().getBinaryStream());
@@ -327,7 +325,7 @@ public class EmStatisticheView extends VerticalLayout
 					e.printStackTrace();
 				}
 			}
-			Label lblSquadra = new Label(item.getNomeSquadra());			
+			Label lblSquadra = new Label(item.getNomeSquadra());
 			container.add(lblSquadra);
 			return container;
 		}));
@@ -354,9 +352,6 @@ public class EmStatisticheView extends VerticalLayout
 		layout.add(hlayoutFilter);
 
 		List<FcStatistiche> items = statisticheController.findAll();
-
-		// Grid<FcStatistiche> grid = new Grid<>();
-		// grid.setItems(items);
 
 		PaginatedGrid<FcStatistiche> grid = new PaginatedGrid<>();
 		ListDataProvider<FcStatistiche> dataProvider = new ListDataProvider<>(items);
@@ -386,20 +381,20 @@ public class EmStatisticheView extends VerticalLayout
 
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setHeightByRows(true);
-		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
+		// grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
+		// GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
 		grid.setMultiSort(true);
 		grid.setAllRowsVisible(true);
 		// grid.setSizeFull();
 
-		Column<FcStatistiche> ruoloColumn = grid.addColumn(new ComponentRenderer<>(g -> {
+		Column<FcStatistiche> ruoloColumn = grid.addColumn(new ComponentRenderer<>(s -> {
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
-			cellLayout.setSizeFull();
-			if (g != null && g.getIdRuolo() != null) {
-				Image img = buildImage("classpath:images/", g.getIdRuolo().toLowerCase() + ".png");
+			if (s != null && s.getIdRuolo() != null) {
+				Image img = buildImage("classpath:images/", s.getIdRuolo().toLowerCase() + ".png");
 				cellLayout.add(img);
 			}
 			return cellLayout;
@@ -409,7 +404,26 @@ public class EmStatisticheView extends VerticalLayout
 		ruoloColumn.setHeader("R");
 		ruoloColumn.setAutoWidth(true);
 
-		Column<FcStatistiche> giocatoreColumn = grid.addColumn(s -> s.getCognGiocatore()).setKey("giocatore");
+		// Column<FcStatistiche> giocatoreColumn = grid.addColumn(s ->
+		// s.getCognGiocatore()).setKey("giocatore");
+		Column<FcStatistiche> giocatoreColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (s != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				if (s.getCognGiocatore() != null) {
+					Span span = new Span();
+					span.setText(s.getCognGiocatore());
+					cellLayout.add(span);
+				}
+			}
+			return cellLayout;
+		}));
 		giocatoreColumn.setSortable(true);
 		giocatoreColumn.setHeader("Giocatore");
 		// giocatoreColumn.setWidth("150px");
@@ -421,35 +435,26 @@ public class EmStatisticheView extends VerticalLayout
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
-			// cellLayout.setSizeFull();
-			if (s != null && s.getNomeSquadra() != null) {
-//				StreamResource resource = new StreamResource(s.getNomeSquadra(),() -> {
-//					Resource r = resourceLoader.getResource("classpath:" + "/img/nazioni/" + s.getNomeSquadra() + ".png");
-//					InputStream inputStream = null;
-//					try {
-//						inputStream = r.getInputStream();
-//					} catch (IOException e) {
-//						e.printStackTrace();
-//					}
-//					return inputStream;
-//				});
-//				Image img = new Image(resource,"");
-//				img.setSrc(resource);
-//				cellLayout.add(img);
-				FcSquadra sq = squadraController.findByNomeSquadra(s.getNomeSquadra());
-				if (sq != null && sq.getImg() != null) {
-					try {
-						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
-						cellLayout.add(img);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+			if (s != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
 				}
-				Label lblSquadra = new Label(s.getNomeSquadra());
-				cellLayout.add(lblSquadra);
+				if (s.getNomeSquadra() != null) {
+					FcSquadra sq = squadraController.findByNomeSquadra(s.getNomeSquadra());
+					if (sq.getImg() != null) {
+						try {
+							Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+							cellLayout.add(img);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					Span span = new Span();
+					span.setText(sq.getNomeSquadra());
+					cellLayout.add(span);
+				}
 			}
 			return cellLayout;
-
 		}));
 		nomeSquadraColumn.setSortable(true);
 		nomeSquadraColumn.setComparator((p1,
@@ -458,18 +463,48 @@ public class EmStatisticheView extends VerticalLayout
 		nomeSquadraColumn.setWidth("100px");
 		nomeSquadraColumn.setAutoWidth(true);
 
-		Column<FcStatistiche> quotazioneColumn = grid.addColumn(s -> s.getFcGiocatore() != null ? s.getFcGiocatore().getQuotazione() : 0);
+		// Column<FcStatistiche> quotazioneColumn = grid.addColumn(s ->
+		// s.getFcGiocatore() != null ? s.getFcGiocatore().getQuotazione() : 0);
+		Column<FcStatistiche> quotazioneColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (s != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				String q = "" + s.getFcGiocatore().getQuotazione();
+				Span span = new Span();
+				span.setText(q);
+				cellLayout.add(span);
+			}
+			return cellLayout;
+		}));
 		quotazioneColumn.setSortable(true);
 		quotazioneColumn.setHeader("Q");
 		quotazioneColumn.setAutoWidth(true);
 
-		// Column<FcStatistiche> proprietarioColumn = grid.addColumn(s ->
-		// s.getProprietario()).setKey("proprietario");
-		// proprietarioColumn.setSortable(true);
-		// proprietarioColumn.setHeader("Proprietario");
-		// proprietarioColumn.setAutoWidth(true);
-
-		Column<FcStatistiche> giocateColumn = grid.addColumn(s -> s.getGiocate()).setKey("giocate");
+		// Column<FcStatistiche> giocateColumn = grid.addColumn(s ->
+		// s.getGiocate()).setKey("giocate");
+		Column<FcStatistiche> giocateColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (s != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				String q = "" + s.getGiocate();
+				Span span = new Span();
+				span.setText(q);
+				cellLayout.add(span);
+			}
+			return cellLayout;
+		}));
 		giocateColumn.setSortable(true);
 		giocateColumn.setHeader("Giocate");
 		giocateColumn.setAutoWidth(true);
@@ -480,6 +515,9 @@ public class EmStatisticheView extends VerticalLayout
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(true);
 			if (s != null && s.getFcGiocatore() != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
 				String imgThink = "2.png";
 				if (s != null && s.getMediaVoto() != 0) {
 					if (s.getMediaVoto() > Costants.EM_RANGE_MAX_MV) {
@@ -489,17 +527,16 @@ public class EmStatisticheView extends VerticalLayout
 					}
 				}
 				Image img = buildImage("classpath:images/", imgThink);
-
 				DecimalFormat myFormatter = new DecimalFormat("#0.00");
 				Double d = Double.valueOf(0);
 				if (s != null) {
 					d = s.getMediaVoto() / Costants.DIVISORE_10;
 				}
 				String sTotPunti = myFormatter.format(d);
-				Label lbl = new Label(sTotPunti);
-
-				cellLayout.add(img);
-				cellLayout.add(lbl);
+				Span span = new Span();
+				span.setText(sTotPunti);
+				span.add(img);
+				cellLayout.add(span);
 
 			}
 			return cellLayout;
@@ -516,6 +553,9 @@ public class EmStatisticheView extends VerticalLayout
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(true);
 			if (s != null && s.getFcGiocatore() != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
 				String imgThink = "2.png";
 				if (s != null && s.getFantaMedia() != 0) {
 					if (s.getFantaMedia() > Costants.EM_RANGE_MAX_MV) {
@@ -525,17 +565,16 @@ public class EmStatisticheView extends VerticalLayout
 					}
 				}
 				Image img = buildImage("classpath:images/", imgThink);
-
 				DecimalFormat myFormatter = new DecimalFormat("#0.00");
 				Double d = Double.valueOf(0);
 				if (s != null) {
 					d = s.getFantaMedia() / Costants.DIVISORE_10;
 				}
 				String sTotPunti = myFormatter.format(d);
-				Label lbl = new Label(sTotPunti);
-
-				cellLayout.add(img);
-				cellLayout.add(lbl);
+				Span span = new Span();
+				span.setText(sTotPunti);
+				span.add(img);
+				cellLayout.add(span);
 			}
 			return cellLayout;
 		}));
@@ -545,31 +584,117 @@ public class EmStatisticheView extends VerticalLayout
 		fantaMediaColumn.setHeader("FMv");
 		fantaMediaColumn.setAutoWidth(true);
 
-		Column<FcStatistiche> golFattoColumn = grid.addColumn(s -> s.getGoalFatto()).setKey("golFatto");
+		// Column<FcStatistiche> golFattoColumn = grid.addColumn(s ->
+		// s.getGoalFatto()).setKey("golFatto");
+		Column<FcStatistiche> golFattoColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (s != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				String q = "" + s.getGoalFatto();
+				Span span = new Span();
+				span.setText(q);
+				cellLayout.add(span);
+			}
+			return cellLayout;
+		}));
 		golFattoColumn.setSortable(true);
 		golFattoColumn.setHeader("G+");
 		golFattoColumn.setAutoWidth(true);
 
-		Column<FcStatistiche> golSubitoColumn = grid.addColumn(s -> s.getGoalSubito()).setKey("golSubito");
+		// Column<FcStatistiche> golSubitoColumn = grid.addColumn(s ->
+		// s.getGoalSubito()).setKey("golSubito");
+		Column<FcStatistiche> golSubitoColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (s != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				String q = "" + s.getGoalSubito();
+				Span span = new Span();
+				span.setText(q);
+				cellLayout.add(span);
+			}
+			return cellLayout;
+		}));
 		golSubitoColumn.setSortable(true);
 		golSubitoColumn.setHeader("G-");
 		golSubitoColumn.setAutoWidth(true);
 
-		// grid.addColumn(s -> s.getRigoreSegnato()).setKey("rigoreSegnato");
-		// grid.addColumn(s ->
-		// s.getRigoreSbagliato()).setKey("rigoreSbagliato");
-
-		Column<FcStatistiche> assistColumn = grid.addColumn(s -> s.getAssist()).setKey("assist");
+		// Column<FcStatistiche> assistColumn = grid.addColumn(s ->
+		// s.getAssist()).setKey("assist");
+		Column<FcStatistiche> assistColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (s != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				String q = "" + s.getAssist();
+				Span span = new Span();
+				span.setText(q);
+				cellLayout.add(span);
+			}
+			return cellLayout;
+		}));
 		assistColumn.setSortable(true);
 		assistColumn.setHeader("Ass");
 		assistColumn.setAutoWidth(true);
 
-		Column<FcStatistiche> ammonizioneColumn = grid.addColumn(s -> s.getAmmonizione()).setKey("ammonizione");
+		// Column<FcStatistiche> ammonizioneColumn = grid.addColumn(s ->
+		// s.getAmmonizione()).setKey("ammonizione");
+		Column<FcStatistiche> ammonizioneColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (s != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				String q = "" + s.getAmmonizione();
+				Span span = new Span();
+				span.setText(q);
+				cellLayout.add(span);
+			}
+			return cellLayout;
+		}));
 		ammonizioneColumn.setSortable(true);
 		ammonizioneColumn.setHeader("Amm");
 		ammonizioneColumn.setAutoWidth(true);
 
-		Column<FcStatistiche> espulsioneColumn = grid.addColumn(s -> s.getEspulsione()).setKey("espulsione");
+		// Column<FcStatistiche> espulsioneColumn = grid.addColumn(s ->
+		// s.getEspulsione()).setKey("espulsione");
+		Column<FcStatistiche> espulsioneColumn = grid.addColumn(new ComponentRenderer<>(s -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (s != null) {
+				if (!s.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				String q = "" + s.getEspulsione();
+				Span span = new Span();
+				span.setText(q);
+				cellLayout.add(span);
+			}
+			return cellLayout;
+		}));
 		espulsioneColumn.setSortable(true);
 		espulsioneColumn.setHeader("Esp");
 		espulsioneColumn.setAutoWidth(true);
