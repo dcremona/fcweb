@@ -36,7 +36,7 @@ public class JobProcessFileCsv {
 			LOG.debug(http_url);
 			fileDownload(http_url, fileName + ".html", path_csv);
 			input = new File(path_csv + fileName + ".html");
-			input = new File(path_csv + "Quotazioni Giocatori - 15 giornata - 2022_2023 - QATAR 2022.html");
+			//input = new File(path_csv + "Quotazioni Giocatori - 15 giornata - 2022_2023 - QATAR 2022.html");
 		} catch (Exception ex) {
 			LOG.error(ex.getMessage());
 		}

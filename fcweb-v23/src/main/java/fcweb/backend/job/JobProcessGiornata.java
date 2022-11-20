@@ -4133,6 +4133,97 @@ public class JobProcessGiornata{
 		}
 	}
 
+	public void updateCalendarioMondiale(String fileName, int idGiornata)
+			throws Exception {
+
+		LOG.info("START updateCalendarioTim");
+
+		FileReader fileReader = null;
+		CSVParser csvFileParser = null;
+
+		// Create the CSVFormat object with the header mapping
+		@SuppressWarnings("deprecation")
+		CSVFormat csvFileFormat = CSVFormat.EXCEL.withDelimiter(';');
+
+		try {
+
+			// initialize FileReader object
+			fileReader = new FileReader(fileName);
+
+			// initialize CSVParser object
+			csvFileParser = new CSVParser(fileReader,csvFileFormat);
+
+			// Get a list of CSV file records
+			List<CSVRecord> csvRecords = csvFileParser.getRecords();
+
+			List<FcCalendarioCompetizione> listCalendarioTim = calendarioTimRepository.findByIdGiornata(idGiornata);
+
+			for (int i = 0; i < csvRecords.size(); i++) {
+				CSVRecord record = csvRecords.get(i);
+
+				String dataOra = record.get(0);
+
+				if (dataOra.length() == 18 || dataOra.length() == 17) {
+					if (dataOra.substring(2, 3).equals("/") && dataOra.substring(5, 6).equals("/")) {
+
+						int idxOra = dataOra.indexOf(":");
+						if (idxOra != -1) {
+							String hhmm = dataOra.substring(idxOra + 1, dataOra.length()).trim();
+							if (hhmm.length() == 4) {
+								dataOra = dataOra.substring(0, idxOra + 1) + " 0" + hhmm;
+							}
+						}
+
+					} else {
+						int idx = dataOra.indexOf("/");
+						if (idx == 1) {
+							dataOra = "0" + dataOra;
+							int idxOra = dataOra.indexOf(":");
+							if (idxOra != -1) {
+								String hhmm = dataOra.substring(idxOra + 1, dataOra.length()).trim();
+								if (hhmm.length() == 4) {
+									dataOra = dataOra.substring(0, idxOra + 1) + " 0" + hhmm;
+								}
+							}
+						} else if (idx == 2) {
+						}
+					}
+				}
+				String squadraCasa = record.get(2).toUpperCase();
+				String squadraFuori = record.get(4).toUpperCase();
+				String ris = record.get(5);
+				LOG.debug("data " + dataOra + " squadraCasa " + squadraCasa + " squadraFuori " + squadraFuori);
+
+				for (FcCalendarioCompetizione cTim : listCalendarioTim) {
+					if (cTim.getSquadraCasa().substring(0, 3).toUpperCase().equals(squadraCasa.substring(0, 3))) {
+						String data = dataOra.substring(0, 6) + "20" + dataOra.substring(6, 8);
+						String ora = dataOra.substring(dataOra.length() - 5, dataOra.length());
+						String str = data + " " + ora;
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH.mm");
+						LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
+						cTim.setData(dateTime);
+						cTim.setRisultato(ris);
+						calendarioTimRepository.save(cTim);
+					}
+				}
+			}
+
+			LOG.info("END updateCalendarioTim");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error("Error in updateCalendarioTim !!!");
+			throw e;
+		} finally {
+			if (fileReader != null) {
+				fileReader.close();
+			}
+			if (csvFileParser != null) {
+				csvFileParser.close();
+			}
+		}
+	}
+
 	public void deleteAllCalendarioTim() {
 		calendarioTimRepository.deleteAll();
 	}

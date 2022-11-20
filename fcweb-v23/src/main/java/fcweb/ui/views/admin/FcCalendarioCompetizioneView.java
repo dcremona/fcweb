@@ -51,9 +51,9 @@ import fcweb.backend.service.SquadraService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.CustomMessageDialog;
 
-@Route(value = "calelndarioTim", layout = MainAppLayout.class)
+@Route(value = "calelndarioCompetizione", layout = MainAppLayout.class)
 @PreserveOnRefresh
-@PageTitle("Calendario Tim")
+@PageTitle("Calendario Competizione")
 public class FcCalendarioCompetizioneView extends VerticalLayout
 		implements ComponentEventListener<ClickEvent<Button>>{
 
@@ -80,12 +80,12 @@ public class FcCalendarioCompetizioneView extends VerticalLayout
 
 	@Autowired
 	private AccessoService accessoController;
-	
+
 	@Autowired
 	private SquadraService squadraController;
 
 	public FcCalendarioCompetizioneView() {
-		LOG.info("FcCalendarioTimView()");
+		LOG.info("FcCalendarioCompetizioneView()");
 	}
 
 	@PostConstruct
@@ -130,9 +130,7 @@ public class FcCalendarioCompetizioneView extends VerticalLayout
 		// "squadraFuori");
 		crud.getGrid().removeAllColumns();
 		crud.getGrid().addColumn(new TextRenderer<>(g -> g == null ? "" : "" + g.getIdGiornata()));
-		Column<FcCalendarioCompetizione> dataColumn = crud.getGrid().addColumn(
-				new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY))
-		);
+		Column<FcCalendarioCompetizione> dataColumn = crud.getGrid().addColumn(new LocalDateTimeRenderer<>(FcCalendarioCompetizione::getData,DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT).withLocale(Locale.ITALY)));
 		dataColumn.setSortable(false);
 		dataColumn.setAutoWidth(true);
 		dataColumn.setFlexGrow(2);
@@ -144,13 +142,6 @@ public class FcCalendarioCompetizioneView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (s != null && s.getSquadraCasa() != null) {
-//				Image img = null;
-//				if ("1".equals(campionato.getType())) {
-//					img = buildImage("classpath:/img/squadre/", s.getSquadraCasa() + ".png");
-//				} else {
-//					img = buildImage("classpath:/img/nazioni/", s.getSquadraCasa() + ".png");
-//				}
-//				cellLayout.add(img);				
 				FcSquadra sq = squadraController.findByIdSquadra(s.getIdSquadraCasa());
 				if (sq.getImg() != null) {
 					try {
@@ -175,13 +166,6 @@ public class FcCalendarioCompetizioneView extends VerticalLayout
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
 			if (s != null && s.getSquadraFuori() != null) {
-//				Image img = null;
-//				if ("1".equals(campionato.getType())) {
-//					img = buildImage("classpath:/img/squadre/", s.getSquadraFuori() + ".png");
-//				} else {
-//					img = buildImage("classpath:/img/nazioni/", s.getSquadraFuori() + ".png");
-//				}
-//				cellLayout.add(img);
 				FcSquadra sq = squadraController.findByIdSquadra(s.getIdSquadraFuori());
 				if (sq.getImg() != null) {
 					try {
@@ -246,17 +230,17 @@ public class FcCalendarioCompetizioneView extends VerticalLayout
 
 		try {
 			Properties p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
+			FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+
 			String basePathData = (String) p.get("PATH_TMP");
 			LOG.info("basePathData " + basePathData);
 			File f = new File(basePathData);
 			if (!f.exists()) {
-				CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, "Impossibile trovare il percorso specificato "+basePathData);
+				CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, "Impossibile trovare il percorso specificato " + basePathData);
 				return;
 			}
 
 			if (event.getSource() == initDb) {
-
-				FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
 
 				if ("1".equals(campionato.getType())) {
 
@@ -282,29 +266,72 @@ public class FcCalendarioCompetizioneView extends VerticalLayout
 					}
 
 				} else {
+
 					jobProcessGiornata.initDbCalendarioCompetizione(basePathData + "calendarioMondiale2022.csv");
+					
+//					jobProcessGiornata.deleteAllCalendarioTim();
+//					for (int g = 1; g <= 7; g++) {
+//						// **************************************
+//						// DOWNLOAD FILE MONDIALE
+//						// **************************************
+//						String giornata = "" + g;
+//						String urlFanta = (String) p.get("URL_FANTA");
+//						String basePath = basePathData;
+//						String calendario = "Mondiale-Calendario";
+//						String httpUrl = urlFanta + calendario + ".asp?GiornataA=" + giornata + "&Tipolink=0";
+//						LOG.info("httpUrl " + httpUrl);
+//						String fileName = "MONDIALE_" + giornata;
+//						JobProcessFileCsv jobCsv = new JobProcessFileCsv();
+//						jobCsv.downloadCsv(httpUrl, basePath, fileName, 0);
+//
+//						fileName = basePathData + fileName + ".csv";
+//						jobProcessGiornata.insertCalendarioTim(fileName, g);
+//
+//					}
 				}
 
 			} else if (event.getSource() == updateGiornata) {
 
-				// **************************************
-				// DOWNLOAD FILE TIM
-				// **************************************
-				String giornata = "" + giornataInfoFilter.getValue().getCodiceGiornata();
-				String urlFanta = (String) p.get("URL_FANTA");
-				String basePath = basePathData;
-				String quotaz = "Serie-A-Calendario";
-				String httpUrl = urlFanta + quotaz + ".asp?GiornataA=" + giornata + "&Tipolink=0";
-				// httpUrl
-				// ="https://www.pianetafanta.it/Serie-A-Calendario.asp?GiornataA=5&Tipolink=0";
-				LOG.info("httpUrl " + httpUrl);
-				String fileName = "TIM_" + giornata;
-				JobProcessFileCsv jobCsv = new JobProcessFileCsv();
-				jobCsv.downloadCsv(httpUrl, basePath, fileName, 0);
+				if ("1".equals(campionato.getType())) {
 
-				fileName = basePathData + fileName + ".csv";
+					// **************************************
+					// DOWNLOAD FILE TIM
+					// **************************************
+					String giornata = "" + giornataInfoFilter.getValue().getCodiceGiornata();
+					String urlFanta = (String) p.get("URL_FANTA");
+					String basePath = basePathData;
+					String quotaz = "Serie-A-Calendario";
+					String httpUrl = urlFanta + quotaz + ".asp?GiornataA=" + giornata + "&Tipolink=0";
+					// ="https://www.pianetafanta.it/Serie-A-Calendario.asp?GiornataA=5&Tipolink=0";
+					LOG.info("httpUrl " + httpUrl);
+					String fileName = "TIM_" + giornata;
+					JobProcessFileCsv jobCsv = new JobProcessFileCsv();
+					jobCsv.downloadCsv(httpUrl, basePath, fileName, 0);
 
-				jobProcessGiornata.updateCalendarioTim(fileName, giornataInfoFilter.getValue().getCodiceGiornata());
+					fileName = basePathData + fileName + ".csv";
+
+					jobProcessGiornata.updateCalendarioTim(fileName, giornataInfoFilter.getValue().getCodiceGiornata());
+
+				} else {
+
+					// **************************************
+					// DOWNLOAD FILE MONDIALE
+					// **************************************
+					String giornata = "" + giornataInfoFilter.getValue().getCodiceGiornata();
+					String urlFanta = (String) p.get("URL_FANTA");
+					String basePath = basePathData;
+					String quotaz = "Mondiale-Calendario";
+					String httpUrl = urlFanta + quotaz + ".asp?GiornataAM=" + giornata + "&Tipolink=0";
+					LOG.info("httpUrl " + httpUrl);
+					String fileName = "MONDIALE_" + giornata;
+					JobProcessFileCsv jobCsv = new JobProcessFileCsv();
+					jobCsv.downloadCsv(httpUrl, basePath, fileName, 0);
+
+					fileName = basePathData + fileName + ".csv";
+
+					jobProcessGiornata.updateCalendarioMondiale(fileName,giornataInfoFilter.getValue().getCodiceGiornata());
+
+				}
 
 			}
 			CustomMessageDialog.showMessageInfo(CustomMessageDialog.MSG_OK);
