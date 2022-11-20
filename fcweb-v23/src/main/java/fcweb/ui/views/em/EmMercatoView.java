@@ -45,6 +45,7 @@ import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -252,7 +253,7 @@ public class EmMercatoView extends VerticalLayout
 	}
 
 	private void initData() {
-		
+
 		p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 		attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
 		campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
@@ -264,7 +265,7 @@ public class EmMercatoView extends VerticalLayout
 		currentDescGiornata = giornataInfo.getDescGiornataFc();
 
 		CREDITI_MERCATO = (String) p.get("CREDITI_MERCATO");
-		
+
 		attori = attoreController.findAll();
 		ruoli = ruoloController.findAll();
 		squadre = squadraController.findAll();
@@ -2552,12 +2553,12 @@ public class EmMercatoView extends VerticalLayout
 		MailClient client = new MailClient(javaMailSender);
 
 		String email_destinatario = "";
-//		List<FcAttore> att = attoreController.findAll();
-//		for (FcAttore a : att) {
-//			if (a.isNotifiche()) {
-//				email_destinatario += a.getEmail() + ";";
-//			}
-//		}
+		// List<FcAttore> att = attoreController.findAll();
+		// for (FcAttore a : att) {
+		// if (a.isNotifiche()) {
+		// email_destinatario += a.getEmail() + ";";
+		// }
+		// }
 		String ACTIVE_MAIL = (String) p.getProperty("ACTIVE_MAIL");
 		if ("true".equals(ACTIVE_MAIL)) {
 			List<FcAttore> attori = attoreController.findByActive(true);
@@ -2596,77 +2597,77 @@ public class EmMercatoView extends VerticalLayout
 		grid.setWidth(width);
 		grid.setHeight(height);
 
-		Column<FcGiocatore> giocatoreColumn = grid.addColumn(new ComponentRenderer<>(p -> {
-
+		Column<FcGiocatore> giocatoreColumn = grid.addColumn(new ComponentRenderer<>(g -> {
 			VerticalLayout cellLayout = new VerticalLayout();
 			cellLayout.setMargin(false);
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(false);
 			cellLayout.setSizeUndefined();
 			cellLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+			if (g != null) {
+				String title = getInfoPlayer(g);
 
-			if (p != null) {
-
-				String title = getInfoPlayer(p);
-
-				String ruolo = p.getFcRuolo().getIdRuolo();
+				String ruolo = g.getFcRuolo().getIdRuolo();
 				if ("P".equals(ruolo)) {
 					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_P);
-					// cellLayout.getElement().getStyle().set("background",
-					// Costants.COLOR_P);
 				} else if ("D".equals(ruolo)) {
 					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_D);
-					// cellLayout.getElement().getStyle().set("background",
-					// Costants.COLOR_D);
 				} else if ("C".equals(ruolo)) {
 					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_C);
-					// cellLayout.getElement().getStyle().set("background",
-					// Costants.COLOR_C);
 				} else if ("A".equals(ruolo)) {
 					cellLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR_A);
-					// cellLayout.getElement().getStyle().set("background",
-					// Costants.COLOR_A);
 				}
 
-				Image imgR = buildImage("classpath:images/", p.getFcRuolo().getIdRuolo().toLowerCase() + ".png");
+				if (!g.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+
+				Image imgR = buildImage("classpath:images/", ruolo.toLowerCase() + ".png");
 				imgR.setTitle(title);
 				cellLayout.add(imgR);
-				cellLayout.setAlignSelf(Alignment.START, imgR);
+				cellLayout.setAlignSelf(Alignment.CENTER, imgR);
 
-				if (p.getFcSquadra() != null) {
+				//Label lblGiocatore = new Label(g.getCognGiocatore());
+				Span lblGiocatore = new Span();
+				lblGiocatore.setText(g.getCognGiocatore());
+				lblGiocatore.getStyle().set("font-size", "11px");
+				lblGiocatore.setTitle(title);
+				cellLayout.add(lblGiocatore);
+				cellLayout.setAlignSelf(Alignment.STRETCH, lblGiocatore);
 
-					Label lblInfoNomeSquadra = new Label(p.getFcSquadra().getNomeSquadra());
-					lblInfoNomeSquadra.getStyle().set("font-size", "11px");
-					lblInfoNomeSquadra.setTitle(title);
-					cellLayout.add(lblInfoNomeSquadra);
-					cellLayout.setAlignSelf(Alignment.STRETCH, lblInfoNomeSquadra);
-
-					FcSquadra sq = p.getFcSquadra();
+				if (g.getFcSquadra() != null) {
+					FcSquadra sq = g.getFcSquadra();
 					if (sq.getImg40() != null) {
 						try {
 							Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg40().getBinaryStream());
+							img.setTitle(title);
 							cellLayout.add(img);
 							cellLayout.setAlignSelf(Alignment.START, img);
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
 					}
+					//Label lblInfoNomeSquadra = new Label(sq.getNomeSquadra());
+					Span lblInfoNomeSquadra = new Span();
+					lblInfoNomeSquadra.setText(sq.getNomeSquadra());
+					lblInfoNomeSquadra.getStyle().set("font-size", "11px");
+					lblInfoNomeSquadra.setTitle(title);
+					cellLayout.add(lblInfoNomeSquadra);
+					cellLayout.setAlignSelf(Alignment.STRETCH, lblInfoNomeSquadra);
 				}
 
-				Label lblGiocatore = new Label(p.getCognGiocatore());
-				lblGiocatore.getStyle().set("font-size", "11px");
-				lblGiocatore.setTitle(title);
-				cellLayout.add(lblGiocatore);
-				cellLayout.setAlignSelf(Alignment.STRETCH, lblGiocatore);
+				//Label lblInfoQuotazione = new Label("" + g.getQuotazione());
+				Span lblInfoQuotazione = new Span();
+				lblInfoQuotazione.setText("" + g.getQuotazione());
 
-				Label lblInfoQuotazione = new Label("" + p.getQuotazione());
 				lblInfoQuotazione.getStyle().set("font-size", "14px");
+				lblInfoQuotazione.setTitle(title);
 				cellLayout.add(lblInfoQuotazione);
 				cellLayout.setAlignSelf(Alignment.CENTER, lblInfoQuotazione);
 
 				Element element = cellLayout.getElement(); // DOM element
 				element.addEventListener("click", e -> {
-					FcGiocatore bean = (FcGiocatore) p;
+					FcGiocatore bean = (FcGiocatore) g;
 					if (CHECK_TOT_CAMBI_EFFETTUATI > 0) {
 						LOG.info("click " + bean.getCognGiocatore());
 
@@ -2912,64 +2913,121 @@ public class EmMercatoView extends VerticalLayout
 		grid.setWidth("450px");
 		grid.setHeight("600px");
 
-		Column<FcGiocatore> ruoloColumn = grid.addColumn(new ComponentRenderer<>(f -> {
+		Column<FcGiocatore> ruoloColumn = grid.addColumn(new ComponentRenderer<>(g -> {
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
-			cellLayout.setSizeFull();
-			if (f != null && f.getFcRuolo() != null) {
-				Image img = buildImage("classpath:images/", f.getFcRuolo().getIdRuolo().toLowerCase() + ".png");
-				cellLayout.add(img);
+			// cellLayout.setSizeFull();
+			if (g != null) {
+				String title = getInfoPlayer(g);
+				if (g.getFcRuolo() != null) {
+					Image img = buildImage("classpath:images/", g.getFcRuolo().getIdRuolo().toLowerCase() + ".png");
+					img.setTitle(title);
+					cellLayout.add(img);
+				}
 			}
 			return cellLayout;
 		}));
-		ruoloColumn.setSortable(true);
+		ruoloColumn.setSortable(false);
 		ruoloColumn.setHeader("R");
 		ruoloColumn.setWidth("50px");
-		ruoloColumn.setComparator((p1,
-				p2) -> p1.getFcRuolo().getIdRuolo().compareTo(p2.getFcRuolo().getIdRuolo()));
+		// ruoloColumn.setComparator((p1,p2) ->
+		// p1.getFcRuolo().getIdRuolo().compareTo(p2.getFcRuolo().getIdRuolo()));
 		// ruoloColumn.setAutoWidth(true);
 
-		Column<FcGiocatore> cognGiocatoreColumn = grid.addColumn(g -> g != null ? g.getCognGiocatore() : "");
-		cognGiocatoreColumn.setSortable(false);
+		// Column<FcGiocatore> cognGiocatoreColumn = grid.addColumn(g -> g !=
+		// null ? g.getCognGiocatore() : "");
+		Column<FcGiocatore> cognGiocatoreColumn = grid.addColumn(new ComponentRenderer<>(g -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (g != null) {
+				String title = getInfoPlayer(g);
+				if (!g.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				if (g.getCognGiocatore() != null) {
+					//Label lblGiocatore = new Label(g.getCognGiocatore());
+					Span lblGiocatore = new Span();
+					lblGiocatore.setText(g.getCognGiocatore());
+					lblGiocatore.setTitle(title);
+					cellLayout.add(lblGiocatore);
+				}
+			}
+			return cellLayout;
+		}));
+		cognGiocatoreColumn.setSortable(true);
+		cognGiocatoreColumn.setComparator((p1,
+				p2) -> p1.getCognGiocatore().compareTo(p2.getCognGiocatore()));
 		cognGiocatoreColumn.setHeader("Giocatore");
 		cognGiocatoreColumn.setWidth("150px");
 		// cognGiocatoreColumn.setAutoWidth(true);
 
-		Column<FcGiocatore> nomeSquadraColumn = grid.addColumn(new ComponentRenderer<>(f -> {
+		Column<FcGiocatore> nomeSquadraColumn = grid.addColumn(new ComponentRenderer<>(g -> {
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
-			if (f != null && f.getFcSquadra() != null) {
-				// Image img = buildImage("classpath:/img/nazioni/",
-				// f.getFcSquadra().getNomeSquadra() + ".png");
-				// cellLayout.add(img);
-				FcSquadra sq = f.getFcSquadra();
-				if (sq.getImg() != null) {
-					try {
-						Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
-						cellLayout.add(img);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+			if (g != null) {
+				String title = getInfoPlayer(g);
+				if (!g.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
 				}
-				Label lblSquadra = new Label(f.getFcSquadra().getNomeSquadra());
-				cellLayout.add(lblSquadra);
+				if (g.getFcSquadra() != null) {
+					FcSquadra sq = g.getFcSquadra();
+					if (sq.getImg() != null) {
+						try {
+							Image img = Utils.getImage(sq.getNomeSquadra(), sq.getImg().getBinaryStream());
+							img.setTitle(title);
+							cellLayout.add(img);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					//Label lblSquadra = new Label(sq.getNomeSquadra());
+					Span lblSquadra = new Span();
+					lblSquadra.setText(sq.getNomeSquadra());
+					lblSquadra.setTitle(title);
+					cellLayout.add(lblSquadra);
+				}
 			}
 			return cellLayout;
 		}));
 		nomeSquadraColumn.setSortable(true);
 		nomeSquadraColumn.setComparator((p1,
 				p2) -> p1.getFcSquadra().getNomeSquadra().compareTo(p2.getFcSquadra().getNomeSquadra()));
-		nomeSquadraColumn.setHeader("Squadra");
+		nomeSquadraColumn.setHeader("Naz");
 		nomeSquadraColumn.setWidth("150px");
 		// nomeSquadraColumn.setAutoWidth(true);
 
-		Column<FcGiocatore> quotazioneColumn = grid.addColumn(g -> g != null ? g.getQuotazione() : 0);
+		// Column<FcGiocatore> quotazioneColumn = grid.addColumn(g -> g != null
+		// ? g.getQuotazione() : 0);
+		Column<FcGiocatore> quotazioneColumn = grid.addColumn(new ComponentRenderer<>(g -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (g != null) {
+				String title = getInfoPlayer(g);
+				if (!g.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+				}
+				String q = "" + g.getQuotazione();
+				//Label lblQuotazione = new Label(q);
+				Span lblQuotazione = new Span();
+				lblQuotazione.setText(q);
+				lblQuotazione.setTitle(title);
+				cellLayout.add(lblQuotazione);
+			}
+			return cellLayout;
+		}));
+
 		quotazioneColumn.setSortable(true);
 		quotazioneColumn.setHeader("Q");
 		quotazioneColumn.setWidth("50px");
@@ -3132,7 +3190,7 @@ public class EmMercatoView extends VerticalLayout
 			String fv = formatter.format(bean.getFcStatistiche().getFantaMedia() / Costants.DIVISORE_10);
 
 			info = bean.getCognGiocatore() + "\n";
-			info += "Squadra: " + bean.getFcSquadra().getNomeSquadra() + "\n";
+			info += "Nazione: " + bean.getFcSquadra().getNomeSquadra() + "\n";
 			info += "Giocate: " + bean.getFcStatistiche().getGiocate() + "\n";
 			info += "MV: " + mv + "\n";
 			info += "FV: " + fv + "\n";
