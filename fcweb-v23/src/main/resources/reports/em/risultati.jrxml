@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.16.0.final utlizzo versione della libreria JasperReports6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<!-- Created with Jaspersoft Studio version 6.17.0.final utlizzo versione della libreria JasperReports6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Risultati" pageWidth="1296" pageHeight="1368" orientation="Landscape" columnWidth="1256" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" uuid="7e9b6ea0-c46d-4380-999a-955505443a47">
 	<property name="ireport.zoom" value="3.630000000000001"/>
 	<property name="ireport.x" value="0"/>
@@ -1914,7 +1914,9 @@
 				</jr:table>
 			</componentElement>
 			<textField>
-				<reportElement mode="Opaque" x="2" y="341" width="200" height="31" backcolor="#CCCCCC" uuid="9cb63ce3-8b50-485b-b31b-c51e3c06d78b"/>
+				<reportElement mode="Opaque" x="0" y="341" width="200" height="31" backcolor="#CCCCCC" uuid="9cb63ce3-8b50-485b-b31b-c51e3c06d78b">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -2265,7 +2267,9 @@
 				<textFieldExpression><![CDATA[$P{ris10}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="839" y="166" width="200" height="31" backcolor="#CCCCCC" uuid="b40d2cbd-9d7a-4861-b108-0722499211d1"/>
+				<reportElement mode="Opaque" x="840" y="166" width="200" height="31" backcolor="#CCCCCC" uuid="b40d2cbd-9d7a-4861-b108-0722499211d1">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -2613,7 +2617,9 @@
 				<textFieldExpression><![CDATA[$P{ris14}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement key="table 6" style="table 6" x="210" y="382" width="200" height="111" uuid="4031de94-69e6-41ca-b6c6-1eda7f8cbcd8"/>
+				<reportElement key="table 6" style="table 6" x="210" y="383" width="200" height="111" uuid="4031de94-69e6-41ca-b6c6-1eda7f8cbcd8">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 1" uuid="68dcd046-288e-44ed-8fce-befabdd1849c">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{data14})]]></dataSourceExpression>
@@ -2933,7 +2939,10 @@
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement key="table 6" style="table 6" x="632" y="382" width="200" height="111" uuid="f43f7e97-88b8-4f9d-b8e3-e2a841e49846"/>
+				<reportElement key="table 6" style="table 6" x="630" y="383" width="200" height="111" uuid="f43f7e97-88b8-4f9d-b8e3-e2a841e49846">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 1" uuid="281cdc85-6844-407d-9ae1-4a5ce75bba75">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{data16})]]></dataSourceExpression>
@@ -3099,6 +3108,177 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{ris16}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="840" y="341" width="200" height="31" backcolor="#CCCCCC" uuid="0b5ffeab-2105-415f-aa00-0723dd6b418d">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sq17}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="968" y="341" width="60" height="25" forecolor="#FFFFFF" backcolor="#000000" uuid="fcd23dc6-98f0-4599-9678-1b5a9b895fe6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ris17}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement key="table 6" style="table 6" x="840" y="383" width="200" height="111" uuid="2f8b4693-c41d-4e54-a8f8-e829b875ebc7">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="f9a1a65c-dfa0-427c-bb24-1ec1b3590eb6">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{data17})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="20" uuid="641b1840-9d43-4a31-b2c9-90743522e464">
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="20" height="30" uuid="97da240c-1f1a-4d66-a26f-aaa42e0f3f58"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[R]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="style1" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="20" height="20" uuid="492be5e2-7632-42c6-ad53-adc434a49d93"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{r}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:columnGroup width="160" uuid="3ddf7fd4-dbad-4273-9dca-81eb369919a4">
+						<jr:column width="160" uuid="8fdf6b67-fa24-4f81-8c9c-d900f809c3fa">
+							<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="160" height="30" uuid="3822f904-1d79-4e81-b284-e7441cf6bb0b"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<text><![CDATA[Calciatore]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="style1" height="20" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="80" height="20" uuid="fb79ece2-9909-41fd-9af7-d4b9d91243ec"/>
+									<textFieldExpression><![CDATA[$F{calciatore}]]></textFieldExpression>
+								</textField>
+								<image>
+									<reportElement x="110" y="0" width="10" height="10" isRemoveLineWhenBlank="true" uuid="155bf9d1-941a-4c27-a5f8-5b493d4fe68a"/>
+									<imageExpression><![CDATA[( $F{goal_realizzato}-$F{rigore_segnato} >= 1 ? $F{path_img} + "golfatto.png" : null)]]></imageExpression>
+								</image>
+								<image>
+									<reportElement x="90" y="0" width="10" height="10" isRemoveLineWhenBlank="true" uuid="d7117925-b6de-454b-985d-5f68e75b8172"/>
+									<imageExpression><![CDATA[( $F{espulsione} == 1 ? $F{path_img} + "esp.png" : null)]]></imageExpression>
+								</image>
+								<image>
+									<reportElement x="80" y="0" width="10" height="10" isRemoveLineWhenBlank="true" uuid="d809962d-9c54-484f-9a3d-529b1b9a22d7"/>
+									<imageExpression><![CDATA[( $F{ammonizione} == 1 ? $F{path_img} + "amm.png" : null)]]></imageExpression>
+								</image>
+								<image>
+									<reportElement x="130" y="0" width="10" height="10" isRemoveLineWhenBlank="true" uuid="c61e30f4-5792-464a-8db5-5085470a2456"/>
+									<imageExpression><![CDATA[( $F{goal_subito} >= 1 ? $F{path_img} + "golsubito.png" : null)]]></imageExpression>
+								</image>
+								<image>
+									<reportElement x="90" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="4a135408-c762-428a-9628-dbca56a144f0"/>
+									<imageExpression><![CDATA[( $F{rigore_segnato} >= 1 ? $F{path_img} + "rigoresegnato.png" : null)]]></imageExpression>
+								</image>
+								<image>
+									<reportElement x="110" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="37433d7f-df37-48fc-9491-f86e34f35956"/>
+									<imageExpression><![CDATA[( $F{rigore_fallito} >= 1 ? $F{path_img} + "rigoresbagliato.png" : null)]]></imageExpression>
+								</image>
+								<image>
+									<reportElement x="130" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="232b4379-3f13-4c0b-9c45-3849abce8d11"/>
+									<imageExpression><![CDATA[( $F{rigore_parato} >= 1 ? $F{path_img} + "rigoreparato.png" : null)]]></imageExpression>
+								</image>
+								<image>
+									<reportElement x="150" y="0" width="10" height="10" isRemoveLineWhenBlank="true" uuid="1a68bd2a-3467-4ba1-af48-a8d430fd3e65"/>
+									<imageExpression><![CDATA[( $F{autorete} >= 1 ? $F{path_img} + "autogol.png" : null)]]></imageExpression>
+								</image>
+								<image>
+									<reportElement x="150" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="4044845f-39f1-4d00-b871-063e9cc66080"/>
+									<imageExpression><![CDATA[( $F{assist} >= 1 ? $F{path_img} + "assist.png" : null)]]></imageExpression>
+								</image>
+								<image>
+									<reportElement x="150" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="7e0dcde9-0fa2-4e07-b260-60f7c209d846"/>
+									<imageExpression><![CDATA[( $F{gv} >= 1 ? $F{path_img} + "golvittoria.png" : null)]]></imageExpression>
+								</image>
+								<textField>
+									<reportElement x="100" y="0" width="10" height="10" isRemoveLineWhenBlank="true" uuid="11688a12-a518-4d6b-917c-ef98103b3991"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="6" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[( $F{goal_realizzato}-$F{rigore_segnato} > 1 ? $F{goal_realizzato}-$F{rigore_segnato} : "")]]></textFieldExpression>
+								</textField>
+								<textField>
+									<reportElement x="120" y="0" width="10" height="10" isRemoveLineWhenBlank="true" uuid="5651462c-c843-4622-acea-ad68674fad66"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="6" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[( $F{goal_subito} > 1 ? $F{goal_subito} : "")]]></textFieldExpression>
+								</textField>
+								<textField>
+									<reportElement x="80" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="df5e062d-ff40-43f2-b933-7fa239cd1a19"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="6" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[( $F{rigore_segnato} > 1 ? $F{rigore_segnato} : "")]]></textFieldExpression>
+								</textField>
+								<textField>
+									<reportElement x="100" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="d261c2f8-2132-42ab-9836-f2879091441d"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="6" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[( $F{rigore_fallito} > 1 ? $F{rigore_fallito} : "")]]></textFieldExpression>
+								</textField>
+								<textField>
+									<reportElement x="120" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="53ee45f4-b7ff-4564-be90-a3b611cd8b5e"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="6" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[( $F{rigore_parato} > 1 ? $F{rigore_parato} : "")]]></textFieldExpression>
+								</textField>
+								<textField>
+									<reportElement x="140" y="0" width="10" height="10" isRemoveLineWhenBlank="true" uuid="9a0b3efa-19b2-4b82-bb35-33918fdaaabb"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="6" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[( $F{autorete} > 1 ? $F{autorete} : "")]]></textFieldExpression>
+								</textField>
+								<textField>
+									<reportElement x="140" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="d93ad145-b01a-4b01-a506-3e81b808b8db"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="6" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[( $F{assist} > 1 ? $F{assist} : "")]]></textFieldExpression>
+								</textField>
+								<textField>
+									<reportElement x="140" y="10" width="10" height="10" isRemoveLineWhenBlank="true" uuid="06c487d0-d8e4-4f58-bc88-c28cb8119158"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="6" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[( $F{gv} > 1 ? $F{gv} : "")]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:column width="30" uuid="6631f4cf-7f32-41a6-8b2b-5de32a19d365">
+						<jr:columnHeader style="table 6_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="30" height="30" uuid="83a28500-1058-4c7b-9246-d604103f0334"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Voto]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="style1" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="30" height="20" uuid="e074e2ac-f99c-47f4-bdab-e877878bdda1"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{v}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</detail>
 </jasperReport>
