@@ -294,7 +294,7 @@ public class EmJobProcessGiornata{
 
 			for (int i = 1; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
-				// LOG.info(""+record.size());
+				LOG.info("" + record.size());
 
 				int c = 0;
 				String idGiocatore = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
@@ -580,6 +580,342 @@ public class EmJobProcessGiornata{
 			// message += "\n\n\n";
 			// message += infoNewGiocatore;
 
+			formazioneHtml += "</table>\n";
+
+			formazioneHtml += "<br>\n";
+			formazioneHtml += "<br>\n";
+			formazioneHtml += "<br>\n";
+
+			formazioneHtml += "<p>" + infoNewGiocatore + "</p>\n";
+
+			formazioneHtml += "<br>\n";
+			formazioneHtml += "<br>\n";
+			formazioneHtml += "<br>\n";
+			formazioneHtml += "<p>Ciao Davide</p>\n";
+			formazioneHtml += "</body>\n";
+			formazioneHtml += "<html>";
+
+			String from = (String) env.getProperty("spring.mail.username");
+
+			client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", att);
+
+			LOG.info("END emaggiornamentoPFGiornata");
+
+		} catch (Exception e) {
+			LOG.error("Error in CsvFileReader !!!" + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			try {
+				fileReader.close();
+				csvFileParser.close();
+			} catch (IOException e) {
+				LOG.error("Error while closing fileReader/csvFileParser !!!");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@RequestMapping(value = "/emaggiornamentoPFGiornataNoExcel", method = RequestMethod.POST)
+	@ResponseBody
+	public void emaggiornamentoPFGiornataNoExcel(Properties p, String fileName,
+			String idGiornata) {
+
+		LOG.info("START emaggiornamentoPFGiornata");
+
+		FileReader fileReader = null;
+
+		CSVParser csvFileParser = null;
+		@SuppressWarnings("deprecation")
+		CSVFormat csvFileFormat = CSVFormat.EXCEL.withDelimiter(';');
+
+		try {
+
+			// initialize FileReader object
+			fileReader = new FileReader(fileName);
+
+			// initialize CSVParser object
+			csvFileParser = new CSVParser(fileReader,csvFileFormat);
+
+			// Get a list of CSV file records
+			List<CSVRecord> csvRecords = csvFileParser.getRecords();
+
+			// String infoVoti = "";
+			String infoNewGiocatore = "";
+
+			String formazioneHtml = "";
+			formazioneHtml += "<html><head><title>FC</title></head>\n";
+			formazioneHtml += "<body>\n";
+			formazioneHtml += "<br>\n";
+			formazioneHtml += "<br>\n";
+
+			formazioneHtml += "<table>";
+
+			formazioneHtml += "<tr>";
+			formazioneHtml += "<td>";
+			formazioneHtml += "Giocatore";
+			formazioneHtml += "</td>";
+			formazioneHtml += "<td>";
+			formazioneHtml += "count_sv ";
+			formazioneHtml += "</td>";
+			formazioneHtml += "<td>";
+			formazioneHtml += "New_Voto ";
+			formazioneHtml += "</td>";
+			formazioneHtml += "<td>";
+			formazioneHtml += "G";
+			formazioneHtml += "</td>";
+			formazioneHtml += "<td>";
+			formazioneHtml += "CS";
+			formazioneHtml += "</td>";
+			formazioneHtml += "<td>";
+			formazioneHtml += "TS";
+			formazioneHtml += "</td>";
+			formazioneHtml += "<td>";
+			formazioneHtml += "Minuti Giocati";
+			formazioneHtml += "</td>";
+			formazioneHtml += "</tr>";
+
+			for (int i = 0; i < csvRecords.size(); i++) {
+				CSVRecord record = csvRecords.get(i);
+				LOG.info("" + record.size());
+
+				String idGiocatore = "";
+				String minGiocati = "";
+
+				int c = 0;
+				String ruolo = StringUtils.isEmpty(record.get(c)) ? "" : record.get(c);
+				c++;
+				String cognGiocatore = StringUtils.isEmpty(record.get(c)) ? "" : record.get(c);
+				c++;
+				String squadra = StringUtils.isEmpty(record.get(c)) ? "" : record.get(c);
+				c++;
+				String G = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
+				c++;
+				String goal_realizzato = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
+				c++;
+				String goal_subito = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
+				c++;
+				String autorete = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
+				c++;
+				String assist = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
+				c++;
+				String ammonizione = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
+				c++;
+				String espulsione = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
+				c++;
+				String rigore_fallito = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);// RIGS
+				c++;
+				String rigore_parato = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);// RIGP
+				c++;
+				String rigore_segnato = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);// RT
+				c++;
+				//String rigore_subito = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);// RS
+				c++;
+				String Gdv = record.get(c);
+
+				String CS = "0";
+				String TS = "0";
+				String M3 = "0";
+
+				FcGiocatore giocatore = null;
+				// if (StringUtils.isNotEmpty(idGiocatore)) {
+				// giocatore =
+				// this.giocatoreRepository.findByIdGiocatore(Integer.parseInt(idGiocatore));
+				// if (giocatore == null) {
+				List<FcGiocatore> listGiocatore = this.giocatoreRepository.findByCognGiocatoreContaining(cognGiocatore);
+				if (listGiocatore != null && listGiocatore.size() == 1) {
+					giocatore = listGiocatore.get(0);
+					idGiocatore = "" + giocatore.getIdGiocatore();
+				}
+				// }
+				// }
+
+				if (giocatore != null) {
+
+					int count_sv = 0;
+
+					G = Utils.replaceString(G, ",", ".");
+					// PORTIERE SV
+					if (ruolo.equals("P")) {
+						if (G.equals("") || G.equals("s.v.") || G.equals("s,v,"))
+							G = "6";
+						// LOG.debug("PORTIERE s.v.: "+Giocatore);
+					} else {
+						if (G.equals("") || G.equals("s.v.") || G.equals("s,v,")) {
+							G = "0";
+							count_sv++;
+						}
+					}
+					BigDecimal bgG = new BigDecimal(G);
+					BigDecimal mG = new BigDecimal(Costants.DIVISORE_10);
+					BigDecimal risG = bgG.multiply(mG);
+					long votoG = risG.longValue();
+
+					CS = Utils.replaceString(CS, ",", ".");
+					// PORTIERE SV
+					if (ruolo.equals("P")) {
+						if (CS.equals("") || CS.equals("s.v.") || CS.equals("s,v,"))
+							CS = "6";
+					} else {
+						if (CS.equals("") || CS.equals("s.v.") || CS.equals("s,v,")) {
+							CS = "0";
+							count_sv++;
+						}
+					}
+
+					BigDecimal bgCS = new BigDecimal(CS);
+					BigDecimal mCS = new BigDecimal(Costants.DIVISORE_10);
+					BigDecimal risCS = bgCS.multiply(mCS);
+					long votoCS = risCS.longValue();
+
+					TS = Utils.replaceString(TS, ",", ".");
+					// PORTIERE SV
+					if (ruolo.equals("P")) {
+						if (TS.equals("") || TS.equals("s.v.") || TS.equals("s,v,"))
+							TS = "6";
+					} else {
+						if (TS.equals("") || TS.equals("s.v.") || TS.equals("s,v,")) {
+							TS = "0";
+							count_sv++;
+						}
+					}
+
+					BigDecimal bgTS = new BigDecimal(TS);
+					BigDecimal mTS = new BigDecimal(Costants.DIVISORE_10);
+					BigDecimal risTS = bgTS.multiply(mTS);
+					long votoTS = risTS.longValue();
+
+					String VOTO_GIOCATORE = Utils.replaceString(M3, ",", ".");
+					// PORTIERE SV
+					if (VOTO_GIOCATORE.equals("s.v.") || VOTO_GIOCATORE.equals("s,v,") && ruolo.equals("P")) {
+						VOTO_GIOCATORE = "6";
+					} else {
+						if (VOTO_GIOCATORE.equals("s.v.") || VOTO_GIOCATORE.equals("s,v,")) {
+							VOTO_GIOCATORE = "0";
+						}
+					}
+
+					BigDecimal bg = new BigDecimal(VOTO_GIOCATORE);
+					BigDecimal m = new BigDecimal(Costants.DIVISORE_10);
+					BigDecimal ris = bg.multiply(m);
+					long voto = ris.longValue();
+					LOG.debug("voto M3 " + voto);
+
+					if (count_sv == 1) {
+						if ("0".equals(G)) {
+							if (votoCS <= votoTS) {
+								G = CS;
+							} else {
+								G = TS;
+							}
+							LOG.info("G = " + G + " CS " + CS + " TS " + TS);
+						} else if ("0".equals(CS)) {
+							if (votoG <= votoTS) {
+								CS = G;
+							} else {
+								CS = TS;
+							}
+							LOG.info("CS = " + CS + " G " + G + " TS " + TS);
+						} else if ("0".equals(TS)) {
+							if (votoG <= votoCS) {
+								TS = G;
+							} else {
+								TS = CS;
+							}
+							LOG.info("TS = " + TS + " G " + G + " CS " + CS);
+						}
+					} else if (count_sv == 2) {
+						LOG.info("count_sv = " + count_sv + " set all 0 ");
+						G = "0";
+						CS = "0";
+						TS = "0";
+					}
+
+					String divide = "3";
+					BigDecimal _bgG = new BigDecimal(G);
+					BigDecimal _bgCS = new BigDecimal(CS);
+					BigDecimal _bgTS = new BigDecimal(TS);
+					BigDecimal _tot0 = _bgG.add(_bgCS);
+					BigDecimal _tot1 = _tot0.add(_bgTS);
+					BigDecimal _media = _tot1.divide(new BigDecimal(divide), 2, RoundingMode.HALF_UP);
+					BigDecimal _moltipl = new BigDecimal(Costants.DIVISORE_10);
+					BigDecimal _ris = _media.multiply(_moltipl);
+					long new_voto = _ris.longValue();
+
+					if (count_sv == 1 || count_sv == 2) {
+						LOG.info("new_voto - count_sv " + count_sv + " - " + giocatore.getCognGiocatore() + " new_voto " + new_voto + " G = " + G + " CS " + CS + " TS " + TS);
+						// infoVoti += "\n" + "new_voto - count_sv " + count_sv
+						// + " - " + giocatore.getCognGiocatore() + " new_voto "
+						// + new_voto + " G = " + G + " CS " + CS + " TS " + TS
+						// + " minutiGiocati " + minGiocati;
+
+						formazioneHtml += "<tr>";
+						formazioneHtml += "<td>";
+						formazioneHtml += giocatore.getCognGiocatore();
+						formazioneHtml += "</td>";
+						formazioneHtml += "<td>";
+						formazioneHtml += count_sv;
+						formazioneHtml += "</td>";
+						formazioneHtml += "<td>";
+						formazioneHtml += new_voto;
+						formazioneHtml += "</td>";
+						formazioneHtml += "<td>";
+						formazioneHtml += G;
+						formazioneHtml += "</td>";
+						formazioneHtml += "<td>";
+						formazioneHtml += CS;
+						formazioneHtml += "</td>";
+						formazioneHtml += "<td>";
+						formazioneHtml += TS;
+						formazioneHtml += "</td>";
+						formazioneHtml += "<td>";
+						formazioneHtml += minGiocati;
+						formazioneHtml += "</td>";
+						formazioneHtml += "</tr>";
+					}
+
+					String update = "update fc_pagelle set voto_giocatore=" + votoG;
+					update += ",g=" + votoG;
+					update += ",cs=" + votoCS;
+					update += ",ts=" + votoTS;
+					update += ",goal_realizzato=" + goal_realizzato;
+					update += ",goal_subito=" + goal_subito;
+					update += ",ammonizione=" + ammonizione;
+					update += ",espulsione=" + espulsione;
+					update += ",rigore_segnato=" + rigore_segnato;
+					update += ",rigore_fallito=" + rigore_fallito;
+					update += ",rigore_parato=" + rigore_parato;
+					update += ",autorete=" + autorete;
+					update += ",assist=" + assist;
+					update += ",gdv=" + Gdv;
+					// update += ",gdp=" + Gdp;
+					update += " where id_giocatore=" + idGiocatore;
+					update += " and id_giornata=" + idGiornata;
+
+					jdbcTemplate.update(update);
+
+				} else {
+					LOG.info("*************************");
+					LOG.info("NOT FOUND " + idGiocatore + " " + cognGiocatore + " " + ruolo + " " + squadra);
+					LOG.info("*************************");
+
+					infoNewGiocatore += "\n" + "NOT FOUND " + idGiocatore + " " + cognGiocatore + " " + ruolo + " " + squadra;
+				}
+			}
+
+			MailClient client = new MailClient(javaMailSender);
+			String email_destinatario = (String) p.getProperty("to");
+			String[] to = null;
+			if (email_destinatario != null && !email_destinatario.equals("")) {
+				to = Utils.tornaArrayString(email_destinatario, ";");
+			}
+			String[] cc = null;
+			String[] bcc = null;
+			String[] att = null;
+			String subject = "INFO aggiornamentoPFGiornata GIORNATA " + idGiornata;
+			// String message = "\n";
+			// message += infoVoti;
+			// message += "\n\n\n";
+			// message += infoNewGiocatore;
 			formazioneHtml += "</table>\n";
 
 			formazioneHtml += "<br>\n";
@@ -1197,8 +1533,8 @@ public class EmJobProcessGiornata{
 	}
 
 	public HashMap<Object, Object> initDbGiocatori(String httpUrlImg,
-			String imgPath, String fileName, boolean updateQuotazioni,String percenutale)
-			throws Exception {
+			String imgPath, String fileName, boolean updateQuotazioni,
+			String percenutale) throws Exception {
 
 		LOG.info("START initDbGiocatori");
 
@@ -1265,7 +1601,7 @@ public class EmJobProcessGiornata{
 
 				FcSquadra squadra = squadraRepository.findByNomeSquadra(nomeSquadra);
 				if (squadra == null) {
-					LOG.info("NEW GIOCATORE " + idGiocatore + " " + cognGiocatore + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);	
+					LOG.info("NEW GIOCATORE " + idGiocatore + " " + cognGiocatore + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);
 				}
 				giocatore.setFcSquadra(squadra);
 
@@ -1418,7 +1754,7 @@ public class EmJobProcessGiornata{
 				}
 
 				FcGiocatore giocatore = null;
-				String idGiocatore = "" ;
+				String idGiocatore = "";
 				String gameName = "";
 				String cognGiocatore = "";
 				String nome = "";
@@ -1452,26 +1788,31 @@ public class EmJobProcessGiornata{
 				// LOG.debug("giocatore " + gameName + " qA " +
 				// quotazioneAttuale);
 				if (StringUtils.isNotEmpty(idGiocatore)) {
-					
+
 					FcRuolo ruolo = new FcRuolo();
 					ruolo.setIdRuolo(idRuolo);
 					FcSquadra squadra = squadraRepository.findByNomeSquadra(nomeSquadra);
 					gameName = (cognGiocatore + " " + nome).toUpperCase();
-					//LOG.info("FIND " + gameName + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);
-					//giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadraAndFcRuolo(gameName, squadra, ruolo);
+					// LOG.info("FIND " + gameName + " " + idRuolo + " " +
+					// nomeSquadra + " " + quotazioneAttuale);
+					// giocatore =
+					// this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadraAndFcRuolo(gameName,
+					// squadra, ruolo);
 					List<FcGiocatore> lgiocatore = this.giocatoreRepository.findByCognGiocatoreStartingWith(gameName);
-					for (FcGiocatore g :lgiocatore) {
+					for (FcGiocatore g : lgiocatore) {
 						giocatore = g;
 						if (!g.getFcSquadra().getNomeSquadra().equals(nomeSquadra)) {
-							LOG.info("ATTENZIONE SQUADRA DIFFERENTE " );
-							LOG.info("" +idGiocatore + ";" + gameName + ";" + idRuolo + ";" + nomeSquadra + ";" + quotazioneAttuale + ";" + quotazioneAttuale);
+							LOG.info("ATTENZIONE SQUADRA DIFFERENTE ");
+							LOG.info("" + idGiocatore + ";" + gameName + ";" + idRuolo + ";" + nomeSquadra + ";" + quotazioneAttuale + ";" + quotazioneAttuale);
 						}
 					}
-					//giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadra(gameName, squadra);
+					// giocatore =
+					// this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadra(gameName,
+					// squadra);
 					if (giocatore == null) {
-						//LOG.info("NEW GIOCATORE " );
-						System.out.println("" +idGiocatore + ";" + gameName + ";" + idRuolo + ";" + nomeSquadra + ";" + quotazioneAttuale + ";" + quotazioneAttuale);
-						
+						// LOG.info("NEW GIOCATORE " );
+						System.out.println("" + idGiocatore + ";" + gameName + ";" + idRuolo + ";" + nomeSquadra + ";" + quotazioneAttuale + ";" + quotazioneAttuale);
+
 						giocatore = new FcGiocatore();
 						giocatore.setIdGiocatore(Integer.parseInt(idGiocatore));
 						giocatore.setCognGiocatore(gameName);
@@ -1480,7 +1821,7 @@ public class EmJobProcessGiornata{
 						giocatore.setFcRuolo(ruolo);
 						giocatore.setFcSquadra(squadra);
 						listGiocatoriAdd.add(giocatore);
-					} 
+					}
 				}
 
 				giocatore.setFlagAttivo(true);

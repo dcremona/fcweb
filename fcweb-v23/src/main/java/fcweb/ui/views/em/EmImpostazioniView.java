@@ -584,28 +584,18 @@ public class EmImpostazioniView extends VerticalLayout
 				if (chkUfficiali.getValue()) {
 					votiExcel = "Voti-Ufficiali-Mondiale-Excel";
 				}
-
+				votiExcel = "mondiale-voti-ufficiali";
+				if (chkUfficiali.getValue()) {
+					votiExcel = "mondiale-voti-ufficiali";
+				}
+				
 				String httpUrl = urlFanta + votiExcel + ".asp?giornataScelta=" + giornata;
 				String fileName = "voti_" + giornata;
-				// emjobProcessFileCsv.downloadCsvOLD(httpUrl, basePathData,
-				// fileName, giornataInfo.getCodiceGiornata());
-				emjobProcessFileCsv.downloadCsv(httpUrl, basePathData, fileName, 3);
 
-				// fileName = basePathData + "voti_" + giornata + ".csv";
-				// emjobProcessGiornata.emaggiornamentoPFGiornataOLD(fileName);
+				emjobProcessFileCsv.downloadCsvNoExcel(httpUrl, basePathData, fileName, 2);
 
 				fileName = basePathData + "voti_" + giornata + ".csv";
-				emjobProcessGiornata.emaggiornamentoPFGiornata(p, fileName, "" + giornata);
-
-				// String httpUrl =
-				// "https://www.pianetafantacalcio.it/Voti-Ufficiali-Mondiale-Excel.asp?giornataScelta="
-				// + giornataInfo.getCodiceGiornata();
-				// String fileName = "PF" + giornataInfo.getCodiceGiornata();
-				// jobProcessFileCsv.downloadCsv(httpUrl, basePathData,
-				// giornataInfo.getCodiceGiornata());
-				// fileName = basePathData + "PF" +
-				// giornataInfo.getCodiceGiornata() + ".csv";
-				// emjobProcessGiornata.emaggiornamentoPFGiornata(fileName);
+				emjobProcessGiornata.emaggiornamentoPFGiornataNoExcel(p, fileName, "" + giornata);
 
 			} else if (event.getSource() == calcola) {
 
