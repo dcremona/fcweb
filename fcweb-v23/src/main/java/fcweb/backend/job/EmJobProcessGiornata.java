@@ -294,7 +294,7 @@ public class EmJobProcessGiornata{
 
 			for (int i = 1; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
-				LOG.info("" + record.size());
+				//LOG.info("" + record.size());
 
 				int c = 0;
 				String idGiocatore = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
@@ -452,11 +452,11 @@ public class EmJobProcessGiornata{
 						}
 					}
 
-					BigDecimal bg = new BigDecimal(VOTO_GIOCATORE);
-					BigDecimal m = new BigDecimal(Costants.DIVISORE_10);
-					BigDecimal ris = bg.multiply(m);
-					long voto = ris.longValue();
-					LOG.debug("voto M3 " + voto);
+					//BigDecimal bg = new BigDecimal(VOTO_GIOCATORE);
+					//BigDecimal m = new BigDecimal(Costants.DIVISORE_10);
+					//BigDecimal ris = bg.multiply(m);
+					//long voto = ris.longValue();
+					//LOG.debug("voto M3 " + voto);
 
 					if (count_sv == 1) {
 						if ("0".equals(G)) {
@@ -503,7 +503,7 @@ public class EmJobProcessGiornata{
 					long new_voto = _ris.longValue();
 
 					if (count_sv == 1 || count_sv == 2) {
-						LOG.info("new_voto - count_sv " + count_sv + " - " + giocatore.getCognGiocatore() + " new_voto " + new_voto + " G = " + G + " CS " + CS + " TS " + TS);
+						//LOG.info("new_voto - count_sv " + count_sv + " - " + giocatore.getCognGiocatore() + " new_voto " + new_voto + " G = " + G + " CS " + CS + " TS " + TS);
 						// infoVoti += "\n" + "new_voto - count_sv " + count_sv
 						// + " - " + giocatore.getCognGiocatore() + " new_voto "
 						// + new_voto + " G = " + G + " CS " + CS + " TS " + TS
@@ -794,11 +794,11 @@ public class EmJobProcessGiornata{
 						}
 					}
 
-					BigDecimal bg = new BigDecimal(VOTO_GIOCATORE);
-					BigDecimal m = new BigDecimal(Costants.DIVISORE_10);
-					BigDecimal ris = bg.multiply(m);
-					long voto = ris.longValue();
-					LOG.debug("voto M3 " + voto);
+					//BigDecimal bg = new BigDecimal(VOTO_GIOCATORE);
+					//BigDecimal m = new BigDecimal(Costants.DIVISORE_10);
+					//BigDecimal ris = bg.multiply(m);
+					//long voto = ris.longValue();
+					//LOG.debug("voto M3 " + voto);
 
 					if (count_sv == 1) {
 						if ("0".equals(G)) {

@@ -70,7 +70,7 @@ public class EmJobProcessFileCsv{
 								rowData = img.attr("alt");
 							}
 						}
-						LOG.debug(rowData);
+						//LOG.debug(rowData);
 						data += rowData + ";";
 					}
 					data += "\n";
