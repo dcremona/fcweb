@@ -54,6 +54,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -81,7 +82,6 @@ import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.job.EmJobProcessFileCsv;
 import fcweb.backend.job.EmJobProcessGiornata;
-import fcweb.backend.job.JobProcessFileCsv;
 import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.AttoreService;
 import fcweb.backend.service.ClassificaTotalePuntiService;
@@ -537,22 +537,19 @@ public class EmImpostazioniView extends VerticalLayout
 				// **************************************
 				String urlFanta = (String) p.get("URL_FANTA");
 				String basePath = basePathData;
-				String quotaz = "Europei-Giocatori-Quotazioni-Excel";
-				quotaz = "Mondiale-Giocatori-Quotazioni-Excel";
-				quotaz = "Mondiale-giocatori-quotazioni-Excel";
-				// https://www.pianetafanta.it/Mondiale-Giocatori-Quotazioni-Excel.asp?giornata=0&Nome=&Squadre=&Ruolo=&Ruolo2=&Quota=&Quota1=
+				String quotaz =  "mondiale-giocatori-quotazioni-excel";
+				//https://www.pianetafanta.it/mondiale-giocatori-quotazioni-excel.asp?giornata=0&Nome=&Squadre=&Ruolo=&Ruolo2=&Quota=&Quota1=
 				String httpUrl = urlFanta + quotaz + ".asp?giornata=" + giornata;
 				LOG.info("httpUrl " + httpUrl);
 				String fileName = "Q_" + giornata;
-				JobProcessFileCsv jobCsv = new JobProcessFileCsv();
+				EmJobProcessFileCsv jobCsv = new EmJobProcessFileCsv();
 				jobCsv.downloadCsv(httpUrl, basePath, fileName, 2);
 
 			} else if (event.getSource() == updateGiocatori) {
 
 				// **************************************
 				// UPDATE GIOCATORI
-				// **************************************private Checkbox
-				// chkUpdateQuotaz;
+				// **************************************
 				LOG.info("httpUrlImg " + Costants.HTTP_URL_IMG);
 				String imgPath = basePathData;
 				String fileName = "Q_" + giornata;
@@ -863,13 +860,8 @@ public class EmImpostazioniView extends VerticalLayout
 		Grid<FcGiocatore> grid = new Grid<>();
 		grid.setItems(new ArrayList<FcGiocatore>());
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
-		// grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,
-		// GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_COMPACT);
-		// grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT,
-		// GridVariant.MATERIAL_COLUMN_DIVIDERS,
-		// GridVariant.LUMO_COLUMN_BORDERS);
 		grid.setAllRowsVisible(true);
-		grid.setWidth("550px");
+		grid.setWidth("600px");
 
 		Column<FcGiocatore> ruoloColumn = grid.addColumn(new ComponentRenderer<>(g -> {
 			HorizontalLayout cellLayout = new HorizontalLayout();
@@ -889,28 +881,22 @@ public class EmImpostazioniView extends VerticalLayout
 		ruoloColumn.setAutoWidth(true);
 
 		Column<FcGiocatore> cognGiocatoreColumn = grid.addColumn(new ComponentRenderer<>(g -> {
-
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
-			cellLayout.setSizeFull();
-
 			if (g != null) {
 				Label lblGiocatore = new Label(g.getCognGiocatore());
 				cellLayout.add(lblGiocatore);
 			}
-
 			return cellLayout;
-
 		}));
 		cognGiocatoreColumn.setSortable(false);
 		cognGiocatoreColumn.setHeader("Giocatore");
 		cognGiocatoreColumn.setAutoWidth(true);
 
 		Column<FcGiocatore> nomeSquadraColumn = grid.addColumn(new ComponentRenderer<>(g -> {
-
 			HorizontalLayout cellLayout = new HorizontalLayout();
 			cellLayout.setMargin(false);
 			cellLayout.setPadding(false);
@@ -930,11 +916,28 @@ public class EmImpostazioniView extends VerticalLayout
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
-
 		}));
 		nomeSquadraColumn.setSortable(false);
 		nomeSquadraColumn.setHeader("Squadra");
 		nomeSquadraColumn.setAutoWidth(true);
+
+		Column<FcGiocatore> quotazioneColumn = grid.addColumn(new ComponentRenderer<>(g -> {
+			HorizontalLayout cellLayout = new HorizontalLayout();
+			cellLayout.setMargin(false);
+			cellLayout.setPadding(false);
+			cellLayout.setSpacing(false);
+			cellLayout.setAlignItems(Alignment.STRETCH);
+			if (g != null) {
+				String q = "" + g.getQuotazione();
+				Span span = new Span();
+				span.setText(q);
+				cellLayout.add(span);
+			}
+			return cellLayout;
+		}));
+		quotazioneColumn.setSortable(true);
+		quotazioneColumn.setHeader("Q");
+		quotazioneColumn.setAutoWidth(true);
 
 		return grid;
 	}

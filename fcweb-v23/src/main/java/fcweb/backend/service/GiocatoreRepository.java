@@ -47,9 +47,11 @@ public interface GiocatoreRepository extends CrudRepository<FcGiocatore, Long>{
 
 	public List<FcGiocatore> findByCognGiocatoreContaining(String cognGiocatore);
 
-	public FcGiocatore findByNomeGiocatoreContaining(String nomeGiocatore);
-	
-	public FcGiocatore findByNomeGiocatoreContainingAndFcSquadra(String nomeGiocatore,FcSquadra squadra);
+//	public FcGiocatore findByNomeGiocatoreContaining(String nomeGiocatore);
+//	
+//	public FcGiocatore findByNomeGiocatoreContainingAndFcSquadra(String nomeGiocatore,FcSquadra squadra);
+//	
+//	public FcGiocatore findByNomeGiocatoreContainingAndFcSquadraAndFcRuolo(String nomeGiocatore,FcSquadra squadra,FcRuolo ruolo);
 
 	public FcGiocatore findByIdGiocatore(int idGiocatore);
 

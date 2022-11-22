@@ -35,14 +35,9 @@ public class EmJobProcessFileCsv{
 	public void downloadCsv(String http_url, String path_csv, String fileName,
 			int headCount) throws Exception {
 		try {
-			LOG.debug(http_url);
 			fileDownload(http_url, fileName + ".html", path_csv);
 		} catch (Exception ex) {
 			LOG.error(ex.getMessage());
-			// File f = new File(path_csv + fileName + ".html");
-			// if (f.exists()) {
-			// f.deleteOnExit();
-			// }
 		}
 
 		File input = new File(path_csv + fileName + ".html");

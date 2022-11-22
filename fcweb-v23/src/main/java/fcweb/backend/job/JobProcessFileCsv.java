@@ -31,9 +31,11 @@ public class JobProcessFileCsv {
 	final static int size = 1024;
 
 	public void downloadCsv(String http_url, String path_csv, String fileName, int headCount) throws Exception {
+		
+		LOG.info("downloadCsv START");
+		
 		File input = null;
 		try {
-			LOG.debug(http_url);
 			fileDownload(http_url, fileName + ".html", path_csv);
 			input = new File(path_csv + fileName + ".html");
 			//input = new File(path_csv + "Quotazioni Giocatori - 15 giornata - 2022_2023 - QATAR 2022.html");
