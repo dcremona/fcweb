@@ -718,6 +718,12 @@ public class EmJobProcessGiornata{
 				if ("ROMERO C.".equals(cognGiocatore)) {
 					ruolo = "D";
 				}
+				if ("PERISIC I.".equals(cognGiocatore)) {
+					ruolo = "C";
+				}
+				if ("GOODWIN C.".equals(cognGiocatore)) {
+					ruolo = "A";
+				}
 
 				FcGiocatore giocatore = null;
 				// if (StringUtils.isNotEmpty(idGiocatore)) {
@@ -1597,7 +1603,13 @@ public class EmJobProcessGiornata{
 				if ("ROMERO C.".equals(cognGiocatore)) {
 					idRuolo = "D";
 				}
-				
+				if ("PERISIC I.".equals(cognGiocatore)) {
+					idRuolo = "C";
+				}
+				if ("GOODWIN C.".equals(cognGiocatore)) {
+					idRuolo = "A";
+				}
+
 				FcRuolo ruolo = new FcRuolo();
 				ruolo.setIdRuolo(idRuolo);
 				FcSquadra squadra = squadraRepository.findByNomeSquadra(nomeSquadra);

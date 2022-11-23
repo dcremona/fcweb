@@ -60,6 +60,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -105,7 +106,7 @@ public class EmImpostazioniView extends VerticalLayout
 
 	@Autowired
 	private JavaMailSender javaMailSender;
-	
+
 	@Autowired
 	private Environment env;
 
@@ -162,6 +163,7 @@ public class EmImpostazioniView extends VerticalLayout
 	private Button calcola;
 	private Checkbox chkUfficiali;
 	private NumberField txtPerc;
+	private TextField txtVotiExcel = null;
 
 	private Button calcolaStatistiche;
 	private Button pdfAndMail;
@@ -355,8 +357,7 @@ public class EmImpostazioniView extends VerticalLayout
 		updateGiocatori.addClickListener(this);
 
 		chkUpdateQuotaz = new Checkbox("Update Quotazioni");
-		
-		
+
 		txtPerc = new NumberField();
 		txtPerc.setMin(0d);
 		txtPerc.setMax(100d);
@@ -408,6 +409,9 @@ public class EmImpostazioniView extends VerticalLayout
 
 		chkUfficiali = new Checkbox("Ufficiali");
 
+		txtVotiExcel = new TextField("Voti Excel");
+		txtVotiExcel.setValue("mondiale-voti-ufficiali");
+
 		calcola = new Button("Calcola");
 		calcola.setIcon(VaadinIcon.PIN.create());
 		calcola.addClickListener(this);
@@ -428,6 +432,7 @@ public class EmImpostazioniView extends VerticalLayout
 
 		HorizontalLayout vHor = new HorizontalLayout();
 		vHor.add(download);
+		vHor.add(txtVotiExcel);
 		vHor.add(chkUfficiali);
 		vHor.add(calcolaStatistiche);
 
@@ -482,7 +487,7 @@ public class EmImpostazioniView extends VerticalLayout
 			LOG.info("basePathData " + basePathData);
 			File f = new File(basePathData);
 			if (!f.exists()) {
-				CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, "Impossibile trovare il percorso specificato "+basePathData);
+				CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, "Impossibile trovare il percorso specificato " + basePathData);
 				return;
 			}
 
@@ -497,7 +502,7 @@ public class EmImpostazioniView extends VerticalLayout
 						classificaTotalePuntiController.createEm(a, campionato, Double.valueOf(0));
 					}
 				}
-				
+
 				if (giornata == 0) {
 					giornata = 1;
 				}
@@ -537,8 +542,8 @@ public class EmImpostazioniView extends VerticalLayout
 				// **************************************
 				String urlFanta = (String) p.get("URL_FANTA");
 				String basePath = basePathData;
-				String quotaz =  "mondiale-giocatori-quotazioni-excel";
-				//https://www.pianetafanta.it/mondiale-giocatori-quotazioni-excel.asp?giornata=0&Nome=&Squadre=&Ruolo=&Ruolo2=&Quota=&Quota1=
+				String quotaz = "mondiale-giocatori-quotazioni-excel";
+				// https://www.pianetafanta.it/mondiale-giocatori-quotazioni-excel.asp?giornata=0&Nome=&Squadre=&Ruolo=&Ruolo2=&Quota=&Quota1=
 				String httpUrl = urlFanta + quotaz + ".asp?giornata=" + giornata;
 				LOG.info("httpUrl " + httpUrl);
 				String fileName = "Q_" + giornata;
@@ -556,7 +561,7 @@ public class EmImpostazioniView extends VerticalLayout
 				fileName = basePathData + fileName + ".csv";
 				boolean updateQuotazioni = chkUpdateQuotaz.getValue().booleanValue();
 				String percentuale = "" + txtPerc.getValue().intValue();
-				HashMap<Object, Object> map = emjobProcessGiornata.initDbGiocatori(Costants.HTTP_URL_IMG, imgPath, fileName, updateQuotazioni,percentuale);
+				HashMap<Object, Object> map = emjobProcessGiornata.initDbGiocatori(Costants.HTTP_URL_IMG, imgPath, fileName, updateQuotazioni, percentuale);
 
 				@SuppressWarnings("unchecked")
 				ArrayList<FcGiocatore> listGiocatoriAdd = (ArrayList<FcGiocatore>) map.get("listAdd");
@@ -576,20 +581,25 @@ public class EmImpostazioniView extends VerticalLayout
 
 				String urlFanta = (String) p.get("URL_FANTA");
 
-				String votiExcel = "Voti-Ufficiali-Europei-Excel";
-				votiExcel = "Voti-Ufficiosi-Mondiale-Excel";
-				if (chkUfficiali.getValue()) {
-					votiExcel = "Voti-Ufficiali-Mondiale-Excel";
-				}
-				votiExcel = "mondiale-voti-ufficiali";
-				if (chkUfficiali.getValue()) {
-					votiExcel = "mondiale-voti-ufficiali";
-				}
-				
-				String httpUrl = urlFanta + votiExcel + ".asp?giornataScelta=" + giornata;
+				// String votiExcel = "Voti-Ufficiali-Europei-Excel";
+				// votiExcel = "Voti-Ufficiosi-Mondiale-Excel";
+				// if (chkUfficiali.getValue()) {
+				// votiExcel = "Voti-Ufficiali-Mondiale-Excel";
+				// }
+				// String httpUrlExcel = urlFanta + votiExcel +
+				// ".asp?giornataScelta=" + giornata;
+				// votiExcel = "mondiale-voti-ufficiali";
+				// if (chkUfficiali.getValue()) {
+				// votiExcel = "mondiale-voti-ufficiali";
+				// }
+				// mondiale-voti-ufficiali-fantacalcio.asp?TipoVoti=&searchBonus=&GiornataA=1
+
+				String votiExcel = txtVotiExcel.getValue();
+				String httpUrlExcel = urlFanta + votiExcel + ".asp?TipoVoti=&searchBonus=&GiornataA=" + giornata;
+
 				String fileName = "voti_" + giornata;
 
-				emjobProcessFileCsv.downloadCsvNoExcel(httpUrl, basePathData, fileName, 2);
+				emjobProcessFileCsv.downloadCsvNoExcel(httpUrlExcel, basePathData, fileName, 2);
 
 				fileName = basePathData + "voti_" + giornata + ".csv";
 				emjobProcessGiornata.emaggiornamentoPFGiornataNoExcel(p, fileName, "" + giornata);
@@ -615,7 +625,8 @@ public class EmImpostazioniView extends VerticalLayout
 				collection.add(new RisultatoBean("P","S1",Double.valueOf(6),Double.valueOf(6),Double.valueOf(6),Double.valueOf(6)));
 				String destFileName1 = basePathData + giornataInfo.getDescGiornataFc() + ".pdf";
 				FileOutputStream outputStream = new FileOutputStream(new File(destFileName1));
-				//JasperRunManager.runReportToPdfStream(inputStream, outputStream, params, new JRBeanCollectionDataSource(l));
+				// JasperRunManager.runReportToPdfStream(inputStream,
+				// outputStream, params, new JRBeanCollectionDataSource(l));
 				JasperReporUtils.runReportToPdfStream(inputStream, outputStream, params, collection);
 
 				Resource resource2 = resourceLoader.getResource("classpath:reports/em/classifica.jasper");
@@ -626,7 +637,8 @@ public class EmImpostazioniView extends VerticalLayout
 				String destFileName2 = basePathData + "Classifica.pdf";
 				FileOutputStream outputStream2 = new FileOutputStream(new File(destFileName2));
 				Connection conn = jdbcTemplate.getDataSource().getConnection();
-				//JasperRunManager.runReportToPdfStream(inputStream2, outputStream2, params2, conn);
+				// JasperRunManager.runReportToPdfStream(inputStream2,
+				// outputStream2, params2, conn);
 				JasperReporUtils.runReportToPdfStream(inputStream2, outputStream2, params2, conn);
 
 				MailClient client = new MailClient(javaMailSender);
@@ -685,7 +697,7 @@ public class EmImpostazioniView extends VerticalLayout
 
 				try {
 					String from = (String) env.getProperty("spring.mail.username");
-					
+
 					client.sendMail(from, to, cc, bcc, subject, message, "", "3", null);
 				} catch (Exception e) {
 					CustomMessageDialog.showMessageError(CustomMessageDialog.MSG_MAIL_KO);
@@ -850,7 +862,7 @@ public class EmImpostazioniView extends VerticalLayout
 		LOG.info(formazioneHtml);
 
 		String from = (String) env.getProperty("spring.mail.username");
-		
+
 		client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", null);
 
 	}
