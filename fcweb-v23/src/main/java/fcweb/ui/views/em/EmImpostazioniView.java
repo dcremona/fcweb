@@ -58,9 +58,10 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -163,7 +164,7 @@ public class EmImpostazioniView extends VerticalLayout
 	private Button calcola;
 	private Checkbox chkUfficiali;
 	private NumberField txtPerc;
-	private TextField txtVotiExcel = null;
+	private RadioButtonGroup<String> radioGroupVotiExcel = null;
 
 	private Button calcolaStatistiche;
 	private Button pdfAndMail;
@@ -409,8 +410,11 @@ public class EmImpostazioniView extends VerticalLayout
 
 		chkUfficiali = new Checkbox("Ufficiali");
 
-		txtVotiExcel = new TextField("Voti Excel");
-		txtVotiExcel.setValue("mondiale-voti-ufficiali");
+		radioGroupVotiExcel = new RadioButtonGroup<>();
+		radioGroupVotiExcel.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
+		radioGroupVotiExcel.setLabel("Voti Excel");
+		radioGroupVotiExcel.setItems("mondiale-voti-ufficiali", "mondiale-voti-ufficiali-fantacalcio");
+		radioGroupVotiExcel.setValue("mondiale-voti-ufficiali");
 
 		calcola = new Button("Calcola");
 		calcola.setIcon(VaadinIcon.PIN.create());
@@ -432,7 +436,7 @@ public class EmImpostazioniView extends VerticalLayout
 
 		HorizontalLayout vHor = new HorizontalLayout();
 		vHor.add(download);
-		vHor.add(txtVotiExcel);
+		vHor.add(radioGroupVotiExcel);
 		vHor.add(chkUfficiali);
 		vHor.add(calcolaStatistiche);
 
@@ -555,7 +559,6 @@ public class EmImpostazioniView extends VerticalLayout
 				// **************************************
 				// UPDATE GIOCATORI
 				// **************************************
-				LOG.info("httpUrlImg " + Costants.HTTP_URL_IMG);
 				String imgPath = basePathData;
 				String fileName = "Q_" + giornata;
 				fileName = basePathData + fileName + ".csv";
@@ -594,7 +597,7 @@ public class EmImpostazioniView extends VerticalLayout
 				// }
 				// mondiale-voti-ufficiali-fantacalcio.asp?TipoVoti=&searchBonus=&GiornataA=1
 
-				String votiExcel = txtVotiExcel.getValue();
+				String votiExcel = radioGroupVotiExcel.getValue();
 				String httpUrlExcel = urlFanta + votiExcel + ".asp?TipoVoti=&searchBonus=&GiornataA=" + giornata;
 
 				String fileName = "voti_" + giornata;

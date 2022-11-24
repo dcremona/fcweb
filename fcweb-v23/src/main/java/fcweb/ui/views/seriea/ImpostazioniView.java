@@ -937,8 +937,6 @@ public class ImpostazioniView extends VerticalLayout
 			cellLayout.setAlignItems(Alignment.STRETCH);
 
 			if (g != null && g.getFcSquadra() != null) {
-//				Image img = buildImage("classpath:/img/squadre/", g.getFcSquadra().getNomeSquadra() + ".png");
-//				cellLayout.add(img);
 				FcSquadra sq = g.getFcSquadra();
 				if (sq != null && sq.getImg() != null) {
 					try {

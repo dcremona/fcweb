@@ -1325,7 +1325,7 @@ public class EmJobProcessGiornata{
 				statistiche.setFcGiocatore(appoFcGiocatore);
 				statistiche.setFlagAttivo(appoFcGiocatore.isFlagAttivo());
 
-				LOG.info("SAVE STATISTICA GIOCATORE " + appoFcGiocatore.getIdGiocatore() + " " + appoFcGiocatore.getCognGiocatore());
+				//LOG.info("SAVE STATISTICA GIOCATORE " + appoFcGiocatore.getIdGiocatore() + " " + appoFcGiocatore.getCognGiocatore());
 
 				statisticheRepository.save(statistiche);
 
@@ -1379,6 +1379,10 @@ public class EmJobProcessGiornata{
 		statistiche.setFlagAttivo(appoFcGiocatore.isFlagAttivo());
 
 		statisticheRepository.save(statistiche);
+
+		jdbcTemplate.update("update fc_giocatore set flag_attivo = 0");
+		jdbcTemplate.update("update fc_giocatore set flag_attivo = 1 where id_squadra in (select id_squadra_casa from fc_calendario_tim where codice_giornata = " + giornata + ")");
+		jdbcTemplate.update("update fc_giocatore set flag_attivo = 1 where id_squadra in (select id_squadra_fuori from fc_calendario_tim where codice_giornata = " + giornata + ")");
 
 		jdbcTemplate.update("update fc_statistiche set flag_attivo = 0");
 		jdbcTemplate.update("update fc_statistiche set flag_attivo = 1 where nome_squadra in (select squadra_casa from fc_calendario_tim where codice_giornata = " + giornata + ")");
@@ -1586,7 +1590,7 @@ public class EmJobProcessGiornata{
 			List<CSVRecord> csvRecords = csvFileParser.getRecords();
 
 			// giocatoreRepository.deleteAll();
-			List<FcGiocatore> listG = (List<FcGiocatore>) giocatoreRepository.findAll();
+//			List<FcGiocatore> listG = (List<FcGiocatore>) giocatoreRepository.findAll();
 
 			for (int i = 1; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
@@ -1628,7 +1632,6 @@ public class EmJobProcessGiornata{
 //					}
 //				}
 						
-				//
 //				List<FcGiocatore> lgiocatore = this.giocatoreRepository.findByCognGiocatoreStartingWith(nomeSquadra);
 //				for (FcGiocatore g : lgiocatore) {
 //					giocatore = g;
