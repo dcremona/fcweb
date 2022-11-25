@@ -2014,12 +2014,6 @@ public class EmTeamInsertView extends VerticalLayout
 				color = "BGCOLOR=\"#FFFF84\"";
 			}
 
-			// Resource resourceNomeSq =
-			// resourceLoader.getResource("classpath:img/nazioni/" +
-			// bean.getFcSquadra().getNomeSquadra() + ".png");
-			// String cidNomeSq = ContentIdGenerator.getContentId();
-			// listImg.put(cidNomeSq, resourceNomeSq.getInputStream());
-
 			String cidNomeSq = ContentIdGenerator.getContentId();
 			FcSquadra sq = bean.getFcSquadra();
 			if (sq.getImg() != null) {
@@ -2068,12 +2062,6 @@ public class EmTeamInsertView extends VerticalLayout
 		MailClient client = new MailClient(javaMailSender);
 
 		String email_destinatario = "";
-		// List<FcAttore> att = attoreController.findAll();
-		// for (FcAttore a : att) {
-		// if (a.isNotifiche()) {
-		// email_destinatario += a.getEmail() + ";";
-		// }
-		// }
 		String ACTIVE_MAIL = (String) p.getProperty("ACTIVE_MAIL");
 		if ("true".equals(ACTIVE_MAIL)) {
 			List<FcAttore> attori = attoreController.findByActive(true);
