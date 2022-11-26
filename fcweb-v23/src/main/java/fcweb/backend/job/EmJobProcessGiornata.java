@@ -1590,13 +1590,21 @@ public class EmJobProcessGiornata{
 			List<CSVRecord> csvRecords = csvFileParser.getRecords();
 
 			// giocatoreRepository.deleteAll();
-//			List<FcGiocatore> listG = (List<FcGiocatore>) giocatoreRepository.findAll();
-
+			List<FcGiocatore> listG = (List<FcGiocatore>) giocatoreRepository.findAll();
+			
+			
+			int count = listG.size();
+			int lastIdGiocatore = 1; 
+			if (count > 0) {
+				FcGiocatore lastG = listG.get(count-1);
+				lastIdGiocatore = lastG.getIdGiocatore();
+			}
+			
 			for (int i = 1; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
 
 				FcGiocatore giocatore = null;
-				String idGiocatore = record.get(0);
+				//String idGiocatore = record.get(0);
 				String cognGiocatore = record.get(1).trim();
 				String idRuolo = record.get(2);
 				String nomeSquadra = record.get(4).trim();
@@ -1618,7 +1626,7 @@ public class EmJobProcessGiornata{
 				ruolo.setIdRuolo(idRuolo);
 				FcSquadra squadra = squadraRepository.findByNomeSquadra(nomeSquadra);
 				if (squadra == null) {
-					LOG.info("SCARTO " + idGiocatore + " " + cognGiocatore + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);
+					LOG.info("SCARTO " + cognGiocatore + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);
 					continue;
 				}
 
@@ -1643,9 +1651,11 @@ public class EmJobProcessGiornata{
 				//giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadra(cognGiocatore, squadra);
 				giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadraAndFcRuolo(cognGiocatore,squadra, ruolo);
 				if (giocatore == null) {
+					lastIdGiocatore ++;
 					giocatore = new FcGiocatore();
+					giocatore.setIdGiocatore(lastIdGiocatore);
 					giocatore.setQuotazione(5);
-					LOG.info("NEW GIOCATORE " + idGiocatore + " " + cognGiocatore + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);
+					LOG.info("NEW GIOCATORE " + lastIdGiocatore + " " + cognGiocatore + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);
 					listGiocatoriAdd.add(giocatore);
 				}
 
@@ -1654,7 +1664,7 @@ public class EmJobProcessGiornata{
 					giocatore.setQuotazione(Integer.valueOf(newQuotaz));
 				}
 
-				giocatore.setIdGiocatore(Integer.parseInt(idGiocatore));
+				//giocatore.setIdGiocatore(Integer.parseInt(idGiocatore));
 				giocatore.setCognGiocatore(cognGiocatore);
 				giocatore.setFcRuolo(ruolo);
 				giocatore.setFcSquadra(squadra);
@@ -1664,45 +1674,45 @@ public class EmJobProcessGiornata{
 				}
 			}
 
-//			if (giocatores.size() > 0) {
-//
+			if (giocatores.size() > 0) {
+
 //				for (FcGiocatore gioc : listG) {
 //					String sql = "UPDATE fc_giocatore SET ";
 //					sql += " FLAG_ATTIVO=0";
 //					sql += " WHERE ID_GIOCATORE=" + gioc.getIdGiocatore();
 //					this.jdbcTemplate.execute(sql);
 //				}
-//
-//				for (FcGiocatore giocatore : giocatores) {
-//
-//					// LOG.info("SAVE GIOCATORE ");
-//					giocatoreRepository.save(giocatore);
-//
-//					FcStatistiche statistiche = new FcStatistiche();
-//					// statistiche.setFcGiocatore(giocatore);
-//					statistiche.setIdGiocatore(giocatore.getIdGiocatore());
-//					statistiche.setCognGiocatore(giocatore.getCognGiocatore());
-//					statistiche.setIdRuolo(giocatore.getFcRuolo().getIdRuolo());
-//					statistiche.setNomeSquadra(giocatore.getFcSquadra().getNomeSquadra());
-//					statistiche.setAmmonizione(0);
-//					statistiche.setAssist(0);
-//					statistiche.setEspulsione(0);
-//					statistiche.setFantaMedia(0.0);
-//					statistiche.setGiocate(0);
-//					statistiche.setGoalFatto(0);
-//					statistiche.setGoalSubito(0);
-//					statistiche.setMediaVoto(0.0);
-//					statistiche.setRigoreSbagliato(0);
-//					statistiche.setRigoreSegnato(0);
-//					statistiche.setFlagAttivo(giocatore.isFlagAttivo());
-//
-//					// LOG.info(" GIOCATORE " + giocatore.getIdGiocatore() + " " + giocatore.getCognGiocatore() + " " + giocatore.getFcRuolo().getIdRuolo());
-//
-//					// LOG.info("SAVE STATISTICA ");
-//					statisticheRepository.save(statistiche);
-//
-//				}
-//
+
+				for (FcGiocatore giocatore : giocatores) {
+
+					// LOG.info("SAVE GIOCATORE ");
+					giocatoreRepository.save(giocatore);
+
+					FcStatistiche statistiche = new FcStatistiche();
+					// statistiche.setFcGiocatore(giocatore);
+					statistiche.setIdGiocatore(giocatore.getIdGiocatore());
+					statistiche.setCognGiocatore(giocatore.getCognGiocatore());
+					statistiche.setIdRuolo(giocatore.getFcRuolo().getIdRuolo());
+					statistiche.setNomeSquadra(giocatore.getFcSquadra().getNomeSquadra());
+					statistiche.setAmmonizione(0);
+					statistiche.setAssist(0);
+					statistiche.setEspulsione(0);
+					statistiche.setFantaMedia(0.0);
+					statistiche.setGiocate(0);
+					statistiche.setGoalFatto(0);
+					statistiche.setGoalSubito(0);
+					statistiche.setMediaVoto(0.0);
+					statistiche.setRigoreSbagliato(0);
+					statistiche.setRigoreSegnato(0);
+					statistiche.setFlagAttivo(giocatore.isFlagAttivo());
+
+					// LOG.info(" GIOCATORE " + giocatore.getIdGiocatore() + " " + giocatore.getCognGiocatore() + " " + giocatore.getFcRuolo().getIdRuolo());
+
+					// LOG.info("SAVE STATISTICA ");
+					statisticheRepository.save(statistiche);
+
+				}
+
 //				String sql = " select id_giocatore,cogn_giocatore from fc_giocatore where flag_attivo=0 and id_giocatore not in (select distinct id_giocatore from fc_giornata_dett where id_giocatore is not null) ";
 //				jdbcTemplate.query(sql, new ResultSetExtractor<ArrayList<FcGiocatore>>(){
 //
@@ -1735,7 +1745,7 @@ public class EmJobProcessGiornata{
 //				String delete3 = " delete from fc_giocatore where flag_attivo=0 and id_giocatore not in (select distinct id_giocatore from fc_giornata_dett where id_giocatore is not null) ";
 //				jdbcTemplate.update(delete3);
 //				LOG.info("delete3 " + delete3);
-//			}
+			}
 
 			LOG.info("END initDbGiocatori");
 

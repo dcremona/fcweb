@@ -679,8 +679,6 @@ public class MercatoView extends VerticalLayout
 			cellLayout.setAlignItems(Alignment.STRETCH);
 
 			if (f != null && f.getKey() != null) {
-//				Image img = buildImage("classpath:/img/squadre/", f.getKey() + ".png");
-//				cellLayout.add(img);
 				FcSquadra sq = squadraController.findByNomeSquadra(f.getKey());
 				if (sq != null && sq.getImg() != null) {
 					try {
