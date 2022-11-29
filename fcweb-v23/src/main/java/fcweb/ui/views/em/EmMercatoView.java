@@ -2485,7 +2485,9 @@ public class EmMercatoView extends VerticalLayout
 				for (FcMercatoDett m : modelCambi) {
 
 					String GIOC_ACQ = "";
+					String SQ_ACQ = "";
 					String cidNomeSqAcq = ContentIdGenerator.getContentId();
+					String SQ_VEN = "";
 					String GIOC_VEN = "";
 					String cidNomeSqVen = ContentIdGenerator.getContentId();
 
@@ -2494,6 +2496,7 @@ public class EmMercatoView extends VerticalLayout
 					if (m.getFcGiocatoreByIdGiocAcq() != null) {
 						GIOC_ACQ = m.getFcGiocatoreByIdGiocAcq().getCognGiocatore();
 						FcSquadra sqAcq = m.getFcGiocatoreByIdGiocAcq().getFcSquadra();
+						SQ_ACQ = sqAcq.getNomeSquadra();
 						if (sqAcq.getImg() != null) {
 							try {
 								listImg.put(cidNomeSqAcq, sqAcq.getImg().getBinaryStream());
@@ -2506,6 +2509,7 @@ public class EmMercatoView extends VerticalLayout
 					if (m.getFcGiocatoreByIdGiocVen() != null) {
 						GIOC_VEN = m.getFcGiocatoreByIdGiocVen().getCognGiocatore();
 						FcSquadra sqVen = m.getFcGiocatoreByIdGiocVen().getFcSquadra();
+						SQ_VEN = sqVen.getNomeSquadra();
 						if (sqVen.getImg() != null) {
 							try {
 								listImg.put(cidNomeSqVen, sqVen.getImg().getBinaryStream());
@@ -2532,7 +2536,7 @@ public class EmMercatoView extends VerticalLayout
 					formazioneHtml += "</td>";
 
 					formazioneHtml += "<td><img src=\"cid:" + cidNomeSqAcq + "\" />";
-					formazioneHtml += SQUADRA;
+					formazioneHtml += SQ_ACQ;
 					formazioneHtml += "</td>";
 
 					formazioneHtml += "<td>";
@@ -2540,7 +2544,7 @@ public class EmMercatoView extends VerticalLayout
 					formazioneHtml += "</td>";
 
 					formazioneHtml += "<td><img src=\"cid:" + cidNomeSqVen + "\" />";
-					formazioneHtml += SQUADRA;
+					formazioneHtml += SQ_VEN;
 					formazioneHtml += "</td>";
 
 					formazioneHtml += "</tr>";
