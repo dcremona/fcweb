@@ -167,6 +167,7 @@ public class EmImpostazioniView extends VerticalLayout
 	private RadioButtonGroup<String> radioGroupVotiExcel = null;
 
 	private Button calcolaStatistiche;
+	private Button aggiornaFlagAttivoGiocatore;
 	private Button pdfAndMail;
 	private Checkbox chkSendMail;
 
@@ -424,6 +425,10 @@ public class EmImpostazioniView extends VerticalLayout
 		calcolaStatistiche.setIcon(VaadinIcon.PRESENTATION.create());
 		calcolaStatistiche.addClickListener(this);
 
+		aggiornaFlagAttivoGiocatore = new Button("Aggiorna Flag Attivo Giocatore");
+		aggiornaFlagAttivoGiocatore.setIcon(VaadinIcon.PRESENTATION.create());
+		aggiornaFlagAttivoGiocatore.addClickListener(this);
+
 		pdfAndMail = new Button("Crea Pdf - Invia email");
 		pdfAndMail.setIcon(VaadinIcon.MAILBOX.create());
 		pdfAndMail.addClickListener(this);
@@ -439,6 +444,7 @@ public class EmImpostazioniView extends VerticalLayout
 		vHor.add(radioGroupVotiExcel);
 		vHor.add(chkUfficiali);
 		vHor.add(calcolaStatistiche);
+		vHor.add(aggiornaFlagAttivoGiocatore);
 
 		layoutCalcola.add(init);
 		layoutCalcola.add(vHor);
@@ -615,6 +621,10 @@ public class EmImpostazioniView extends VerticalLayout
 			} else if (event.getSource() == calcolaStatistiche) {
 
 				emjobProcessGiornata.emstatistiche(giornataInfo.getCodiceGiornata());
+			
+			} else if (event.getSource() == aggiornaFlagAttivoGiocatore) {
+
+				emjobProcessGiornata.aggiornaFlagAttivoGiocatore(giornataInfo.getCodiceGiornata());
 
 			} else if (event.getSource() == pdfAndMail) {
 

@@ -294,7 +294,7 @@ public class EmJobProcessGiornata{
 
 			for (int i = 1; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
-				//LOG.info("" + record.size());
+				// LOG.info("" + record.size());
 
 				int c = 0;
 				String idGiocatore = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);
@@ -452,11 +452,11 @@ public class EmJobProcessGiornata{
 						}
 					}
 
-					//BigDecimal bg = new BigDecimal(VOTO_GIOCATORE);
-					//BigDecimal m = new BigDecimal(Costants.DIVISORE_10);
-					//BigDecimal ris = bg.multiply(m);
-					//long voto = ris.longValue();
-					//LOG.debug("voto M3 " + voto);
+					// BigDecimal bg = new BigDecimal(VOTO_GIOCATORE);
+					// BigDecimal m = new BigDecimal(Costants.DIVISORE_10);
+					// BigDecimal ris = bg.multiply(m);
+					// long voto = ris.longValue();
+					// LOG.debug("voto M3 " + voto);
 
 					if (count_sv == 1) {
 						if ("0".equals(G)) {
@@ -503,7 +503,9 @@ public class EmJobProcessGiornata{
 					long new_voto = _ris.longValue();
 
 					if (count_sv == 1 || count_sv == 2) {
-						//LOG.info("new_voto - count_sv " + count_sv + " - " + giocatore.getCognGiocatore() + " new_voto " + new_voto + " G = " + G + " CS " + CS + " TS " + TS);
+						// LOG.info("new_voto - count_sv " + count_sv + " - " +
+						// giocatore.getCognGiocatore() + " new_voto " +
+						// new_voto + " G = " + G + " CS " + CS + " TS " + TS);
 						// infoVoti += "\n" + "new_voto - count_sv " + count_sv
 						// + " - " + giocatore.getCognGiocatore() + " new_voto "
 						// + new_voto + " G = " + G + " CS " + CS + " TS " + TS
@@ -675,7 +677,7 @@ public class EmJobProcessGiornata{
 
 			for (int i = 0; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
-				//LOG.info("" + record.size());
+				// LOG.info("" + record.size());
 
 				String idGiocatore = "";
 				String minGiocati = "";
@@ -707,14 +709,15 @@ public class EmJobProcessGiornata{
 				c++;
 				String rigore_segnato = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);// RT
 				c++;
-				//String rigore_subito = StringUtils.isEmpty(record.get(c)) ? "0" : record.get(c);// RS
+				// String rigore_subito = StringUtils.isEmpty(record.get(c)) ?
+				// "0" : record.get(c);// RS
 				c++;
 				String Gdv = record.get(c);
 
 				String CS = "0";
 				String TS = "0";
 				String M3 = "0";
-				
+
 				if ("ROMERO C.".equals(cognGiocatore)) {
 					ruolo = "D";
 				}
@@ -730,29 +733,31 @@ public class EmJobProcessGiornata{
 				// giocatore =
 				// this.giocatoreRepository.findByIdGiocatore(Integer.parseInt(idGiocatore));
 				// if (giocatore == null) {
-//				List<FcGiocatore> listGiocatore = this.giocatoreRepository.findByCognGiocatoreContaining(cognGiocatore);
-//				if (listGiocatore != null && listGiocatore.size() == 1) {
-//					giocatore = listGiocatore.get(0);
-//					idGiocatore = "" + giocatore.getIdGiocatore();
-//				}
+				// List<FcGiocatore> listGiocatore =
+				// this.giocatoreRepository.findByCognGiocatoreContaining(cognGiocatore);
+				// if (listGiocatore != null && listGiocatore.size() == 1) {
+				// giocatore = listGiocatore.get(0);
+				// idGiocatore = "" + giocatore.getIdGiocatore();
 				// }
 				// }
-				
+				// }
+
 				FcRuolo fcRuolo = new FcRuolo();
 				fcRuolo.setIdRuolo(ruolo);
 				FcSquadra fcSquadra = squadraRepository.findByNomeSquadra(squadra);
 				if (squadra == null) {
-					LOG.info("SCARTO " + idGiocatore + " " + cognGiocatore + " " + ruolo + " " + squadra );
+					LOG.info("SCARTO " + idGiocatore + " " + cognGiocatore + " " + ruolo + " " + squadra);
 					continue;
 				}
-				//LOG.info("FIND " + cognGiocatore+ " squadra " +squadra);
-				giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadraAndFcRuolo(cognGiocatore,fcSquadra, fcRuolo);
-				//giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadra(cognGiocatore,fcSquadra);
-				
+				// LOG.info("FIND " + cognGiocatore+ " squadra " +squadra);
+				giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadraAndFcRuolo(cognGiocatore, fcSquadra, fcRuolo);
+				// giocatore =
+				// this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadra(cognGiocatore,fcSquadra);
+
 				if (giocatore != null) {
 
 					idGiocatore = "" + giocatore.getIdGiocatore();
-					
+
 					int count_sv = 0;
 
 					G = Utils.replaceString(G, ",", ".");
@@ -816,11 +821,11 @@ public class EmJobProcessGiornata{
 						}
 					}
 
-					//BigDecimal bg = new BigDecimal(VOTO_GIOCATORE);
-					//BigDecimal m = new BigDecimal(Costants.DIVISORE_10);
-					//BigDecimal ris = bg.multiply(m);
-					//long voto = ris.longValue();
-					//LOG.debug("voto M3 " + voto);
+					// BigDecimal bg = new BigDecimal(VOTO_GIOCATORE);
+					// BigDecimal m = new BigDecimal(Costants.DIVISORE_10);
+					// BigDecimal ris = bg.multiply(m);
+					// long voto = ris.longValue();
+					// LOG.debug("voto M3 " + voto);
 
 					if (count_sv == 1) {
 						if ("0".equals(G)) {
@@ -829,24 +834,24 @@ public class EmJobProcessGiornata{
 							} else {
 								G = TS;
 							}
-							//LOG.info("G = " + G + " CS " + CS + " TS " + TS);
+							// LOG.info("G = " + G + " CS " + CS + " TS " + TS);
 						} else if ("0".equals(CS)) {
 							if (votoG <= votoTS) {
 								CS = G;
 							} else {
 								CS = TS;
 							}
-							//LOG.info("CS = " + CS + " G " + G + " TS " + TS);
+							// LOG.info("CS = " + CS + " G " + G + " TS " + TS);
 						} else if ("0".equals(TS)) {
 							if (votoG <= votoCS) {
 								TS = G;
 							} else {
 								TS = CS;
 							}
-							//LOG.info("TS = " + TS + " G " + G + " CS " + CS);
+							// LOG.info("TS = " + TS + " G " + G + " CS " + CS);
 						}
 					} else if (count_sv == 2) {
-						//LOG.info("count_sv = " + count_sv + " set all 0 ");
+						// LOG.info("count_sv = " + count_sv + " set all 0 ");
 						G = "0";
 						CS = "0";
 						TS = "0";
@@ -1247,8 +1252,6 @@ public class EmJobProcessGiornata{
 		return Sort.by(Sort.Direction.ASC, "fcGiocatore");
 	}
 
-	@RequestMapping(value = "/emstatistiche", method = RequestMethod.POST)
-	@ResponseBody
 	public void emstatistiche(int giornata) throws Exception {
 
 		LOG.info("START emstatistiche");
@@ -1325,7 +1328,9 @@ public class EmJobProcessGiornata{
 				statistiche.setFcGiocatore(appoFcGiocatore);
 				statistiche.setFlagAttivo(appoFcGiocatore.isFlagAttivo());
 
-				//LOG.info("SAVE STATISTICA GIOCATORE " + appoFcGiocatore.getIdGiocatore() + " " + appoFcGiocatore.getCognGiocatore());
+				// LOG.info("SAVE STATISTICA GIOCATORE " +
+				// appoFcGiocatore.getIdGiocatore() + " " +
+				// appoFcGiocatore.getCognGiocatore());
 
 				statisticheRepository.save(statistiche);
 
@@ -1379,6 +1384,14 @@ public class EmJobProcessGiornata{
 		statistiche.setFlagAttivo(appoFcGiocatore.isFlagAttivo());
 
 		statisticheRepository.save(statistiche);
+
+		LOG.info("END emstatistiche");
+
+	}
+
+	public void aggiornaFlagAttivoGiocatore(int giornata) throws Exception {
+
+		LOG.info("END aggiornaFlagAttivoGiocatore");
 
 		jdbcTemplate.update("update fc_giocatore set flag_attivo = 0");
 		jdbcTemplate.update("update fc_giocatore set flag_attivo = 1 where id_squadra in (select id_squadra_casa from fc_calendario_tim where codice_giornata = " + giornata + ")");
@@ -1591,20 +1604,19 @@ public class EmJobProcessGiornata{
 
 			// giocatoreRepository.deleteAll();
 			List<FcGiocatore> listG = (List<FcGiocatore>) giocatoreRepository.findAll();
-			
-			
+
 			int count = listG.size();
-			int lastIdGiocatore = 1; 
+			int lastIdGiocatore = 1;
 			if (count > 0) {
-				FcGiocatore lastG = listG.get(count-1);
+				FcGiocatore lastG = listG.get(count - 1);
 				lastIdGiocatore = lastG.getIdGiocatore();
 			}
-			
+
 			for (int i = 1; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
 
 				FcGiocatore giocatore = null;
-				//String idGiocatore = record.get(0);
+				// String idGiocatore = record.get(0);
 				String cognGiocatore = record.get(1).trim();
 				String idRuolo = record.get(2);
 				String nomeSquadra = record.get(4).trim();
@@ -1630,28 +1642,36 @@ public class EmJobProcessGiornata{
 					continue;
 				}
 
-//				if (StringUtils.isNotEmpty(idGiocatore)) {
-//					giocatore = this.giocatoreRepository.findByIdGiocatore(Integer.parseInt(idGiocatore));
-//					if (giocatore == null) {
-//						giocatore = new FcGiocatore();
-//						giocatore.setQuotazione(5);
-//						LOG.info("NEW GIOCATORE " + idGiocatore + " " + cognGiocatore + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);
-//						listGiocatoriAdd.add(giocatore);
-//					}
-//				}
-						
-//				List<FcGiocatore> lgiocatore = this.giocatoreRepository.findByCognGiocatoreStartingWith(nomeSquadra);
-//				for (FcGiocatore g : lgiocatore) {
-//					giocatore = g;
-//					if (!g.getFcSquadra().getNomeSquadra().equals(nomeSquadra)) {
-//						LOG.info("ATTENZIONE SQUADRA DIFFERENTE ");
-//						LOG.info("" + idGiocatore + ";" + cognGiocatore + ";" + idRuolo + ";" + nomeSquadra + ";" + quotazioneAttuale + ";" + quotazioneAttuale);
-//					}
-//				}
-				//giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadra(cognGiocatore, squadra);
-				giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadraAndFcRuolo(cognGiocatore,squadra, ruolo);
+				// if (StringUtils.isNotEmpty(idGiocatore)) {
+				// giocatore =
+				// this.giocatoreRepository.findByIdGiocatore(Integer.parseInt(idGiocatore));
+				// if (giocatore == null) {
+				// giocatore = new FcGiocatore();
+				// giocatore.setQuotazione(5);
+				// LOG.info("NEW GIOCATORE " + idGiocatore + " " + cognGiocatore
+				// + " " + idRuolo + " " + nomeSquadra + " " +
+				// quotazioneAttuale);
+				// listGiocatoriAdd.add(giocatore);
+				// }
+				// }
+
+				// List<FcGiocatore> lgiocatore =
+				// this.giocatoreRepository.findByCognGiocatoreStartingWith(nomeSquadra);
+				// for (FcGiocatore g : lgiocatore) {
+				// giocatore = g;
+				// if (!g.getFcSquadra().getNomeSquadra().equals(nomeSquadra)) {
+				// LOG.info("ATTENZIONE SQUADRA DIFFERENTE ");
+				// LOG.info("" + idGiocatore + ";" + cognGiocatore + ";" +
+				// idRuolo + ";" + nomeSquadra + ";" + quotazioneAttuale + ";" +
+				// quotazioneAttuale);
+				// }
+				// }
+				// giocatore =
+				// this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadra(cognGiocatore,
+				// squadra);
+				giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadraAndFcRuolo(cognGiocatore, squadra, ruolo);
 				if (giocatore == null) {
-					lastIdGiocatore ++;
+					lastIdGiocatore++;
 					giocatore = new FcGiocatore();
 					giocatore.setIdGiocatore(lastIdGiocatore);
 					giocatore.setQuotazione(5);
@@ -1664,7 +1684,7 @@ public class EmJobProcessGiornata{
 					giocatore.setQuotazione(Integer.valueOf(newQuotaz));
 				}
 
-				//giocatore.setIdGiocatore(Integer.parseInt(idGiocatore));
+				// giocatore.setIdGiocatore(Integer.parseInt(idGiocatore));
 				giocatore.setCognGiocatore(cognGiocatore);
 				giocatore.setFcRuolo(ruolo);
 				giocatore.setFcSquadra(squadra);
@@ -1676,12 +1696,12 @@ public class EmJobProcessGiornata{
 
 			if (giocatores.size() > 0) {
 
-//				for (FcGiocatore gioc : listG) {
-//					String sql = "UPDATE fc_giocatore SET ";
-//					sql += " FLAG_ATTIVO=0";
-//					sql += " WHERE ID_GIOCATORE=" + gioc.getIdGiocatore();
-//					this.jdbcTemplate.execute(sql);
-//				}
+				// for (FcGiocatore gioc : listG) {
+				// String sql = "UPDATE fc_giocatore SET ";
+				// sql += " FLAG_ATTIVO=0";
+				// sql += " WHERE ID_GIOCATORE=" + gioc.getIdGiocatore();
+				// this.jdbcTemplate.execute(sql);
+				// }
 
 				for (FcGiocatore giocatore : giocatores) {
 
@@ -1706,45 +1726,64 @@ public class EmJobProcessGiornata{
 					statistiche.setRigoreSegnato(0);
 					statistiche.setFlagAttivo(giocatore.isFlagAttivo());
 
-					// LOG.info(" GIOCATORE " + giocatore.getIdGiocatore() + " " + giocatore.getCognGiocatore() + " " + giocatore.getFcRuolo().getIdRuolo());
+					// LOG.info(" GIOCATORE " + giocatore.getIdGiocatore() + " "
+					// + giocatore.getCognGiocatore() + " " +
+					// giocatore.getFcRuolo().getIdRuolo());
 
 					// LOG.info("SAVE STATISTICA ");
 					statisticheRepository.save(statistiche);
 
 				}
 
-//				String sql = " select id_giocatore,cogn_giocatore from fc_giocatore where flag_attivo=0 and id_giocatore not in (select distinct id_giocatore from fc_giornata_dett where id_giocatore is not null) ";
-//				jdbcTemplate.query(sql, new ResultSetExtractor<ArrayList<FcGiocatore>>(){
-//
-//					@Override
-//					public ArrayList<FcGiocatore> extractData(ResultSet rs)
-//							throws SQLException, DataAccessException {
-//						int idGiocatore = 0;
-//						String cognGiocatore = "";
-//						while (rs.next()) {
-//							idGiocatore = rs.getInt(1);
-//							cognGiocatore = rs.getString(2);
-//							LOG.info("idGiocatore " + idGiocatore + " cognGiocatore " + cognGiocatore);
-//							FcGiocatore giocatore = giocatoreRepository.findByIdGiocatore(idGiocatore);
-//							listGiocatoriDel.add(giocatore);
-//						}
-//						return null;
-//					}
-//				});
-//
-//				String delete1 = " delete from fc_statistiche where id_giocatore in ( ";
-//				delete1 += " select id_giocatore from fc_giocatore where flag_attivo=0 and id_giocatore not in (select distinct id_giocatore from fc_giornata_dett where id_giocatore is not null) ";
-//				delete1 += " ) ";
-//				jdbcTemplate.update(delete1);
-//				LOG.info("delete1 " + delete1);
-//				String delete2 = " delete from fc_pagelle where  id_giocatore in ( ";
-//				delete2 += " select id_giocatore from fc_giocatore where flag_attivo=0 and id_giocatore not in (select distinct id_giocatore from fc_giornata_dett where id_giocatore is not null)";
-//				delete2 += " ) ";
-//				jdbcTemplate.update(delete2);
-//				LOG.info("delete2 " + delete2);
-//				String delete3 = " delete from fc_giocatore where flag_attivo=0 and id_giocatore not in (select distinct id_giocatore from fc_giornata_dett where id_giocatore is not null) ";
-//				jdbcTemplate.update(delete3);
-//				LOG.info("delete3 " + delete3);
+				// String sql = " select id_giocatore,cogn_giocatore from
+				// fc_giocatore where flag_attivo=0 and id_giocatore not in
+				// (select distinct id_giocatore from fc_giornata_dett where
+				// id_giocatore is not null) ";
+				// jdbcTemplate.query(sql, new
+				// ResultSetExtractor<ArrayList<FcGiocatore>>(){
+				//
+				// @Override
+				// public ArrayList<FcGiocatore> extractData(ResultSet rs)
+				// throws SQLException, DataAccessException {
+				// int idGiocatore = 0;
+				// String cognGiocatore = "";
+				// while (rs.next()) {
+				// idGiocatore = rs.getInt(1);
+				// cognGiocatore = rs.getString(2);
+				// LOG.info("idGiocatore " + idGiocatore + " cognGiocatore " +
+				// cognGiocatore);
+				// FcGiocatore giocatore =
+				// giocatoreRepository.findByIdGiocatore(idGiocatore);
+				// listGiocatoriDel.add(giocatore);
+				// }
+				// return null;
+				// }
+				// });
+				//
+				// String delete1 = " delete from fc_statistiche where
+				// id_giocatore in ( ";
+				// delete1 += " select id_giocatore from fc_giocatore where
+				// flag_attivo=0 and id_giocatore not in (select distinct
+				// id_giocatore from fc_giornata_dett where id_giocatore is not
+				// null) ";
+				// delete1 += " ) ";
+				// jdbcTemplate.update(delete1);
+				// LOG.info("delete1 " + delete1);
+				// String delete2 = " delete from fc_pagelle where id_giocatore
+				// in ( ";
+				// delete2 += " select id_giocatore from fc_giocatore where
+				// flag_attivo=0 and id_giocatore not in (select distinct
+				// id_giocatore from fc_giornata_dett where id_giocatore is not
+				// null)";
+				// delete2 += " ) ";
+				// jdbcTemplate.update(delete2);
+				// LOG.info("delete2 " + delete2);
+				// String delete3 = " delete from fc_giocatore where
+				// flag_attivo=0 and id_giocatore not in (select distinct
+				// id_giocatore from fc_giornata_dett where id_giocatore is not
+				// null) ";
+				// jdbcTemplate.update(delete3);
+				// LOG.info("delete3 " + delete3);
 			}
 
 			LOG.info("END initDbGiocatori");
@@ -1853,9 +1892,12 @@ public class EmJobProcessGiornata{
 					ruolo.setIdRuolo(idRuolo);
 					FcSquadra squadra = squadraRepository.findByNomeSquadra(nomeSquadra);
 					gameName = (cognGiocatore + " " + nome).toUpperCase();
-					// LOG.info("FIND " + gameName + " " + idRuolo + " " + nomeSquadra + " " + quotazioneAttuale);
-					//giocatore = this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadraAndFcRuolo(gameName, squadra, ruolo);
-					
+					// LOG.info("FIND " + gameName + " " + idRuolo + " " +
+					// nomeSquadra + " " + quotazioneAttuale);
+					// giocatore =
+					// this.giocatoreRepository.findByCognGiocatoreStartingWithAndFcSquadraAndFcRuolo(gameName,
+					// squadra, ruolo);
+
 					List<FcGiocatore> lgiocatore = this.giocatoreRepository.findByCognGiocatoreContaining(gameName);
 					for (FcGiocatore g : lgiocatore) {
 						giocatore = g;
