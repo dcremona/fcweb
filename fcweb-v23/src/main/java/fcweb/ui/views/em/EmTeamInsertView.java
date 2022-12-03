@@ -727,6 +727,7 @@ public class EmTeamInsertView extends VerticalLayout
 
 				if (!g.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 
 				Span lblOrdinamento = new Span();
@@ -905,6 +906,7 @@ public class EmTeamInsertView extends VerticalLayout
 				String title = getInfoPlayer(g);
 				if (!g.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				if (g.getCognGiocatore() != null) {
 					// Label lblGiocatore = new Label(g.getCognGiocatore());
@@ -931,6 +933,7 @@ public class EmTeamInsertView extends VerticalLayout
 				String title = getInfoPlayer(g);
 				if (!g.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				if (g.getFcSquadra() != null) {
 					FcSquadra sq = g.getFcSquadra();
@@ -967,6 +970,7 @@ public class EmTeamInsertView extends VerticalLayout
 				String title = getInfoPlayer(g);
 				if (!g.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				FcStatistiche s = g.getFcStatistiche();
 				String imgThink = "2.png";

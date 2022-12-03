@@ -415,6 +415,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				if (s.getCognGiocatore() != null) {
 					Span span = new Span();
@@ -438,6 +439,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				if (s.getNomeSquadra() != null) {
 					FcSquadra sq = squadraController.findByNomeSquadra(s.getNomeSquadra());
@@ -474,6 +476,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String q = "" + s.getFcGiocatore().getQuotazione();
 				Span span = new Span();
@@ -497,6 +500,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String q = "" + s.getGiocate();
 				Span span = new Span();
@@ -517,6 +521,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null && s.getFcGiocatore() != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String imgThink = "2.png";
 				if (s != null && s.getMediaVoto() != 0) {
@@ -555,6 +560,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null && s.getFcGiocatore() != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String imgThink = "2.png";
 				if (s != null && s.getFantaMedia() != 0) {
@@ -595,6 +601,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String q = "" + s.getGoalFatto();
 				Span span = new Span();
@@ -618,6 +625,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String q = "" + s.getGoalSubito();
 				Span span = new Span();
@@ -641,6 +649,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String q = "" + s.getAssist();
 				Span span = new Span();
@@ -664,6 +673,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String q = "" + s.getAmmonizione();
 				Span span = new Span();
@@ -687,6 +697,7 @@ public class EmStatisticheView extends VerticalLayout
 			if (s != null) {
 				if (!s.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String q = "" + s.getEspulsione();
 				Span span = new Span();

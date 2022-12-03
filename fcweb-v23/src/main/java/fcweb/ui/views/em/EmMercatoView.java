@@ -2624,6 +2624,7 @@ public class EmMercatoView extends VerticalLayout
 
 				if (!g.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 
 				Image imgR = buildImage("classpath:images/", ruolo.toLowerCase() + ".png");
@@ -2954,6 +2955,7 @@ public class EmMercatoView extends VerticalLayout
 				String title = getInfoPlayer(g);
 				if (!g.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				if (g.getCognGiocatore() != null) {
 					// Label lblGiocatore = new Label(g.getCognGiocatore());
@@ -2982,6 +2984,7 @@ public class EmMercatoView extends VerticalLayout
 				String title = getInfoPlayer(g);
 				if (!g.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				if (g.getFcSquadra() != null) {
 					FcSquadra sq = g.getFcSquadra();
@@ -3022,6 +3025,7 @@ public class EmMercatoView extends VerticalLayout
 				String title = getInfoPlayer(g);
 				if (!g.isFlagAttivo()) {
 					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
 				}
 				String q = "" + g.getQuotazione();
 				// Label lblQuotazione = new Label(q);
