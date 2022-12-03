@@ -1016,12 +1016,16 @@ public class EmJobProcessGiornata{
 				int ordinamento = gd.getOrdinamento();
 				int idGiocatore = gd.getFcGiocatore().getIdGiocatore();
 				int votoGiocatore = buildFantaMedia(gd.getFcPagelle());
-				Double votoG = fcPagelle.getG();
+				Double votoGazzetta = fcPagelle.getG();
+				int votoG = 0;
+				if (votoGazzetta != null) {
+					votoG = votoGazzetta.intValue();
+				}
 
 				String sql = " update fc_giornata_dett set voto = " + votoGiocatore;
 				if (ordinamento < 12) {
 
-					if (votoGiocatore == 0 && votoG == null) {
+					if (votoGiocatore == 0 && votoG == 0) {
 						novoto.add(gd);
 					} else {
 						titolari.add(gd);
