@@ -188,7 +188,7 @@ public class EmJobProcessFileCsv{
 							int aut = 0;
 							for (Node n : childNodes) {
 								String title = n.attr("title");
-								if ("Autorete".equals(title)) {
+								if ("AutoGoal".equals(title)) {
 									aut++;
 								}
 							}
