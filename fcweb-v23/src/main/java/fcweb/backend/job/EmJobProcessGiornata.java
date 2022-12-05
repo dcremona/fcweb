@@ -1210,7 +1210,7 @@ public class EmJobProcessGiornata{
 
 	@RequestMapping(value = "/ricalcolaTotPunti", method = RequestMethod.POST)
 	@ResponseBody
-	public void ricalcolaTotPunti(Integer giornata) throws Exception {
+	public void ricalcolaTotPunti(Integer giornata, FcCampionato campionato) throws Exception {
 
 		LOG.info("START ricalcolaTotPunti");
 
@@ -1225,6 +1225,7 @@ public class EmJobProcessGiornata{
 			sql += " where id_attore=" + attore.getIdAttore();
 			sql += " and id_giornata=" + giornata;
 			sql += " and id_stato_giocatore='T'";
+			sql += " and flag_attivo='S'";
 			jdbcTemplate.query(sql, new ResultSetExtractor<String>(){
 				@Override
 				public String extractData(ResultSet rs)
@@ -1233,8 +1234,13 @@ public class EmJobProcessGiornata{
 					while (rs.next()) {
 						totPunti = rs.getInt(1);
 						LOG.debug(attore.getDescAttore() + " " + totPunti);
-						jdbcTemplate.execute(" delete from fc_classifica_tot_pt where id_giornata=" + giornata + " and id_attore=" + attore.getIdAttore());
-						jdbcTemplate.execute(" insert into fc_classifica_tot_pt (id_attore,tot_pt,id_giornata) values (" + attore.getIdAttore() + "," + totPunti + "," + giornata + ")");
+						
+						String query = "DELETE FROM fc_classifica_tot_pt WHERE ID_CAMPIONATO=" + campionato.getIdCampionato() + " AND ID_ATTORE=" + attore.getIdAttore() + " AND ID_GIORNATA=" + giornata + "";
+						jdbcTemplate.update(query);
+
+						query = "INSERT INTO fc_classifica_tot_pt (ID_CAMPIONATO,ID_ATTORE,ID_GIORNATA,TOT_PT) VALUES (" + campionato.getIdCampionato() + "," + attore.getIdAttore() + "," + giornata + "," + totPunti + ")";
+						jdbcTemplate.update(query);
+						
 					}
 					return "1";
 				}

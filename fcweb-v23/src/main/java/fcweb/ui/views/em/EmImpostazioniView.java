@@ -162,6 +162,7 @@ public class EmImpostazioniView extends VerticalLayout
 	private Button init;
 	private Button download;
 	private Button calcola;
+	private Button ricalcola;
 	private Checkbox chkUfficiali;
 	private NumberField txtPerc;
 	private RadioButtonGroup<String> radioGroupVotiExcel = null;
@@ -417,9 +418,13 @@ public class EmImpostazioniView extends VerticalLayout
 		radioGroupVotiExcel.setItems("mondiale-voti-ufficiali", "mondiale-voti-ufficiali-fantacalcio");
 		radioGroupVotiExcel.setValue("mondiale-voti-ufficiali");
 
-		calcola = new Button("Calcola");
+		calcola = new Button("Calcola (Yes Algoritmo + Statistiche)");
 		calcola.setIcon(VaadinIcon.PIN.create());
 		calcola.addClickListener(this);
+
+		ricalcola = new Button("Ri-Calcola (No Algoritmo + Statistiche");
+		ricalcola.setIcon(VaadinIcon.PIN.create());
+		ricalcola.addClickListener(this);
 
 		calcolaStatistiche = new Button("Calcola Statistiche");
 		calcolaStatistiche.setIcon(VaadinIcon.PRESENTATION.create());
@@ -449,6 +454,7 @@ public class EmImpostazioniView extends VerticalLayout
 		layoutCalcola.add(init);
 		layoutCalcola.add(vHor);
 		layoutCalcola.add(calcola);
+		layoutCalcola.add(ricalcola);
 		layoutCalcola.add(pdfAndMail);
 		layoutCalcola.add(chkSendMail);
 
@@ -618,10 +624,15 @@ public class EmImpostazioniView extends VerticalLayout
 				emjobProcessGiornata.emalgoritmo(giornataInfo.getCodiceGiornata(), campionato);
 				emjobProcessGiornata.emstatistiche(giornataInfo.getCodiceGiornata());
 
+			} else if (event.getSource() == ricalcola) {
+
+				emjobProcessGiornata.ricalcolaTotPunti(giornataInfo.getCodiceGiornata(), campionato);
+				emjobProcessGiornata.emstatistiche(giornataInfo.getCodiceGiornata());
+
 			} else if (event.getSource() == calcolaStatistiche) {
 
 				emjobProcessGiornata.emstatistiche(giornataInfo.getCodiceGiornata());
-			
+
 			} else if (event.getSource() == aggiornaFlagAttivoGiocatore) {
 
 				emjobProcessGiornata.aggiornaFlagAttivoGiocatore(giornataInfo.getCodiceGiornata());
