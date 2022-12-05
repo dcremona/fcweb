@@ -1091,6 +1091,31 @@ public class EmJobProcessGiornata{
 				novoto.remove(nvp);
 			}
 
+			int countP = 0;
+			int countD = 0;
+			int countC = 0;
+			int countA = 0;
+			String nextSchema = "";
+			for (FcGiornataDett tit : titolari) {
+
+				int idx = riserve.indexOf(tit);
+				if (idx != -1) {
+					riserve.remove(tit);
+				}
+
+				if (tit.getFcGiocatore().getFcRuolo().getIdRuolo().equals("P")) {
+					countP++;
+				} else if (tit.getFcGiocatore().getFcRuolo().getIdRuolo().equals("D")) {
+					countD++;
+				} else if (tit.getFcGiocatore().getFcRuolo().getIdRuolo().equals("C")) {
+					countC++;
+				} else if (tit.getFcGiocatore().getFcRuolo().getIdRuolo().equals("A")) {
+					countA++;
+				}
+				nextSchema = countP + "-" + countD + "-" + countC + "-" + countA;
+			}
+			LOG.debug("NUOVO SCHEMA 1" + attore.getDescAttore() + " " + nextSchema);
+
 			// START FORZA CAMBI RIMASTI IN BASE ORDINE INSERITI (NON VIENE
 			// CONSIDERATO IL RUOLO
 			// AVVIENE IL CAMBIO DI SCHEMA
@@ -1100,11 +1125,27 @@ public class EmJobProcessGiornata{
 
 					int votoGiocatore = buildFantaMedia(ris.getFcPagelle());
 					String idRuolo = ris.getFcGiocatore().getFcRuolo().getIdRuolo();
+
+					if ("P".equals(idRuolo) && countP == 1) {
+						continue;
+					} else if ("D".equals(idRuolo) && countD == 5) {
+						continue;
+					} else if ("C".equals(idRuolo) && countC == 5) {
+						continue;
+					} else if ("A".equals(idRuolo) && countA == 3) {
+						continue;
+					}
+
 					if (votoGiocatore != 0) {
 
 						for (FcGiornataDett sv : novoto) {
 
 							String idRuolo2 = sv.getFcGiocatore().getFcRuolo().getIdRuolo();
+							if ("P".equals(idRuolo2) ) {
+								if (!"P".equals(idRuolo) ) {
+									continue;
+								}
+							}
 
 							if (!novotoProcess.contains(sv) && !idRuolo2.equals(idRuolo)) {
 
@@ -1137,11 +1178,11 @@ public class EmJobProcessGiornata{
 			}
 			// END
 
-			int countP = 0;
-			int countD = 0;
-			int countC = 0;
-			int countA = 0;
-			String nextSchema = "";
+			countP = 0;
+			countD = 0;
+			countC = 0;
+			countA = 0;
+			nextSchema = "";
 			for (FcGiornataDett tit : titolari) {
 				if (tit.getFcGiocatore().getFcRuolo().getIdRuolo().equals("P")) {
 					countP++;
@@ -1154,7 +1195,7 @@ public class EmJobProcessGiornata{
 				}
 				nextSchema = countP + "-" + countD + "-" + countC + "-" + countA;
 			}
-			LOG.debug("NUOVO SCHEMA " + attore.getDescAttore() + " " + nextSchema);
+			LOG.debug("NUOVO SCHEMA 2" + attore.getDescAttore() + " " + nextSchema);
 
 			String query = "DELETE FROM fc_classifica_tot_pt WHERE ID_CAMPIONATO=" + campionato.getIdCampionato() + " AND ID_ATTORE=" + attore.getIdAttore() + " AND ID_GIORNATA=" + giornata + "";
 			jdbcTemplate.update(query);
