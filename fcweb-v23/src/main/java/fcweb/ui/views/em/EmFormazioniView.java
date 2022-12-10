@@ -41,6 +41,7 @@ import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcClassificaTotPt;
+import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornataDett;
 import fcweb.backend.data.entity.FcGiornataDettInfo;
 import fcweb.backend.data.entity.FcGiornataInfo;
@@ -48,8 +49,8 @@ import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.AttoreService;
 import fcweb.backend.service.ClassificaTotalePuntiService;
-import fcweb.backend.service.GiornataDettService;
 import fcweb.backend.service.GiornataDettInfoService;
+import fcweb.backend.service.GiornataDettService;
 import fcweb.backend.service.GiornataInfoService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;;
@@ -304,7 +305,6 @@ public class EmFormazioniView extends VerticalLayout{
 			cellLayout.setSizeFull();
 			if (f != null && f.getFcGiocatore() != null) {
 				Image img = buildImage("classpath:images/", f.getFcGiocatore().getFcRuolo().getIdRuolo().toLowerCase() + ".png", f.getFcGiocatore().getFcRuolo().getDescRuolo());
-
 				cellLayout.add(img);
 			}
 			return cellLayout;
@@ -325,8 +325,13 @@ public class EmFormazioniView extends VerticalLayout{
 			} else if ("N".equals(gd.getFlagAttivo())) {
 				cellLayout.getStyle().set("color", Costants.LIGHT_GRAY);
 			}
-			if (gd != null && gd.getFcGiocatore() != null) {
-				Label lblGiocatore = new Label(gd.getFcGiocatore().getCognGiocatore());
+			FcGiocatore g = gd.getFcGiocatore();
+			if (gd != null && g != null) {
+				if (!g.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
+				}
+				Label lblGiocatore = new Label(g.getCognGiocatore());
 				lblGiocatore.getStyle().set("fontSize", "smaller");
 				cellLayout.add(lblGiocatore);
 
@@ -364,8 +369,13 @@ public class EmFormazioniView extends VerticalLayout{
 			} else if ("N".equals(gd.getFlagAttivo())) {
 				cellLayout.getStyle().set("color", Costants.LIGHT_GRAY);
 			}
-			if (gd != null && gd.getFcGiocatore() != null) {
-				Label lblSquadra = new Label(gd.getFcGiocatore().getFcSquadra().getNomeSquadra().substring(0, 3));
+			FcGiocatore g = gd.getFcGiocatore();
+			if (gd != null && g != null) {
+				if (!g.isFlagAttivo()) {
+					cellLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
+					cellLayout.getElement().getStyle().set("-webkit-text-fill-color", Costants.RED);
+				}
+				Label lblSquadra = new Label(g.getFcSquadra().getNomeSquadra().substring(0, 3));
 				lblSquadra.getStyle().set("fontSize", "smaller");
 				FcSquadra sq = gd.getFcGiocatore().getFcSquadra();
 				if (sq.getImg() != null) {
@@ -376,10 +386,6 @@ public class EmFormazioniView extends VerticalLayout{
 						e.printStackTrace();
 					}
 				}
-				// Image img = buildImage("classpath:/img/nazioni/",
-				// gd.getFcGiocatore().getFcSquadra().getNomeSquadra() +
-				// ".png");
-				// cellLayout.add(img);
 				cellLayout.add(lblSquadra);
 			}
 			return cellLayout;
@@ -461,21 +467,32 @@ public class EmFormazioniView extends VerticalLayout{
 		resultGiocatoreColumn.setAutoWidth(true);
 
 		Column<FcGiornataDett> votoColumn = grid.addColumn(new ComponentRenderer<>(gd -> {
-			DecimalFormat myFormatter = new DecimalFormat("#0.00");
-			Double d = Double.valueOf(0);
-			if (gd.getVoto() != null) {
-				d = gd.getVoto() / Costants.DIVISORE_10;
-			}
-			String sVoto = myFormatter.format(d);
 
-			Label lbl = new Label(sVoto);
-			lbl.getStyle().set("color", Costants.LIGHT_GRAY);
-			if ("S".equals(gd.getFlagAttivo())) {
-				lbl.getStyle().set("color", Costants.GRAY);
-			} else if ("N".equals(gd.getFlagAttivo())) {
+			Label lbl = null;
+			FcGiocatore g = gd.getFcGiocatore();
+			if (gd != null && g != null) {
+
+				DecimalFormat myFormatter = new DecimalFormat("#0.00");
+				Double d = Double.valueOf(0);
+				if (gd.getVoto() != null) {
+					d = gd.getVoto() / Costants.DIVISORE_10;
+				}
+				String sVoto = myFormatter.format(d);
+
+				lbl = new Label(sVoto);
 				lbl.getStyle().set("color", Costants.LIGHT_GRAY);
+				if ("S".equals(gd.getFlagAttivo())) {
+					lbl.getStyle().set("color", Costants.GRAY);
+				} else if ("N".equals(gd.getFlagAttivo())) {
+					lbl.getStyle().set("color", Costants.LIGHT_GRAY);
+				}
+				lbl.getStyle().set("fontSize", "smaller");
+
+				if (!g.isFlagAttivo()) {
+					lbl.getStyle().set("background", Costants.LOWER_GRAY);
+					lbl.getStyle().set("-webkit-text-fill-color", Costants.RED);
+				}
 			}
-			lbl.getStyle().set("fontSize", "smaller");
 			return lbl;
 
 		}));
