@@ -149,13 +149,16 @@ public class EmJobProcessFileCsv{
 							
 							List<Node> childNodes = tdRow.childNodes();
 							for (Node n : childNodes) {
-								String title = n.attr("title");
-								if ("ammonito".equals(title)) {
-									map.put("AMM", "1");
-								} else if ("espulso".equals(title)) {
+								String sclass = n.attr("class");
+								if ("cart-rosso".equals(sclass)) {
 									map.put("ESP", "1");
-								} else if ("Goal Decisivo".equals(title)) {
-									map.put("GDV", "1");
+								} else {
+									String title = n.attr("title");
+									if ("ammonito".equals(title)) {
+										map.put("AMM", "1");
+									} else if ("Goal Decisivo".equals(title)) {
+										map.put("GDV", "1");
+									}
 								}
 							}
 						} else if (c == 2) {
