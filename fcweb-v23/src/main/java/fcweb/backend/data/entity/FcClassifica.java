@@ -31,6 +31,7 @@ public class FcClassifica implements java.io.Serializable{
 	private int gs;
 	private int idPosiz;
 	private int idPosizFinal;
+	private int vinte;
 	private int pari;
 	private int perse;
 	private int punti;
@@ -38,7 +39,7 @@ public class FcClassifica implements java.io.Serializable{
 	private Double totPunti;
 	private Double totPuntiOld;
 	private Double totPuntiRosa;
-	private int vinte;
+	private int totPuntiTvsT;
 
 	public FcClassifica() {
 	}
@@ -243,5 +244,16 @@ public class FcClassifica implements java.io.Serializable{
 	public void setVinte(int vinte) {
 		this.vinte = vinte;
 	}
+
+	@Column(name = "tot_punti_TvsT", nullable = false, columnDefinition = "int default 0")
+	public int getTotPuntiTvsT() {
+		return totPuntiTvsT;
+	}
+
+	public void setTotPuntiTvsT(int totPuntiTvsT) {
+		this.totPuntiTvsT = totPuntiTvsT;
+	}
+	
+	
 
 }

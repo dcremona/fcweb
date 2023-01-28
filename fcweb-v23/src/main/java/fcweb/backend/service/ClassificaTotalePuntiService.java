@@ -28,6 +28,11 @@ public class ClassificaTotalePuntiService{
 		this.classificaTotalePuntiRepository = classificaTotalePuntiRepository;
 	}
 
+	public List<FcClassificaTotPt> findByFcCampionatoAndFcGiornataInfo(
+			FcCampionato campionato,FcGiornataInfo giornataInfo) {
+		List<FcClassificaTotPt> l = (List<FcClassificaTotPt>) classificaTotalePuntiRepository.findByFcCampionatoAndFcGiornataInfo(campionato,giornataInfo);
+		return l;
+	}
 	public List<FcClassificaTotPt> findAll() {
 		List<FcClassificaTotPt> l = (List<FcClassificaTotPt>) classificaTotalePuntiRepository.findAll();
 		return l;

@@ -32,6 +32,8 @@ public class FcClassificaTotPt implements java.io.Serializable{
 	private Double totPt;
 	private Double totPtOld;
 	private Double totPtRosa;
+	private int goal;
+	private int ptTvsT;
 
 	public FcClassificaTotPt() {
 	}
@@ -158,5 +160,25 @@ public class FcClassificaTotPt implements java.io.Serializable{
 	public void setTotPtRosa(Double totPtRosa) {
 		this.totPtRosa = totPtRosa;
 	}
+
+	@Column(name = "goal", nullable = false, columnDefinition = "int default 0")
+	public int getGoal() {
+		return this.goal;
+	}
+
+	public void setGoal(int goal) {
+		this.goal = goal;
+	}
+
+	@Column(name = "ptTvsT", nullable = false, columnDefinition = "int default 0")
+	public int getPtTvsT() {
+		return ptTvsT;
+	}
+
+	public void setPtTvsT(int ptTvsT) {
+		this.ptTvsT = ptTvsT;
+	}
+
+	
 
 }

@@ -32,9 +32,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import common.mail.MailClient;
 import common.util.Buffer;
@@ -42,6 +39,7 @@ import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcCalendarioCompetizione;
 import fcweb.backend.data.entity.FcCampionato;
+import fcweb.backend.data.entity.FcClassificaTotPt;
 import fcweb.backend.data.entity.FcFormazione;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornata;
@@ -56,6 +54,7 @@ import fcweb.backend.data.entity.FcStatistiche;
 import fcweb.backend.service.AttoreRepository;
 import fcweb.backend.service.CalendarioCompetizioneRepository;
 import fcweb.backend.service.CampionatoRepository;
+import fcweb.backend.service.ClassificaTotalePuntiRepository;
 import fcweb.backend.service.FormazioneRepository;
 import fcweb.backend.service.GiocatoreRepository;
 import fcweb.backend.service.GiornataDettRepository;
@@ -109,6 +108,12 @@ public class JobProcessGiornata{
 
 	@Autowired
 	private CalendarioCompetizioneRepository calendarioTimRepository;
+
+	@Autowired
+	private GiornataRepository giornataRepository;
+
+	@Autowired
+	private ClassificaTotalePuntiRepository classificaTotalePuntiRepository;
 
 	public HashMap<Object, Object> initDbGiocatori(String httpUrlImg,
 			String imgPath, String fileName, boolean updateQuotazioni,
@@ -398,8 +403,6 @@ public class JobProcessGiornata{
 		return (int) new_quot;
 	}
 
-	@RequestMapping(value = "/initiDb", method = RequestMethod.POST)
-	@ResponseBody
 	public void initiDb(Integer codiceGiornata) throws Exception {
 		LOG.info("START initiDb");
 
@@ -440,8 +443,6 @@ public class JobProcessGiornata{
 
 	}
 
-	@RequestMapping(value = "/generaCalendario", method = RequestMethod.POST)
-	@ResponseBody
 	public void generaCalendario(FcCampionato campionato) throws Exception {
 
 		Integer[] squadreInt = new Integer[8];
@@ -464,8 +465,6 @@ public class JobProcessGiornata{
 		return Sort.by(Sort.Direction.ASC, "idSquadra");
 	}
 
-	@RequestMapping(value = "/initPagelle", method = RequestMethod.POST)
-	@ResponseBody
 	public void initPagelle(Integer giornata) {
 		FcGiornataInfo giornataInfo = giornataInfoRepository.findByCodiceGiornata(giornata);
 		LOG.debug("" + giornataInfo.getCodiceGiornata());
@@ -480,8 +479,6 @@ public class JobProcessGiornata{
 		}
 	}
 
-	@RequestMapping(value = "/executeUpdateDbFcExpRoseA", method = RequestMethod.POST)
-	@ResponseBody
 	public void executeUpdateDbFcExpRoseA(boolean freePlayer,
 			Integer idCampionato) throws Exception {
 
@@ -618,8 +615,6 @@ public class JobProcessGiornata{
 		LOG.info("END executeUpdateDbFcExpRoseA");
 	}
 
-	@RequestMapping(value = "/aggiornamentoPFGiornata", method = RequestMethod.POST)
-	@ResponseBody
 	public void aggiornamentoPFGiornata(Properties p, String fileName,
 			String idGiornata) {
 
@@ -982,7 +977,7 @@ public class JobProcessGiornata{
 			formazioneHtml += "<html>";
 
 			String from = (String) env.getProperty("spring.mail.username");
-			
+
 			client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", att);
 
 			LOG.info("END aggiornamentoPFGiornata");
@@ -1001,8 +996,6 @@ public class JobProcessGiornata{
 		}
 	}
 
-	@RequestMapping(value = "/seiPolitico", method = RequestMethod.POST)
-	@ResponseBody
 	public void seiPolitico(Integer giornata, FcSquadra squadra)
 			throws Exception {
 
@@ -1052,8 +1045,6 @@ public class JobProcessGiornata{
 
 	}
 
-	@RequestMapping(value = "/checkSeiPolitico", method = RequestMethod.POST)
-	@ResponseBody
 	public void checkSeiPolitico(Integer giornata) throws Exception {
 
 		LOG.info("START checkSeiPolitico");
@@ -1105,10 +1096,8 @@ public class JobProcessGiornata{
 		LOG.info("END checkSeiPolitico");
 	}
 
-	@RequestMapping(value = "/aggiornaVotiGiocatori", method = RequestMethod.POST)
-	@ResponseBody
-	public void aggiornaVotiGiocatori(int giornata, int forzaVotoGiocatore,boolean bRoundVoto)
-			throws Exception {
+	public void aggiornaVotiGiocatori(int giornata, int forzaVotoGiocatore,
+			boolean bRoundVoto) throws Exception {
 
 		LOG.info("START aggiornaVotiGiocatori");
 
@@ -1120,8 +1109,8 @@ public class JobProcessGiornata{
 
 		for (FcPagelle pagelle : lPagelle) {
 
-			int VOTO_GIOCATORE = Utils.buildVoto(pagelle,bRoundVoto);
-			
+			int VOTO_GIOCATORE = Utils.buildVoto(pagelle, bRoundVoto);
+
 			if (forzaVotoGiocatore == 0) {
 				VOTO_GIOCATORE = forzaVotoGiocatore;
 			}
@@ -1137,8 +1126,6 @@ public class JobProcessGiornata{
 
 	}
 
-	@RequestMapping(value = "/aggiornaTotRosa", method = RequestMethod.POST)
-	@ResponseBody
 	public void aggiornaTotRosa(String idCampionato, int giornata)
 			throws Exception {
 
@@ -1163,7 +1150,7 @@ public class JobProcessGiornata{
 					id_giornata = rs.getInt(1);
 					id_attore = rs.getInt(2);
 					tot25 = rs.getInt(3);
-					
+
 					String sqlUpdate = " UPDATE fc_classifica_tot_pt SET ";
 					sqlUpdate += " tot_pt_rosa=" + tot25;
 					sqlUpdate += " WHERE id_attore=" + id_attore;
@@ -1214,8 +1201,6 @@ public class JobProcessGiornata{
 
 	}
 
-	@RequestMapping(value = "/aggiornaScore", method = RequestMethod.POST)
-	@ResponseBody
 	public void aggiornaScore(int giornata, String colPt, String colScore)
 			throws Exception {
 
@@ -1281,8 +1266,6 @@ public class JobProcessGiornata{
 		return Sort.by(Sort.Direction.ASC, "fcGiocatore");
 	}
 
-	@RequestMapping(value = "/statistiche", method = RequestMethod.POST)
-	@ResponseBody
 	public void statistiche(FcCampionato campionato) throws Exception {
 
 		LOG.info("START statistiche");
@@ -1535,8 +1518,6 @@ public class JobProcessGiornata{
 
 	}
 
-	@RequestMapping(value = "/inserisciUltimaFormazione", method = RequestMethod.POST)
-	@ResponseBody
 	public void inserisciUltimaFormazione(int idAttore, int giornata)
 			throws Exception {
 		int prev_gg = giornata - 1;
@@ -1555,18 +1536,13 @@ public class JobProcessGiornata{
 		jdbcTemplate.update(ins2);
 	}
 
-	@RequestMapping(value = "/resetFormazione", method = RequestMethod.POST)
-	@ResponseBody
-	public void resetFormazione(int idAttore, int giornata)
-			throws Exception {
+	public void resetFormazione(int idAttore, int giornata) throws Exception {
 		String delete = "delete from fc_giornata_dett_info where id_giornata=" + giornata + " and id_attore=" + idAttore;
 		jdbcTemplate.update(delete);
 		String delete2 = "delete from fc_giornata_dett where id_giornata=" + giornata + " and id_attore=" + idAttore;
 		jdbcTemplate.update(delete2);
 	}
 
-	@RequestMapping(value = "/inserisciFormazione442", method = RequestMethod.POST)
-	@ResponseBody
 	public void inserisciFormazione442(FcCampionato campionato, FcAttore attore,
 			int giornata) throws Exception {
 
@@ -1657,13 +1633,8 @@ public class JobProcessGiornata{
 		});
 	}
 
-	@Autowired
-	private GiornataRepository giornataRepository;
-
-	@RequestMapping(value = "/algoritmo", method = RequestMethod.POST)
-	@ResponseBody
 	public void algoritmo(Integer giornata, FcCampionato campionato,
-			int forzaVotoGiocatore,boolean bRoundVoto) throws Exception {
+			int forzaVotoGiocatore, boolean bRoundVoto) throws Exception {
 
 		LOG.info("START algoritmo");
 
@@ -1686,7 +1657,7 @@ public class JobProcessGiornata{
 
 		List<FcGiornata> lGiornata = giornataRepository.findByFcGiornataInfo(giornataInfo);
 
-		List<FcAttore> l = (List<FcAttore>) attoreRepository.findAll();
+		List<FcAttore> l = (List<FcAttore>) attoreRepository.findByActive(true);
 
 		for (FcAttore attore : l) {
 
@@ -1762,7 +1733,7 @@ public class JobProcessGiornata{
 				String ID_RUOLO = pagelle.getFcGiocatore().getFcRuolo().getIdRuolo();
 				int ESPULSO = pagelle.getEspulsione();
 
-				int VOTO_GIOCATORE = Utils.buildVoto(pagelle,bRoundVoto);
+				int VOTO_GIOCATORE = Utils.buildVoto(pagelle, bRoundVoto);
 
 				if (forzaVotoGiocatore == 0) {
 					VOTO_GIOCATORE = forzaVotoGiocatore;
@@ -2176,12 +2147,11 @@ public class JobProcessGiornata{
 			String query = "DELETE FROM fc_classifica_tot_pt WHERE ID_CAMPIONATO=" + "" + campionato.getIdCampionato() + " AND ID_ATTORE=" + ID_ATTORE + " AND ID_GIORNATA=" + giornata + "";
 			jdbcTemplate.update(query);
 
-			//LOG.debug("sommaTitolariRiserve          -----> " + sommaTitolariRiserve);
-			//int roundSommaTitolariRiserve = Utils.arrotonda(sommaTitolariRiserve);
-			//LOG.debug("roundSommaTitolariRiserve     -----> " + roundSommaTitolariRiserve);
+			int totGoalTVsTutti = getTotGoal(somma);
+			int sommaTVsTutti = somma;
 
-			query = "INSERT INTO fc_classifica_tot_pt (ID_CAMPIONATO,ID_ATTORE,ID_GIORNATA,TOT_PT,TOT_PT_OLD) ";
-			query += " VALUES (" + "" + campionato.getIdCampionato() + "," + ID_ATTORE + "," + giornata + "," +sommaTitolariRiserve + "," + somma + ")";
+			query = "INSERT INTO fc_classifica_tot_pt (ID_CAMPIONATO,ID_ATTORE,ID_GIORNATA,TOT_PT,TOT_PT_OLD,GOAL) ";
+			query += " VALUES (" + "" + campionato.getIdCampionato() + "," + ID_ATTORE + "," + giornata + "," + sommaTitolariRiserve + "," + sommaTVsTutti + "," + totGoalTVsTutti + ")";
 			jdbcTemplate.update(query);
 
 			// BONUS QUARTI
@@ -2200,14 +2170,16 @@ public class JobProcessGiornata{
 				}
 			}
 
-			//int roundSomma = Utils.arrotonda(somma);
-	
+			// int roundSomma = Utils.arrotonda(somma);
+
 			LOG.debug("----------------------------------------");
 			LOG.debug("END DESC_ATTORE       -----> " + attore.getDescAttore());
 			LOG.debug("SCHEMA                -----> " + count_dif + "-" + count_cen + "-" + count_att);
 			LOG.debug("TOTALE FINALE         -----> " + somma);
 			int totGoal = getTotGoal(somma);
 			LOG.debug("GOAL SEGNATI          -----> " + totGoal);
+			LOG.debug("GOAL   TUTTI VS TUTTI -----> " + totGoalTVsTutti);
+			LOG.debug("TOTALE TUTTI VS TUTTI -----> " + sommaTVsTutti);
 			LOG.debug("----------------------------------------");
 			LOG.debug("");
 
@@ -2256,200 +2228,244 @@ public class JobProcessGiornata{
 
 		List<FcGiornata> lSEGiornat = giornataRepository.findByFcGiornataInfoGreaterThanEqualAndFcGiornataInfoLessThanEqualOrderByFcGiornataInfo(start, end);
 
-		int ID_ATTORE_CASA = 0;
-		int ID_ATTORE_FUORI = 0;
-		int TOT_CASA = 0;
-		int TOT_FUORI = 0;
-		int GOL_CASA = 0;
-		int GOL_FUORI = 0;
-		int ID_GIORNATA = 0;
+		int idAttoreCasa = 0;
+		int idAttoreFuori = 0;
+		int totCasa = 0;
+		int totFuori = 0;
+		int golCasa = 0;
+		int golFuori = 0;
+		int idGiornata = 0;
 
-		int PUNTI = 0;
-		int VINTE = 0;
-		int PARI = 0;
-		int PERSE = 0;
-		int GF = 0;
-		int GS = 0;
-		int DR = 0;
-		int TOT_PUNTI = 0;
-		int TOT_FM = 0;
-		int RIS_PARTITA = 0;
+		int punti = 0;
+		int vinte = 0;
+		int pari = 0;
+		int perse = 0;
+		int gf = 0;
+		int gs = 0;
+		int dr = 0;
+		int totPunti = 0;
+		int totFm = 0;
+		int risPartita = 0;
 
 		for (FcGiornata g : lSEGiornat) {
 
 			if (g.getFcAttoreByIdAttoreCasa() == null || g.getFcAttoreByIdAttoreFuori() == null || g.getTotCasa() == null || g.getTotFuori() == null || g.getGolCasa() == null || g.getGolFuori() == null) {
 				continue;
 			}
-			ID_ATTORE_CASA = g.getFcAttoreByIdAttoreCasa().getIdAttore();
-			ID_ATTORE_FUORI = g.getFcAttoreByIdAttoreFuori().getIdAttore();
-			TOT_CASA = g.getTotCasa().intValue();
-			TOT_FUORI = g.getTotFuori().intValue();
-			GOL_CASA = g.getGolCasa();
-			GOL_FUORI = g.getGolFuori();
-			ID_GIORNATA = g.getFcGiornataInfo().getCodiceGiornata();
+			idAttoreCasa = g.getFcAttoreByIdAttoreCasa().getIdAttore();
+			idAttoreFuori = g.getFcAttoreByIdAttoreFuori().getIdAttore();
+			totCasa = g.getTotCasa().intValue();
+			totFuori = g.getTotFuori().intValue();
+			golCasa = g.getGolCasa();
+			golFuori = g.getGolFuori();
+			idGiornata = g.getFcGiornataInfo().getCodiceGiornata();
 
-			if (GOL_CASA > GOL_FUORI) {
-				PUNTI = 3;
-				VINTE = 1;
-				PARI = 0;
-				PERSE = 0;
-				TOT_FM = 2;
-			} else if (GOL_CASA == GOL_FUORI) {
-				PUNTI = 1;
-				VINTE = 0;
-				PARI = 1;
-				PERSE = 0;
-				TOT_FM = 0;
-			} else if (GOL_CASA < GOL_FUORI) {
-				PUNTI = 0;
-				VINTE = 0;
-				PARI = 0;
-				PERSE = 1;
-				TOT_FM = 0;
+			if (golCasa > golFuori) {
+				punti = 3;
+				vinte = 1;
+				pari = 0;
+				perse = 0;
+				totFm = 2;
+			} else if (golCasa == golFuori) {
+				punti = 1;
+				vinte = 0;
+				pari = 1;
+				perse = 0;
+				totFm = 0;
+			} else if (golCasa < golFuori) {
+				punti = 0;
+				vinte = 0;
+				pari = 0;
+				perse = 1;
+				totFm = 0;
 			}
-			GF = GOL_CASA;
-			GS = GOL_FUORI;
-			DR = GF - GS;
-			TOT_PUNTI = TOT_CASA;
+			gf = golCasa;
+			gs = golFuori;
+			dr = gf - gs;
+			totPunti = totCasa;
 
-			if (VINTE == 1) {
-				RIS_PARTITA = 1;
-			} else if (PARI == 1) {
-				RIS_PARTITA = 0;
-			} else if (PERSE == 1) {
-				RIS_PARTITA = 2;
+			if (vinte == 1) {
+				risPartita = 1;
+			} else if (pari == 1) {
+				risPartita = 0;
+			} else if (perse == 1) {
+				risPartita = 2;
 			}
 
-			String query = " DELETE FROM fc_giornata_ris WHERE ID_GIORNATA =" + ID_GIORNATA + " AND ID_ATTORE=" + ID_ATTORE_CASA;
+			String query = " DELETE FROM fc_giornata_ris WHERE ID_GIORNATA =" + idGiornata + " AND ID_ATTORE=" + idAttoreCasa;
 			// LOG.info(query);
 			jdbcTemplate.update(query);
 
-			query = "INSERT INTO fc_giornata_ris (id_giornata,id_attore,vinta,nulla,persa,gf,gs,punti,fm,id_ris_partita,casafuori) VALUES (" + ID_GIORNATA + ",";
-			query += ID_ATTORE_CASA + "," + VINTE + ",";
-			query += PARI + "," + PERSE + ",";
-			query += GF + "," + GS + ",";
-			query += PUNTI + "," + TOT_FM + "," + RIS_PARTITA + ",1)";
+			query = "INSERT INTO fc_giornata_ris (id_giornata,id_attore,vinta,nulla,persa,gf,gs,punti,fm,id_ris_partita,casafuori) VALUES (" + idGiornata + ",";
+			query += idAttoreCasa + "," + vinte + ",";
+			query += pari + "," + perse + ",";
+			query += gf + "," + gs + ",";
+			query += punti + "," + totFm + "," + risPartita + ",1)";
 			// LOG.info(query);
 			jdbcTemplate.update(query);
 
-			int idx = buf.findFirst("" + ID_ATTORE_CASA, 1, false);
+			int idx = buf.findFirst("" + idAttoreCasa, 1, false);
 			if (idx != -1) {
 				int currPunt = buf.getFieldByInt(2);
-				currPunt = currPunt + PUNTI;
+				currPunt = currPunt + punti;
 				buf.setField(idx, 2, "" + currPunt);
 
 				int currVinte = buf.getFieldByInt(3);
-				currVinte = currVinte + VINTE;
+				currVinte = currVinte + vinte;
 				buf.setField(idx, 3, "" + currVinte);
 
 				int currPari = buf.getFieldByInt(4);
-				currPari = currPari + PARI;
+				currPari = currPari + pari;
 				buf.setField(idx, 4, "" + currPari);
 
 				int currPerse = buf.getFieldByInt(5);
-				currPerse = currPerse + PERSE;
+				currPerse = currPerse + perse;
 				buf.setField(idx, 5, "" + currPerse);
 
 				int currGf = buf.getFieldByInt(6);
-				currGf = currGf + GF;
+				currGf = currGf + gf;
 				buf.setField(idx, 6, "" + currGf);
 
 				int currGs = buf.getFieldByInt(7);
-				currGs = currGs + GS;
+				currGs = currGs + gs;
 				buf.setField(idx, 7, "" + currGs);
 
 				int currDr = buf.getFieldByInt(8);
-				currDr = currDr + DR;
+				currDr = currDr + dr;
 				buf.setField(idx, 8, "" + currDr);
 
 				int currTot_punti = buf.getFieldByInt(9);
-				currTot_punti = currTot_punti + TOT_PUNTI;
+				currTot_punti = currTot_punti + totPunti;
 				buf.setField(idx, 9, "" + currTot_punti);
 
 				int currTot_fm = buf.getFieldByInt(10);
-				currTot_fm = currTot_fm + TOT_FM;
+				currTot_fm = currTot_fm + totFm;
 				buf.setField(idx, 10, "" + currTot_fm);
 			}
 
-			if (GOL_FUORI > GOL_CASA) {
-				PUNTI = 3;
-				VINTE = 1;
-				PARI = 0;
-				PERSE = 0;
-				TOT_FM = 3;
-			} else if (GOL_FUORI == GOL_CASA) {
-				PUNTI = 1;
-				VINTE = 0;
-				PARI = 1;
-				PERSE = 0;
-				TOT_FM = 1;
-			} else if (GOL_FUORI < GOL_CASA) {
-				PUNTI = 0;
-				VINTE = 0;
-				PARI = 0;
-				PERSE = 1;
-				TOT_FM = 0;
+			if (golFuori > golCasa) {
+				punti = 3;
+				vinte = 1;
+				pari = 0;
+				perse = 0;
+				totFm = 3;
+			} else if (golFuori == golCasa) {
+				punti = 1;
+				vinte = 0;
+				pari = 1;
+				perse = 0;
+				totFm = 1;
+			} else if (golFuori < golCasa) {
+				punti = 0;
+				vinte = 0;
+				pari = 0;
+				perse = 1;
+				totFm = 0;
 			}
-			GF = GOL_FUORI;
-			GS = GOL_CASA;
-			DR = GF - GS;
-			TOT_PUNTI = TOT_FUORI;
+			gf = golFuori;
+			gs = golCasa;
+			dr = gf - gs;
+			totPunti = totFuori;
 
-			if (VINTE == 1) {
-				RIS_PARTITA = 1;
-			} else if (PARI == 1) {
-				RIS_PARTITA = 0;
-			} else if (PERSE == 1) {
-				RIS_PARTITA = 2;
+			if (vinte == 1) {
+				risPartita = 1;
+			} else if (pari == 1) {
+				risPartita = 0;
+			} else if (perse == 1) {
+				risPartita = 2;
 			}
-			query = " DELETE FROM fc_giornata_ris WHERE ID_GIORNATA =" + ID_GIORNATA + " AND ID_ATTORE=" + ID_ATTORE_FUORI;
+			query = " DELETE FROM fc_giornata_ris WHERE ID_GIORNATA =" + idGiornata + " AND ID_ATTORE=" + idAttoreFuori;
 			jdbcTemplate.update(query);
 
-			query = "INSERT INTO fc_giornata_ris (id_giornata,id_attore, vinta,nulla,persa,gf,gs,punti,fm,id_ris_partita,casafuori) VALUES (" + ID_GIORNATA + ",";
-			query += ID_ATTORE_FUORI + "," + VINTE + ",";
-			query += PARI + "," + PERSE + ",";
-			query += GF + "," + GS + ",";
-			query += PUNTI + "," + TOT_FM + "," + RIS_PARTITA + ",0)";
+			query = "INSERT INTO fc_giornata_ris (id_giornata,id_attore, vinta,nulla,persa,gf,gs,punti,fm,id_ris_partita,casafuori) VALUES (" + idGiornata + ",";
+			query += idAttoreFuori + "," + vinte + ",";
+			query += pari + "," + perse + ",";
+			query += gf + "," + gs + ",";
+			query += punti + "," + totFm + "," + risPartita + ",0)";
 			jdbcTemplate.update(query);
 
-			idx = buf.findFirst("" + ID_ATTORE_FUORI, 1, false);
+			idx = buf.findFirst("" + idAttoreFuori, 1, false);
 			if (idx != -1) {
 				int currPunt = buf.getFieldByInt(2);
-				currPunt = currPunt + PUNTI;
+				currPunt = currPunt + punti;
 				buf.setField(idx, 2, "" + currPunt);
 
 				int currVinte = buf.getFieldByInt(3);
-				currVinte = currVinte + VINTE;
+				currVinte = currVinte + vinte;
 				buf.setField(idx, 3, "" + currVinte);
 
 				int currPari = buf.getFieldByInt(4);
-				currPari = currPari + PARI;
+				currPari = currPari + pari;
 				buf.setField(idx, 4, "" + currPari);
 
 				int currPerse = buf.getFieldByInt(5);
-				currPerse = currPerse + PERSE;
+				currPerse = currPerse + perse;
 				buf.setField(idx, 5, "" + currPerse);
 
 				int currGf = buf.getFieldByInt(6);
-				currGf = currGf + GF;
+				currGf = currGf + gf;
 				buf.setField(idx, 6, "" + currGf);
 
 				int currGs = buf.getFieldByInt(7);
-				currGs = currGs + GS;
+				currGs = currGs + gs;
 				buf.setField(idx, 7, "" + currGs);
 
 				int currDr = buf.getFieldByInt(8);
-				currDr = currDr + DR;
+				currDr = currDr + dr;
 				buf.setField(idx, 8, "" + currDr);
 
 				int currTot_punti = buf.getFieldByInt(9);
-				currTot_punti = currTot_punti + TOT_PUNTI;
+				currTot_punti = currTot_punti + totPunti;
 				buf.setField(idx, 9, "" + currTot_punti);
 
 				int currTot_fm = buf.getFieldByInt(10);
-				currTot_fm = currTot_fm + TOT_FM;
+				currTot_fm = currTot_fm + totFm;
 				buf.setField(idx, 10, "" + currTot_fm);
 			}
+		}
+
+		// AGGIORNO classifica 1 vs tutti
+
+		List<FcClassificaTotPt> lClasTotPt = classificaTotalePuntiRepository.findByFcCampionatoAndFcGiornataInfo(campionato, giornataInfo);
+
+		for (FcAttore attore : l) {
+
+			// Ottieni goal giornata
+			int goalGiornata = 0;
+			int sommaPtGiornata = 0;
+			for (FcClassificaTotPt clasTot : lClasTotPt) {
+				if (clasTot.getFcAttore().getIdAttore() == attore.getIdAttore()) {
+					goalGiornata = clasTot.getGoal();
+					break;
+				}
+			}
+
+			for (FcClassificaTotPt clasTot : lClasTotPt) {
+				if (clasTot.getFcAttore().getIdAttore() != attore.getIdAttore()) {
+					int goalGiornataAvversario = clasTot.getGoal();
+
+					if (goalGiornata > goalGiornataAvversario) {
+						punti = 3;
+					} else if (goalGiornata == goalGiornataAvversario) {
+						punti = 1;
+					} else if (goalGiornata < goalGiornataAvversario) {
+						punti = 0;
+					}
+
+					sommaPtGiornata = sommaPtGiornata + punti;
+				}
+			}
+
+			FcClassificaTotPt fcClassificaTotPt = classificaTotalePuntiRepository.findByFcCampionatoAndFcAttoreAndFcGiornataInfo(campionato, attore, giornataInfo);
+			fcClassificaTotPt.setPtTvsT(sommaPtGiornata);
+			classificaTotalePuntiRepository.save(fcClassificaTotPt);
+
+			LOG.debug("----------------------------------------");
+			LOG.debug("DESC_ATTORE               -----> " + attore.getDescAttore());
+			LOG.debug("GOAL_GIORNATA 1VSTUTTI    -----> " + goalGiornata);
+			LOG.debug("SOMMA PUNTI   1VSTUTTI    -----> " + sommaPtGiornata);
+			LOG.debug("----------------------------------------");
+
 		}
 
 		// AGGIORNO CLASSIFICA SE NON SONO ARRIVATO AI QUARTI
@@ -2464,7 +2480,7 @@ public class JobProcessGiornata{
 			newBuf.moveFirst();
 			for (int i = 0; i < buf.getRecordCount(); i++) {
 
-				String sql = " SELECT SUM(TOT_PT) , SUM(TOT_PT_OLD) , SUM(TOT_PT_ROSA) FROM fc_classifica_tot_pt WHERE ID_CAMPIONATO=" + campionato.getIdCampionato();
+				String sql = " SELECT SUM(TOT_PT) , SUM(TOT_PT_OLD) , SUM(TOT_PT_ROSA), SUM(pt_tvst) FROM fc_classifica_tot_pt WHERE ID_CAMPIONATO=" + campionato.getIdCampionato();
 				sql += " AND ID_ATTORE =" + newBuf.getField(1);
 
 				jdbcTemplate.query(sql, new ResultSetExtractor<String>(){
@@ -2477,16 +2493,17 @@ public class JobProcessGiornata{
 							String tot_punti = rs.getString(1);
 							String tot_punti_old = rs.getString(2);
 							String tot_punti_rosa = rs.getString(3);
+							String pt_tvst = rs.getString(4);
 
 							String query = " INSERT INTO fc_classifica (ID_ATTORE,PUNTI,VINTE,PARI,PERSE,GF,GS,DR,";
-							query += " TOT_PUNTI,TOT_FM,ID_CAMPIONATO,ID_POSIZ,ID_POSIZ_FINAL,TOT_PUNTI_OLD,TOT_PUNTI_ROSA,FM_MERCATO) VALUES (" + newBuf.getField(1) + ",";
+							query += " TOT_PUNTI,TOT_FM,ID_CAMPIONATO,ID_POSIZ,ID_POSIZ_FINAL,TOT_PUNTI_OLD,TOT_PUNTI_ROSA,tot_punti_TvsT,FM_MERCATO) VALUES (" + newBuf.getField(1) + ",";
 							query += newBuf.getField(2) + "," + newBuf.getField(3) + ",";
 							query += newBuf.getField(4) + "," + newBuf.getField(5) + ",";
 							query += newBuf.getField(6) + "," + newBuf.getField(7) + ",";
 							query += newBuf.getField(8) + "," + tot_punti + ",";
 							query += newBuf.getField(10) + "," + campionato.getIdCampionato() + ",";
 							query += newBuf.getField(12) + "," + newBuf.getField(13) + ",";
-							query += tot_punti_old + "," + tot_punti_rosa + ",0)";
+							query += tot_punti_old + "," + tot_punti_rosa + "," + pt_tvst + ",0)";
 
 							jdbcTemplate.update(query);
 
@@ -2576,7 +2593,7 @@ public class JobProcessGiornata{
 
 			for (int attore = 1; attore < 9; attore++) {
 
-				String sql = "SELECT SUM(TOT_PT) , SUM(TOT_PT_OLD) , SUM(TOT_PT_ROSA) , ID_ATTORE FROM fc_classifica_tot_pt " ;
+				String sql = "SELECT SUM(TOT_PT) , SUM(TOT_PT_OLD) , SUM(TOT_PT_ROSA) , SUM(pt_tvst), ID_ATTORE FROM fc_classifica_tot_pt ";
 				sql += " WHERE ID_CAMPIONATO=" + campionato.getIdCampionato() + " AND ID_ATTORE =" + attore;
 
 				jdbcTemplate.query(sql, new ResultSetExtractor<String>(){
@@ -2589,10 +2606,14 @@ public class JobProcessGiornata{
 							String tot_punti = rs.getString(1);
 							String tot_punti_old = rs.getString(2);
 							String tot_punti_rosa = rs.getString(3);
-							String idAttore = rs.getString(4);
+							String pt_tvst = rs.getString(4);
+							String idAttore = rs.getString(5);
 
-							String query = " UPDATE fc_classifica SET TOT_PUNTI=" + tot_punti + "," + " TOT_PUNTI_OLD=" + tot_punti_old + "," + " TOT_PUNTI_ROSA=" + tot_punti_rosa + " WHERE ID_CAMPIONATO=" + campionato.getIdCampionato() + " AND ID_ATTORE =" + idAttore;
-
+							String query = " UPDATE fc_classifica SET TOT_PUNTI=" + tot_punti + ",";
+							query += " TOT_PUNTI_OLD=" + tot_punti_old + ",";
+							query += " TOT_PUNTI_ROSA=" + tot_punti_rosa + ",";
+							query += " pt_tvst=" + pt_tvst;
+							query += " WHERE ID_CAMPIONATO=" + campionato.getIdCampionato() + " AND ID_ATTORE =" + idAttore;
 							jdbcTemplate.update(query);
 
 							return "1";
@@ -4331,20 +4352,4 @@ public class JobProcessGiornata{
 			}
 		}
 	}
-
-	// public static byte[] getImage(String fileName) {
-	// File file = new File(fileName);
-	// if (file.exists()) {
-	// try {
-	// BufferedImage bufferedImage = ImageIO.read(file);
-	// ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-	// ImageIO.write(bufferedImage, "png", byteOutStream);
-	// return byteOutStream.toByteArray();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// return null;
-	// }
-
 }
