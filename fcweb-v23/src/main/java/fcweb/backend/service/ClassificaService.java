@@ -42,6 +42,12 @@ public class ClassificaService{
 		List<FcClassifica> l = classificaRepository.findByFcCampionatoOrderByTotPuntiRosaDesc(campionato);
 		return l;
 	}
+	
+	public List<FcClassifica> findByFcCampionatoOrderByTotPuntiTvsTDesc(
+			FcCampionato campionato) {
+		List<FcClassifica> l = classificaRepository.findByFcCampionatoOrderByTotPuntiTvsTDesc(campionato);
+		return l;
+	}
 
 	public FcClassifica findByFcCampionatoAndFcAttore(FcCampionato campionato,
 			FcAttore attore) {

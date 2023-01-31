@@ -24,6 +24,9 @@ public interface ClassificaRepository
 
 	public List<FcClassifica> findByFcCampionatoOrderByTotPuntiRosaDesc(
 			FcCampionato campionato);
+	
+	public List<FcClassifica> findByFcCampionatoOrderByTotPuntiTvsTDesc(
+			FcCampionato campionato);
 
 	public FcClassifica findByFcCampionatoAndFcAttore(FcCampionato campionato,
 			FcAttore attore);

@@ -470,6 +470,11 @@ public class JobProcessSendMail{
 		b.setValue(puntiTotali);
 		dataInfo.add(b);
 
+		b = new RisultatoBean();
+		b.setDesc("Totale Punteggio TvsT:");
+		b.setValue(""+totPunti.getPtTvsT());
+		dataInfo.add(b);
+
 		FcGiornataDettInfo info = giornataDettInfoController.findByFcAttoreAndFcGiornataInfo(attore, giornataInfo);
 
 		b = new RisultatoBean();

@@ -215,7 +215,7 @@ public class ClassificaView extends VerticalLayout{
 		String[] att = new String[8];
 		ArrayList<Integer> data = new ArrayList<Integer>();
 
-		List<FcClassifica> all = classificaController.findByFcCampionatoOrderByTotPuntiRosaDesc(campionato);
+		List<FcClassifica> all = classificaController.findByFcCampionatoOrderByTotPuntiTvsTDesc(campionato);
 
 		int i = 0;
 		for (FcClassifica cl : all) {

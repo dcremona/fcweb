@@ -757,12 +757,19 @@ public class FormazioniView extends VerticalLayout{
 		lblTotPuntiRosa.getStyle().set("background", Costants.LIGHT_YELLOW);
 		lblTotPuntiRosa.setSizeFull();
 
+		Label lblTotPuntiTvsT = new Label();
+		lblTotPuntiTvsT.setText("Totale Punteggio TvsT: " + totPunti.getPtTvsT());
+		lblTotPuntiTvsT.getStyle().set("font-size", "16px");
+		lblTotPuntiTvsT.getStyle().set("background", Costants.LIGHT_GRAY);
+		lblTotPuntiTvsT.setSizeFull();
+
 		Label lblInvio = new Label();
 		lblInvio.setText("Inviata alle: " + (info == null ? "" : Utils.formatDate(info.getDataInvio(), "dd/MM/yyyy HH:mm:ss")));
 		lblInvio.setSizeFull();
 
 		layoutMain.add(lblTotGiornata);
 		layoutMain.add(lblTotPuntiRosa);
+		layoutMain.add(lblTotPuntiTvsT);
 		layoutMain.add(lblInvio);
 
 		return layoutMain;
