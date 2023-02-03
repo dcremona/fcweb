@@ -2612,7 +2612,7 @@ public class JobProcessGiornata{
 							String query = " UPDATE fc_classifica SET TOT_PUNTI=" + tot_punti + ",";
 							query += " TOT_PUNTI_OLD=" + tot_punti_old + ",";
 							query += " TOT_PUNTI_ROSA=" + tot_punti_rosa + ",";
-							query += " pt_tvst=" + pt_tvst;
+							query += " tot_punti_TvsT=" + pt_tvst;
 							query += " WHERE ID_CAMPIONATO=" + campionato.getIdCampionato() + " AND ID_ATTORE =" + idAttore;
 							jdbcTemplate.update(query);
 
