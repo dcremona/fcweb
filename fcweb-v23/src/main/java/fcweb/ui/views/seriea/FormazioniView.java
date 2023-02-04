@@ -737,12 +737,13 @@ public class FormazioniView extends VerticalLayout{
 		}
 
 		String totPuntiRosa = "0";
+		String totPuntiTvsT = "0";
 		try {
 			if (totPunti != null && totPunti.getTotPtRosa() != null) {
 				totPuntiRosa = formatter.format(totPunti.getTotPtRosa() == 0 ? "0" : totPunti.getTotPtRosa() / Costants.DIVISORE_100);
+				totPuntiTvsT = "" +totPunti.getPtTvsT();
 			}
 		} catch (Exception e) {
-			totPuntiRosa = "0";
 		}
 
 		Label lblTotGiornata = new Label();
@@ -758,7 +759,7 @@ public class FormazioniView extends VerticalLayout{
 		lblTotPuntiRosa.setSizeFull();
 
 		Label lblTotPuntiTvsT = new Label();
-		lblTotPuntiTvsT.setText("Totale Punteggio TvsT: " + totPunti.getPtTvsT());
+		lblTotPuntiTvsT.setText("Totale Punteggio TvsT: " + totPuntiTvsT);
 		lblTotPuntiTvsT.getStyle().set("font-size", "16px");
 		lblTotPuntiTvsT.getStyle().set("background", Costants.LIGHT_GRAY);
 		lblTotPuntiTvsT.setSizeFull();
