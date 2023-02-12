@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.vaadin.olli.FileDownloadWrapper;
+import org.vaadin.tabs.PagedTabs;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -56,10 +57,10 @@ import fcweb.backend.job.JobProcessSendMail;
 import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.ClassificaService;
 import fcweb.backend.service.ClassificaTotalePuntiService;
-import fcweb.backend.service.GiornataService;
-import fcweb.backend.service.GiornataDettService;
 import fcweb.backend.service.GiornataDettInfoService;
+import fcweb.backend.service.GiornataDettService;
 import fcweb.backend.service.GiornataInfoService;
+import fcweb.backend.service.GiornataService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;;
 
@@ -208,6 +209,9 @@ public class FormazioniView extends VerticalLayout{
 	@SuppressWarnings("unchecked")
 	private void buildTabGiornata(VerticalLayout layout, String giornata) {
 
+		VerticalLayout container = new VerticalLayout();
+		PagedTabs tabs = new PagedTabs(container);
+
 		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
 		Integer currGG = 0;
 		if (campionato.getIdCampionato() == 1) {
@@ -279,7 +283,7 @@ public class FormazioniView extends VerticalLayout{
 			vCasa.add(tableSqCasaTribuna);
 			vCasa.add(tableAltriPunteggiCasa);
 			vCasa.add(layoutTotaliCasa);
-			vCasa.setSizeFull();
+			// vCasa.setSizeFull();
 
 			VerticalLayout vFuori = new VerticalLayout();
 			vFuori.add(tableSqFuoriTitolari);
@@ -287,18 +291,30 @@ public class FormazioniView extends VerticalLayout{
 			vFuori.add(tableSqFuoriTribuna);
 			vFuori.add(tableAltriPunteggiFuori);
 			vFuori.add(layoutTotaliFuori);
-			vFuori.setSizeFull();
+			// vFuori.setSizeFull();
 
 			HorizontalLayout horizontalLayout1 = new HorizontalLayout();
+			horizontalLayout1.setWidth("100%");
 			horizontalLayout1.add(vCasa);
 			horizontalLayout1.add(vFuori);
-			horizontalLayout1.setSizeFull();
+			// horizontalLayout1.setSizeFull();
 
-			layout.add(horizontalLayout0);
-			layout.add(horizontalLayout1);
-			layout.setSizeFull();
+			// layout.add(horizontalLayout0);
+			// layout.add(horizontalLayout1);
+			// layout.setSizeFull();
+
+			final VerticalLayout layoutTab = new VerticalLayout();
+			layoutTab.setMargin(false);
+			layoutTab.setPadding(false);
+			layoutTab.setSpacing(false);
+			layoutTab.add(horizontalLayout0);
+			layoutTab.add(horizontalLayout1);
+
+			tabs.add(attoreCasa.getDescAttore() + " [*] " + attoreFuori.getDescAttore(), layoutTab, false);
 
 		}
+
+		layout.add(tabs, container);
 	}
 
 	private HashMap<String, Object> buildData(FcAttore attore,
@@ -378,7 +394,7 @@ public class FormazioniView extends VerticalLayout{
 			cellLayout.setPadding(false);
 			cellLayout.setSpacing(false);
 			cellLayout.setAlignItems(Alignment.STRETCH);
-			cellLayout.setSizeFull();
+			// cellLayout.setSizeFull();
 			if (f != null && f.getFcGiocatore() != null) {
 				Image img = buildImage("classpath:images/", f.getFcGiocatore().getFcRuolo().getIdRuolo().toLowerCase() + ".png", f.getFcGiocatore().getFcRuolo().getDescRuolo());
 				cellLayout.add(img);
@@ -402,12 +418,12 @@ public class FormazioniView extends VerticalLayout{
 				cellLayout.getStyle().set("color", Costants.LIGHT_GRAY);
 			}
 			if (gd != null && gd.getFcGiocatore() != null) {
-				
+
 				String descGiocatore = gd.getFcGiocatore().getCognGiocatore();
 				if ("S".equals(gd.getFlagAttivo()) && (gd.getOrdinamento() == 14 || gd.getOrdinamento() == 16 || gd.getOrdinamento() == 18)) {
-					descGiocatore= "(-0,5) " + gd.getFcGiocatore().getCognGiocatore() ;
+					descGiocatore = "(-0,5) " + gd.getFcGiocatore().getCognGiocatore();
 				}
-				
+
 				Label lblGiocatore = new Label(descGiocatore);
 				lblGiocatore.getStyle().set("fontSize", "smaller");
 				cellLayout.add(lblGiocatore);
@@ -741,7 +757,7 @@ public class FormazioniView extends VerticalLayout{
 		try {
 			if (totPunti != null && totPunti.getTotPtRosa() != null) {
 				totPuntiRosa = formatter.format(totPunti.getTotPtRosa() == 0 ? "0" : totPunti.getTotPtRosa() / Costants.DIVISORE_100);
-				totPuntiTvsT = "" +totPunti.getPtTvsT();
+				totPuntiTvsT = "" + totPunti.getPtTvsT();
 			}
 		} catch (Exception e) {
 		}
