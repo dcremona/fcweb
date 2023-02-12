@@ -93,8 +93,6 @@ public class LoginView extends VerticalLayout {
 			return;
 		}
 
-		accessoController.insertAccesso(this.getClass().getName());
-
 //		WebBrowser browser = VaadinSession.getCurrent().getBrowser();
 //		LOG.info("browser.isChrome() " + browser.isChrome());
 //		LOG.info("browser.isChromeOS() " + browser.isChromeOS());
@@ -164,7 +162,7 @@ public class LoginView extends VerticalLayout {
 
 			boolean isAuthenticated = checkUser(e.getUsername(), e.getPassword());
 			if (isAuthenticated) {
-				//accessoController.insertAccesso(this.getClass().getName());
+				accessoController.insertAccesso(this.getClass().getName());
 
 				if ("logo.png".equals(imgLogo)) {
 					UI.getCurrent().navigate(HomeView.class);
