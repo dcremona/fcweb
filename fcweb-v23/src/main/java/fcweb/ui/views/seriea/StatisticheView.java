@@ -108,12 +108,13 @@ public class StatisticheView extends VerticalLayout
 	@Autowired
 	private ResourceLoader resourceLoader;
 
-	public List<FcAttore> squadreA = new ArrayList<FcAttore>();
-	public List<FcAttore> squadreB = new ArrayList<FcAttore>();
+	private List<FcAttore> squadreA = new ArrayList<FcAttore>();
+	private List<FcAttore> squadreB = new ArrayList<FcAttore>();
 	private ComboBox<FcAttore> comboAttoreA;
 	private ComboBox<FcAttore> comboAttoreB;
 	private ComboBox<String> comboPunti;
 
+	private List<FcAttore> propretari = new ArrayList<FcAttore>();
 	private List<FcSquadra> squadreSerieA = null;
 	private Button salvaStat = null;
 
@@ -125,6 +126,7 @@ public class StatisticheView extends VerticalLayout
 	private ComboBox<FcSquadra> comboSqudreA;
 	private NumberField txtQuotaz;
 	private ToggleButton freePlayers = null;
+	private ComboBox<FcAttore> comboProprietario;
 
 	private VerticalLayout verticalLayoutGrafico = new VerticalLayout();
 
@@ -146,6 +148,7 @@ public class StatisticheView extends VerticalLayout
 		squadreA = attoreController.findByActive(true);
 		squadreB = squadreA;
 		squadreSerieA = squadraController.findAll();
+		propretari = squadreA;
 	}
 
 	private void initLayout() {
@@ -351,8 +354,9 @@ public class StatisticheView extends VerticalLayout
 		comboSqudreA.setPlaceholder("Squadra");
 		comboSqudreA.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
-//			Image img = buildImage("classpath:/img/squadre/", item.getNomeSquadra() + ".png");
-//			container.add(img);			
+			// Image img = buildImage("classpath:/img/squadre/",
+			// item.getNomeSquadra() + ".png");
+			// container.add(img);
 			if (item != null && item.getImg() != null) {
 				try {
 					Image img = Utils.getImage(item.getNomeSquadra(), item.getImg().getBinaryStream());
@@ -375,6 +379,18 @@ public class StatisticheView extends VerticalLayout
 		freePlayers.setLabel("Free Players");
 		freePlayers.setValue(false);
 
+		comboProprietario = new ComboBox<>("Propretari");
+		comboProprietario.setItems(propretari);
+		comboProprietario.setItemLabelGenerator(ss -> ss.getDescAttore());
+		comboProprietario.setClearButtonVisible(true);
+		comboProprietario.setPlaceholder("Proprietario");
+		comboProprietario.setRenderer(new ComponentRenderer<>(item -> {
+			VerticalLayout container = new VerticalLayout();
+			Label lblProp = new Label(item.getDescAttore());
+			container.add(lblProp);
+			return container;
+		}));
+
 		hlayoutFilter.add(toggleP);
 		hlayoutFilter.add(toggleD);
 		hlayoutFilter.add(toggleC);
@@ -382,6 +398,7 @@ public class StatisticheView extends VerticalLayout
 		hlayoutFilter.add(comboSqudreA);
 		hlayoutFilter.add(txtQuotaz);
 		hlayoutFilter.add(freePlayers);
+		hlayoutFilter.add(comboProprietario);
 
 		layout.add(hlayoutFilter);
 
@@ -413,6 +430,9 @@ public class StatisticheView extends VerticalLayout
 			applyFilter(dataProvider);
 		});
 		freePlayers.addValueChangeListener(event -> {
+			applyFilter(dataProvider);
+		});
+		comboProprietario.addValueChangeListener(event -> {
 			applyFilter(dataProvider);
 		});
 
@@ -623,7 +643,7 @@ public class StatisticheView extends VerticalLayout
 			}
 			CustomMessageDialog.showMessageInfo(CustomMessageDialog.MSG_OK);
 		} catch (Exception e) {
-			CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC,e.getMessage());
+			CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, e.getMessage());
 		}
 	}
 
@@ -668,6 +688,7 @@ public class StatisticheView extends VerticalLayout
 		if (comboSqudreA.getValue() != null) {
 			dataProvider.addFilter(s -> comboSqudreA.getValue().getNomeSquadra().equals(s.getNomeSquadra()));
 		}
+
 		if (txtQuotaz.getValue() != null) {
 			dataProvider.addFilter(s -> s.getFcGiocatore().getQuotazione().intValue() <= txtQuotaz.getValue().intValue());
 		}
@@ -675,6 +696,11 @@ public class StatisticheView extends VerticalLayout
 		if (freePlayers.getValue()) {
 			dataProvider.addFilter(s -> StringUtils.isEmpty(s.getProprietario()));
 		}
+
+		if (comboProprietario.getValue() != null) {
+			dataProvider.addFilter(s -> comboProprietario.getValue().getDescAttore().equals(s.getProprietario()));
+		}
+
 	}
 
 	private Image buildImage(String path, String nomeImg) {
