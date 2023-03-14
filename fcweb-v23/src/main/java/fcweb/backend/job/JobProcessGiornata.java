@@ -1978,11 +1978,6 @@ public class JobProcessGiornata{
 			ArrayList<String> listaRuoliPossibiliCambi = new ArrayList<String>();
 			ArrayList<String> listaIdGiocatoriCambiati = new ArrayList<String>();
 
-			int contaPvotoZero = 0;
-			int contaDvotoZero = 0;
-			int contaCvotoZero = 0;
-			int contaAvotoZero = 0;
-
 			List<FcGiornataDett> lGiocatori2 = giornataDettRepository.findByFcAttoreAndFcGiornataInfoOrderByOrdinamentoAsc(attore, giornataInfo);
 			int countCambiEffettuati = 0;
 			for (FcGiornataDett gd : lGiocatori2) {
@@ -2003,139 +1998,116 @@ public class JobProcessGiornata{
 				}
 				if (gd.getOrdinamento() < 12 && gd.getVoto() == 0 && "N".equals(gd.getFlagAttivo())) {
 					listaIdGiocatoriCambiati.add("" + gd.getId().getIdGiocatore());
-
-					// conto i giocatori che non hanno preso un voto
-					if ("P".equals(gd.getFcGiocatore().getFcRuolo().getIdRuolo())) {
-						contaPvotoZero++;
-					} else if ("D".equals(gd.getFcGiocatore().getFcRuolo().getIdRuolo())) {
-						contaDvotoZero++;
-					} else if ("C".equals(gd.getFcGiocatore().getFcRuolo().getIdRuolo())) {
-						contaCvotoZero++;
-					} else if ("A".equals(gd.getFcGiocatore().getFcRuolo().getIdRuolo())) {
-						contaAvotoZero++;
-					}
 				}
 			}
 
-			LOG.info("contaPvotoZero " + contaPvotoZero);
-			LOG.info("contaDvotoZero " + contaDvotoZero);
-			LOG.info("contaCvotoZero " + contaCvotoZero);
-			LOG.info("contaAvotoZero " + contaAvotoZero);
+			LOG.info("countCambiEffettuati       " + countCambiEffettuati);
+			LOG.info("somma parziale prima cambi " + somma);
+			boolean bCambioEffettuato = false;
+			for (String r : listaRuoliPossibiliCambi) {
+					
+				if ("P".equals(r)) {
+					HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori2, 12, r, somma);
+					if (mapResult.containsKey("SOMMA")) {
+						somma = Integer.parseInt((String) mapResult.get("SOMMA"));
+						listaIdGiocatoriCambiati.add((String) mapResult.get("ID_GIOCATORE"));
+						bCambioEffettuato = true;
+						countCambiEffettuati++;
+					}
+				} else if ("D".equals(r)) {
+					HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori2, 13, r, somma);
+					if (mapResult.containsKey("SOMMA")) {
+						somma = Integer.parseInt((String) mapResult.get("SOMMA"));
+						listaIdGiocatoriCambiati.add((String) mapResult.get("ID_GIOCATORE"));
+						bCambioEffettuato = true;
+						countCambiEffettuati++;
+					}
+				} else if ("C".equals(r)) {
+					HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori2, 15, r, somma);
+					if (mapResult.containsKey("SOMMA")) {
+						somma = Integer.parseInt((String) mapResult.get("SOMMA"));
+						listaIdGiocatoriCambiati.add((String) mapResult.get("ID_GIOCATORE"));
+						bCambioEffettuato = true;
+						countCambiEffettuati++;
+					}
+				} else if ("A".equals(r)) {
+					HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori2, 17, r, somma);
+					if (mapResult.containsKey("SOMMA")) {
+						somma = Integer.parseInt((String) mapResult.get("SOMMA"));
+						listaIdGiocatoriCambiati.add((String) mapResult.get("ID_GIOCATORE"));
+						bCambioEffettuato = true;
+						countCambiEffettuati++;
+					}
+				}
+				
+				if (bCambioEffettuato) {
+					LOG.info("3 CAMBIO 1 RISERVA EFFETTUATO");
+					break;
+				}
+			}
 
-			boolean isTerzoCambioPossibile = contaPvotoZero > 0 || contaDvotoZero > 1 || contaCvotoZero > 1 || contaAvotoZero > 1;
-			LOG.info("isTerzoCambioPossibile " + isTerzoCambioPossibile);
+			LOG.info("1 somma parziale dopo cambi " + somma);
+			LOG.info("1 countCambiEffettuati      " + countCambiEffettuati);
 
-			if (isTerzoCambioPossibile) {
+			// sta iniziando ad essere complicato ... io riassumeri ..
+			// ammessi 2 cambi con le regole che già sappiamo..
+			// il 3 cambio è ammesso solo se non giocano 2 titolari di pari
+			// ruolo .. ( es NON posso cambiare PDA ma potrei cambiare PAA)
+			// in entrambi i casi vale la regola che il 2 cambio pari ruolo ha un malus di -0,5
 
-				LOG.info("countCambiEffettuati       " + countCambiEffettuati);
-				LOG.info("somma parziale prima cambi " + somma);
-				boolean bCambioEffettuato = false;
+			if (countCambiEffettuati < 3) {
+
+				listaRuoliPossibiliCambi = new ArrayList<String>();
+
+				List<FcGiornataDett> lGiocatori3 = giornataDettRepository.findByFcAttoreAndFcGiornataInfoOrderByOrdinamentoAsc(attore, giornataInfo);
+				for (FcGiornataDett gd : lGiocatori3) {
+					if (gd.getOrdinamento() == 14 && gd.getVoto() > 0 && "N".equals(gd.getFlagAttivo())) {
+						listaRuoliPossibiliCambi.add("D");
+					}
+					if (gd.getOrdinamento() == 16 && gd.getVoto() > 0 && "N".equals(gd.getFlagAttivo())) {
+						listaRuoliPossibiliCambi.add("C");
+					}
+					if (gd.getOrdinamento() == 18 && gd.getVoto() > 0 && "N".equals(gd.getFlagAttivo())) {
+						listaRuoliPossibiliCambi.add("A");
+					}
+				}
+
+				LOG.info("VERIFICO 3 CAMBIO 2 RISERVA");
 				for (String r : listaRuoliPossibiliCambi) {
-					if ("P".equals(r)) {
-						HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori2, 12, r, somma);
+					if ("D".equals(r)) {
+						HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori3, 14, r, somma);
 						if (mapResult.containsKey("SOMMA")) {
 							somma = Integer.parseInt((String) mapResult.get("SOMMA"));
-							listaIdGiocatoriCambiati.add((String) mapResult.get("ID_GIOCATORE"));
-							bCambioEffettuato = true;
-							countCambiEffettuati++;
-						}
-					} else if ("D".equals(r)) {
-						HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori2, 13, r, somma);
-						if (mapResult.containsKey("SOMMA")) {
-							somma = Integer.parseInt((String) mapResult.get("SOMMA"));
-							listaIdGiocatoriCambiati.add((String) mapResult.get("ID_GIOCATORE"));
+							somma = somma - Costants.DIV_0_5;
 							bCambioEffettuato = true;
 							countCambiEffettuati++;
 						}
 					} else if ("C".equals(r)) {
-						HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori2, 15, r, somma);
+						HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori3, 16, r, somma);
 						if (mapResult.containsKey("SOMMA")) {
 							somma = Integer.parseInt((String) mapResult.get("SOMMA"));
-							listaIdGiocatoriCambiati.add((String) mapResult.get("ID_GIOCATORE"));
+							somma = somma - Costants.DIV_0_5;
 							bCambioEffettuato = true;
 							countCambiEffettuati++;
 						}
 					} else if ("A".equals(r)) {
-						HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori2, 17, r, somma);
+						HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori3, 18, r, somma);
 						if (mapResult.containsKey("SOMMA")) {
 							somma = Integer.parseInt((String) mapResult.get("SOMMA"));
-							listaIdGiocatoriCambiati.add((String) mapResult.get("ID_GIOCATORE"));
+							somma = somma - Costants.DIV_0_5;
 							bCambioEffettuato = true;
 							countCambiEffettuati++;
 						}
 					}
 					if (bCambioEffettuato) {
-						LOG.info("3 CAMBIO 1 RISERVA EFFETTUATO");
+						LOG.info("3 CAMBIO 2 RISERVA EFFETTUATO");
 						break;
 					}
 				}
-
-				LOG.info("1 somma parziale dopo cambi " + somma);
-				LOG.info("1 countCambiEffettuati      " + countCambiEffettuati);
-
-				// sta iniziando ad essere complicato ... io riassumeri ..
-				// ammessi 2
-				// cambi con le regole che già sappiamo..
-				// il 3 cambio è ammesso solo se non giocano 2 titolari di pari
-				// ruolo .. ( es NON posso cambiare PDA ma potrei cambiare PAA)
-				// in entrambi i casi vale la regola che il 2 cambio pari ruolo
-				// ha
-				// un malus di -0,5
-
-				if (countCambiEffettuati < 3) {
-
-					listaRuoliPossibiliCambi = new ArrayList<String>();
-
-					List<FcGiornataDett> lGiocatori3 = giornataDettRepository.findByFcAttoreAndFcGiornataInfoOrderByOrdinamentoAsc(attore, giornataInfo);
-					for (FcGiornataDett gd : lGiocatori3) {
-						if (gd.getOrdinamento() == 14 && gd.getVoto() > 0 && "N".equals(gd.getFlagAttivo())) {
-							listaRuoliPossibiliCambi.add("D");
-						}
-						if (gd.getOrdinamento() == 16 && gd.getVoto() > 0 && "N".equals(gd.getFlagAttivo())) {
-							listaRuoliPossibiliCambi.add("C");
-						}
-						if (gd.getOrdinamento() == 18 && gd.getVoto() > 0 && "N".equals(gd.getFlagAttivo())) {
-							listaRuoliPossibiliCambi.add("A");
-						}
-					}
-
-					LOG.info("VERIFICO 3 CAMBIO 2 RISERVA");
-					for (String r : listaRuoliPossibiliCambi) {
-						if ("D".equals(r)) {
-							HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori3, 14, r, somma);
-							if (mapResult.containsKey("SOMMA")) {
-								somma = Integer.parseInt((String) mapResult.get("SOMMA"));
-								somma = somma - Costants.DIV_0_5;
-								bCambioEffettuato = true;
-								countCambiEffettuati++;
-							}
-						} else if ("C".equals(r)) {
-							HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori3, 16, r, somma);
-							if (mapResult.containsKey("SOMMA")) {
-								somma = Integer.parseInt((String) mapResult.get("SOMMA"));
-								somma = somma - Costants.DIV_0_5;
-								bCambioEffettuato = true;
-								countCambiEffettuati++;
-							}
-						} else if ("A".equals(r)) {
-							HashMap<String, String> mapResult = effettuaCambio(giornata, ID_ATTORE, listaIdGiocatoriCambiati, lGiocatori3, 18, r, somma);
-							if (mapResult.containsKey("SOMMA")) {
-								somma = Integer.parseInt((String) mapResult.get("SOMMA"));
-								somma = somma - Costants.DIV_0_5;
-								bCambioEffettuato = true;
-								countCambiEffettuati++;
-							}
-						}
-						if (bCambioEffettuato) {
-							LOG.info("3 CAMBIO 2 RISERVA EFFETTUATO");
-							break;
-						}
-					}
-				}
-
-				LOG.info("2 somma parziale dopo cambi " + somma);
-				LOG.info("2 countCambiEffettuati      " + countCambiEffettuati);
 			}
+
+			LOG.info("2 somma parziale dopo cambi " + somma);
+			LOG.info("2 countCambiEffettuati      " + countCambiEffettuati);
 
 			// BONUS MALUS SCHEMA
 			count_dif = count_dif - 2;
