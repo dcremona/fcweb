@@ -151,11 +151,11 @@ public class FcGiocatoreView extends VerticalLayout{
 							flag = Utils.buildFileSmall(imgPath + newImg, imgPath + "small-" + newImg);
 							LOG.info("bResult 2 " + flag);
 
-							if ( "DE-KETELAERE.png".equals(newImg) ) {
-								g.setImg(BlobProxy.generateProxy(Utils.getImage(imgPath + "small-" + newImg)));	
-							} else {
+//							if ( "DE-KETELAERE.png".equals(newImg) ) {
+//								g.setImg(BlobProxy.generateProxy(Utils.getImage(imgPath + "small-" + newImg)));	
+//							} else {
 								g.setImg(BlobProxy.generateProxy(Utils.getImage(imgPath + newImg)));	
-							}
+//							}
 							g.setImgSmall(BlobProxy.generateProxy(Utils.getImage(imgPath + "small-" + newImg)));
 
 							LOG.info("SAVE GIOCATORE ");
