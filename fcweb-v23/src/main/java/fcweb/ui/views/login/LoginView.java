@@ -1,5 +1,6 @@
 package fcweb.ui.views.login;
 
+import com.vaadin.flow.component.html.Image;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -10,7 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-
+import org.springframework.core.io.ResourceLoader;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,10 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -53,7 +52,7 @@ import fcweb.utils.CustomMessageDialog;
 @Route(value = "fcWeb")
 @RouteAlias(value = "")
 @PageTitle("")
-public class LoginView extends VerticalLayout {
+public class LoginView extends VerticalLayout{
 
 	private static final long serialVersionUID = 1L;
 
@@ -93,16 +92,16 @@ public class LoginView extends VerticalLayout {
 			return;
 		}
 
-//		WebBrowser browser = VaadinSession.getCurrent().getBrowser();
-//		LOG.info("browser.isChrome() " + browser.isChrome());
-//		LOG.info("browser.isChromeOS() " + browser.isChromeOS());
-//		LOG.info("browser.isIPad() " + browser.isIPad());
-//		LOG.info("browser.isIPhone() " + browser.isIPhone());
-//		LOG.info("browser.isIOS() " + browser.isIOS());
-//		LOG.info("browser.isSafari() " + browser.isSafari());
-//		LOG.info("browser.isFirefox() " + browser.isFirefox());
-//		LOG.info("browser.isLinux() " + browser.isLinux());
-//		LOG.info("browser.isWindows() " + browser.isWindows());
+		// WebBrowser browser = VaadinSession.getCurrent().getBrowser();
+		// LOG.info("browser.isChrome() " + browser.isChrome());
+		// LOG.info("browser.isChromeOS() " + browser.isChromeOS());
+		// LOG.info("browser.isIPad() " + browser.isIPad());
+		// LOG.info("browser.isIPhone() " + browser.isIPhone());
+		// LOG.info("browser.isIOS() " + browser.isIOS());
+		// LOG.info("browser.isSafari() " + browser.isSafari());
+		// LOG.info("browser.isFirefox() " + browser.isFirefox());
+		// LOG.info("browser.isLinux() " + browser.isLinux());
+		// LOG.info("browser.isWindows() " + browser.isWindows());
 
 		UI.getCurrent().getPage().retrieveExtendedClientDetails(event -> {
 			int resX = event.getScreenWidth();
@@ -126,21 +125,24 @@ public class LoginView extends VerticalLayout {
 		// }
 		// });
 
-//		UI.getCurrent().getPage().addBrowserWindowResizeListener(e -> {
-//			int winWidth = e.getWidth();
-//			int winHeight = e.getHeight();
-//			// Do something
-//			LOG.info("winWidth " + winWidth);
-//			LOG.info("winHeight " + winHeight);
-//		});
+		// UI.getCurrent().getPage().addBrowserWindowResizeListener(e -> {
+		// int winWidth = e.getWidth();
+		// int winHeight = e.getHeight();
+		// // Do something
+		// LOG.info("winWidth " + winWidth);
+		// LOG.info("winHeight " + winHeight);
+		// });
 
 		String imgLogo = (String) env.getProperty("img.logo");
-
 		Image img = buildImage("classpath:images/", imgLogo);
 		this.add(img);
 		this.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, img);
 
 		LoginI18n i18n = LoginI18n.createDefault();
+		i18n.setHeader(new LoginI18n.Header());
+		i18n.getHeader().setTitle("Fc App");
+		// i18n.getHeader().setDescription("Login using user/user or admin/admin");
+		i18n.setAdditionalInformation(null);
 
 		LoginI18n.Form i18nForm = i18n.getForm();
 		i18nForm.setTitle("Fc App");
@@ -212,8 +214,8 @@ public class LoginView extends VerticalLayout {
 				CustomMessageDialog.showMessageError("Email o Password non valide");
 				return false;
 			}
-			
-			if (!attore.isActive()){
+
+			if (!attore.isActive()) {
 				CustomMessageDialog.showMessageError("Utenza non attiva");
 				return false;
 			}
@@ -230,8 +232,9 @@ public class LoginView extends VerticalLayout {
 			properties.setProperty(prop.getKey(), prop.getValue());
 		}
 
-//		String springMailPassword = (String) env.getProperty("spring.mail.password");
-//		properties.setProperty("mail.password", springMailPassword);
+		// String springMailPassword = (String)
+		// env.getProperty("spring.mail.password");
+		// properties.setProperty("mail.password", springMailPassword);
 
 		FcCampionato campionato = campionatoController.findByActive(true);
 		if (campionato == null) {
@@ -278,11 +281,23 @@ public class LoginView extends VerticalLayout {
 
 	private String getNextDate(FcGiornataInfo giornataInfo) {
 
-		LocalDateTime dataAnticipo = giornataInfo.getDataAnticipo();
-		LocalDateTime dataGiornata = giornataInfo.getDataGiornata();
-		LocalDateTime dataPosticipo = giornataInfo.getDataPosticipo();
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime currentDate = LocalDateTime.now();
+
+		LocalDateTime dataAnticipo = null;
+		LocalDateTime dataAnticipo1 = giornataInfo.getDataAnticipo1();
+		LocalDateTime dataAnticipo2 = giornataInfo.getDataAnticipo2();
+		if (dataAnticipo1 != null && dataAnticipo2 != null) {
+			if (now.isBefore(dataAnticipo1)) {
+				dataAnticipo = dataAnticipo1;
+			} else if (now.isAfter(dataAnticipo1)) {
+				dataAnticipo = dataAnticipo2;
+			}
+		} else if (dataAnticipo1 == null && dataAnticipo2 != null) {
+			dataAnticipo = dataAnticipo2;
+		}
+		LocalDateTime dataGiornata = giornataInfo.getDataGiornata();
+		LocalDateTime dataPosticipo = giornataInfo.getDataPosticipo();
 
 		if (dataGiornata != null) {
 			currentDate = dataGiornata;
@@ -293,30 +308,20 @@ public class LoginView extends VerticalLayout {
 
 				LOG.info("now.getDayOfWeek() : " + now.getDayOfWeek());
 				LOG.info("dataGiornata.getDayOfWeek() : " + dataGiornata.getDayOfWeek());
-				if (now.isAfter(dataAnticipo) && now.isBefore(dataGiornata)
-						&& now.getDayOfWeek() == dataGiornata.getDayOfWeek()) {
+				if (now.isAfter(dataAnticipo) && now.isBefore(dataGiornata) && now.getDayOfWeek() == dataGiornata.getDayOfWeek()) {
 					currentDate = dataGiornata;
 				}
 			}
-			// if (dataAnticipo != null && dataPosticipo == null) {
-			// currentDate = giornataInfo.getDataAnticipo();
-			// } else if (giornataInfo.getDataAnticipo() != null &&
-			// now.isBefore(giornataInfo.getDataAnticipo())) {
-			// currentDate = giornataInfo.getDataAnticipo();
-			// } else if (now.isBefore(giornataInfo.getDataGiornata())) {
-			// currentDate = giornataInfo.getDataGiornata();
-			// }
 		}
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 		String currentDataGiornata = currentDate.format(formatter);
-		// DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		// String currentDataGiornata = dateFormat.format(currentDate);
 
 		return currentDataGiornata;
 	}
 
-	private Date getCalendarCountDown(String currentDataGiornata, String FUSO_ORARIO) {
+	private Date getCalendarCountDown(String currentDataGiornata,
+			String FUSO_ORARIO) {
 
 		Calendar c = Calendar.getInstance();
 		int dd = 0;
@@ -339,7 +344,8 @@ public class LoginView extends VerticalLayout {
 		return c.getTime();
 	}
 
-	private long getMillisDiff(String nextDate, String fusoOrario) throws Exception {
+	private long getMillisDiff(String nextDate, String fusoOrario)
+			throws Exception {
 
 		Calendar c = Calendar.getInstance();
 		DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -376,7 +382,7 @@ public class LoginView extends VerticalLayout {
 	}
 
 	private Image buildImage(String path, String nomeImg) {
-		StreamResource resource = new StreamResource(nomeImg, () -> {
+		StreamResource resource = new StreamResource(nomeImg,() -> {
 			Resource r = resourceLoader.getResource(path + nomeImg);
 			InputStream inputStream = null;
 			try {
@@ -387,7 +393,7 @@ public class LoginView extends VerticalLayout {
 			return inputStream;
 		});
 
-		Image img = new Image(resource, "");
+		Image img = new Image(resource,"");
 		return img;
 	}
 
