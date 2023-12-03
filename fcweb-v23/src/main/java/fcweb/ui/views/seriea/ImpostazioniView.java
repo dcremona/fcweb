@@ -157,7 +157,8 @@ public class ImpostazioniView extends VerticalLayout
 	private Checkbox chkSendMail;
 
 	private Details panelSetup;
-	private DateTimePicker da;
+	private DateTimePicker da1;
+	private DateTimePicker da2;
 	private DateTimePicker dg;
 	private DateTimePicker dp;
 
@@ -213,11 +214,16 @@ public class ImpostazioniView extends VerticalLayout
 			} else {
 				fcGiornataInfo2 = event.getValue();
 			}
-			if (fcGiornataInfo2 != null && da != null && dg != null && dp != null) {
+			if (fcGiornataInfo2 != null && da1 != null && da2 != null && dg != null && dp != null) {
 				LOG.info("gioranta " + "" + fcGiornataInfo2.getCodiceGiornata());
-				if (fcGiornataInfo2.getDataAnticipo() != null) {
+				if (fcGiornataInfo2.getDataAnticipo1() != null) {
 					// da.setValue(DateConvertUtils.asLocalDateTime(fcGiornataInfo2.getDataAnticipo()));
-					da.setValue(fcGiornataInfo2.getDataAnticipo());
+					da1.setValue(fcGiornataInfo2.getDataAnticipo1());
+				}
+
+				if (fcGiornataInfo2.getDataAnticipo2() != null) {
+					// da.setValue(DateConvertUtils.asLocalDateTime(fcGiornataInfo2.getDataAnticipo()));
+					da2.setValue(fcGiornataInfo2.getDataAnticipo2());
 				}
 				if (fcGiornataInfo2.getDataGiornata() != null) {
 					// dg.setValue(DateConvertUtils.asLocalDateTime(fcGiornataInfo2.getDataGiornata()));
@@ -273,7 +279,7 @@ public class ImpostazioniView extends VerticalLayout
 		resetFormazione = new Button("Reset Formazione");
 		resetFormazione.setIcon(VaadinIcon.PLUS_SQUARE_O.create());
 		resetFormazione.addClickListener(this);
-		
+
 		ultimaFormazione = new Button("Inserisci Ultima Formazione");
 		ultimaFormazione.setIcon(VaadinIcon.PLUS_SQUARE_O.create());
 		ultimaFormazione.addClickListener(this);
@@ -364,12 +370,13 @@ public class ImpostazioniView extends VerticalLayout
 		comboSqudreA.setPlaceholder("Squadra");
 		comboSqudreA.setRenderer(new ComponentRenderer<>(item -> {
 			VerticalLayout container = new VerticalLayout();
-//			Image img = buildImage("classpath:/img/squadre/", item.getNomeSquadra() + ".png");
-//			container.add(img);
+			// Image img = buildImage("classpath:/img/squadre/",
+			// item.getNomeSquadra() + ".png");
+			// container.add(img);
 			if (item != null && item.getImg() != null) {
 				try {
 					Image img = Utils.getImage(item.getNomeSquadra(), item.getImg().getBinaryStream());
-					container.add(img);		
+					container.add(img);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -428,10 +435,15 @@ public class ImpostazioniView extends VerticalLayout
 		panelCalcola.setOpened(true);
 		this.add(panelCalcola);
 
-		da = new DateTimePicker("Data Anticipo");
-		if (giornataInfo.getDataAnticipo() != null) {
+		da1 = new DateTimePicker("Data Anticipo1");
+		if (giornataInfo.getDataAnticipo1() != null) {
+			da1.setValue(giornataInfo.getDataAnticipo1());
+		}
+
+		da2 = new DateTimePicker("Data Anticipo2");
+		if (giornataInfo.getDataAnticipo2() != null) {
 			// da.setValue(DateConvertUtils.asLocalDateTime(giornataInfo.getDataAnticipo()));
-			da.setValue(giornataInfo.getDataAnticipo());
+			da2.setValue(giornataInfo.getDataAnticipo2());
 		}
 
 		dg = new DateTimePicker("Data Giornata");
@@ -459,9 +471,12 @@ public class ImpostazioniView extends VerticalLayout
 		layoutRow1.add(resetDate);
 
 		HorizontalLayout layoutRow2 = new HorizontalLayout();
-		layoutRow2.add(da);
-		layoutRow2.add(dg);
-		layoutRow2.add(dp);
+		layoutRow2.add(da1);
+		layoutRow2.add(da2);
+		
+		HorizontalLayout layoutRow22 = new HorizontalLayout();
+		layoutRow22.add(dg);
+		layoutRow22.add(dp);
 
 		VerticalLayout pnlUfficiali = new VerticalLayout();
 		pnlUfficiali.setSizeUndefined();
@@ -493,6 +508,7 @@ public class ImpostazioniView extends VerticalLayout
 
 		layoutDate.add(layoutRow1);
 		layoutDate.add(layoutRow2);
+		layoutDate.add(layoutRow22);
 		layoutDate.add(layoutRow3);
 
 		Details panelGiorn = new Details("Imposta Date",layoutDate);
@@ -542,7 +558,7 @@ public class ImpostazioniView extends VerticalLayout
 
 			FcAttore attore = (FcAttore) comboAttore.getValue();
 			LOG.info("giornata " + giornata);
-			
+
 			String basePathData = (String) p.get("PATH_TMP");
 			LOG.info("basePathData " + basePathData);
 			File f = new File(basePathData);
@@ -568,7 +584,7 @@ public class ImpostazioniView extends VerticalLayout
 				// **************************************
 				// DOWNLOAD FILE QUOTAZIONI
 				// **************************************
-				
+
 				String urlFanta = (String) p.get("URL_FANTA");
 				String basePath = basePathData;
 				String quotaz = "Giocatori-Quotazioni-Excel";
@@ -583,7 +599,7 @@ public class ImpostazioniView extends VerticalLayout
 				// **************************************
 				// UPDATE GIOCATORI
 				// **************************************
-				
+
 				LOG.info("httpUrlImg " + Costants.HTTP_URL_IMG);
 				String imgPath = basePathData;
 				String fileName = "Q_" + giornata;
@@ -724,24 +740,28 @@ public class ImpostazioniView extends VerticalLayout
 				jobProcessSendMail.writePdfAndSendMail(campionato, giornataInfo, p, pathImg, basePathData);
 
 			} else if (event.getSource() == salva) {
-				LOG.info("da " + da.getValue());
+				LOG.info("da1 " + da1.getValue());
+				LOG.info("da2 " + da2.getValue());
 				LOG.info("dg " + dg.getValue());
 				LOG.info("dp " + dp.getValue());
-				giornataInfo.setDataAnticipo(da.getValue());
+				giornataInfo.setDataAnticipo1(da1.getValue());
+				giornataInfo.setDataAnticipo2(da2.getValue());
 				giornataInfo.setDataGiornata(dg.getValue());
 				giornataInfo.setDataPosticipo(dp.getValue());
 				// giornataInfo.setDataAnticipo(DateConvertUtils.asUtilDate(da.getValue()));
 				// giornataInfo.setDataGiornata(DateConvertUtils.asUtilDate(dg.getValue()));
 				// giornataInfo.setDataPosticipo(DateConvertUtils.asUtilDate(dp.getValue()));
-				LOG.info("getDataAnticipo " + giornataInfo.getDataAnticipo());
+				LOG.info("getDataAnticipo2 " + giornataInfo.getDataAnticipo2());
 				LOG.info("getDataGiornata " + giornataInfo.getDataGiornata());
 				LOG.info("getDataPosticipo " + giornataInfo.getDataPosticipo());
 				giornataInfoController.updateGiornataInfo(giornataInfo);
 			} else if (event.getSource() == resetDate) {
-				da.setValue(null);
+				da1.setValue(null);
+				da2.setValue(null);
 				dg.setValue(null);
 				dp.setValue(null);
-				LOG.info("1 " + da.getValue());
+				LOG.info("1 " + da1.getValue());
+				LOG.info("1 " + da2.getValue());
 				LOG.info("1 " + dg.getValue());
 				LOG.info("1 " + dp.getValue());
 
@@ -760,25 +780,38 @@ public class ImpostazioniView extends VerticalLayout
 
 				if (listDate.size() == 1) {
 					LocalDateTime localDateTime1 = listDate.get(0);
-					da.setValue(null);
+					da1.setValue(null);
+					da2.setValue(null);
 					dg.setValue(localDateTime1.minus(1, ChronoUnit.MINUTES));
 					dp.setValue(null);
 				} else if (listDate.size() == 2) {
 					LocalDateTime localDateTime1 = listDate.get(0);
 					LocalDateTime localDateTime2 = listDate.get(1);
-					da.setValue(localDateTime1.minus(1, ChronoUnit.MINUTES));
+					da1.setValue(null);
+					da2.setValue(localDateTime1.minus(1, ChronoUnit.MINUTES));
 					dg.setValue(localDateTime2.minus(1, ChronoUnit.MINUTES));
 					dp.setValue(null);
-				} else if (listDate.size() > 2) {
+				} else if (listDate.size() == 3) {
 					LocalDateTime localDateTime1 = listDate.get(0);
 					LocalDateTime localDateTime2 = listDate.get(1);
 					LocalDateTime localDateTime3 = listDate.get(2);
-					da.setValue(localDateTime1.minus(1, ChronoUnit.MINUTES));
+					da1.setValue(null);
+					da2.setValue(localDateTime1.minus(1, ChronoUnit.MINUTES));
 					dg.setValue(localDateTime2.minus(1, ChronoUnit.MINUTES));
 					dp.setValue(localDateTime3.minus(1, ChronoUnit.MINUTES));
+				} else if (listDate.size() > 3) {
+					LocalDateTime localDateTime1 = listDate.get(0);
+					LocalDateTime localDateTime2 = listDate.get(1);
+					LocalDateTime localDateTime3 = listDate.get(2);
+					LocalDateTime localDateTime4 = listDate.get(3);
+					da1.setValue(localDateTime1.minus(1, ChronoUnit.MINUTES));
+					da2.setValue(localDateTime2.minus(1, ChronoUnit.MINUTES));
+					dg.setValue(localDateTime3.minus(1, ChronoUnit.MINUTES));
+					dp.setValue(localDateTime4.minus(1, ChronoUnit.MINUTES));
 				}
 
-				LOG.info("2 " + da.getValue());
+				LOG.info("2 " + da1.getValue());
+				LOG.info("2 " + da2.getValue());
 				LOG.info("2 " + dg.getValue());
 				LOG.info("2 " + dp.getValue());
 			}
@@ -822,7 +855,8 @@ public class ImpostazioniView extends VerticalLayout
 
 		formazioneHtml += "<br>";
 		formazioneHtml += "<br>";
-		formazioneHtml += "<p>Data Anticipo:  " + (ggInfo.getDataAnticipo() == null ? "" : Utils.formatLocalDateTime(ggInfo.getDataAnticipo(), "dd/MM/yyyy HH:mm")) + "</p>";
+		formazioneHtml += "<p>Data Anticipo1:  " + (ggInfo.getDataAnticipo1() == null ? "" : Utils.formatLocalDateTime(ggInfo.getDataAnticipo1(), "dd/MM/yyyy HH:mm")) + "</p>";
+		formazioneHtml += "<p>Data Anticipo2:  " + (ggInfo.getDataAnticipo2() == null ? "" : Utils.formatLocalDateTime(ggInfo.getDataAnticipo2(), "dd/MM/yyyy HH:mm")) + "</p>";
 		formazioneHtml += "<p>Data Giornata:  " + (ggInfo.getDataGiornata() == null ? "" : Utils.formatLocalDateTime(ggInfo.getDataGiornata(), "dd/MM/yyyy HH:mm")) + "</p>";
 		formazioneHtml += "<p>Data Posticipo: " + (ggInfo.getDataPosticipo() == null ? "" : Utils.formatLocalDateTime(ggInfo.getDataPosticipo(), "dd/MM/yyyy HH:mm")) + "</p>";
 		formazioneHtml += "<br>";
@@ -859,8 +893,8 @@ public class ImpostazioniView extends VerticalLayout
 		LOG.info(formazioneHtml);
 
 		String from = (String) env.getProperty("spring.mail.username");
-		
-		client.sendMail(from,to, cc, bcc, subject, formazioneHtml, "text/html", "3", null);
+
+		client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", null);
 
 	}
 
