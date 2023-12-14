@@ -301,14 +301,20 @@ public class LoginView extends VerticalLayout{
 
 		if (dataGiornata != null) {
 			currentDate = dataGiornata;
-			if (dataAnticipo != null && dataPosticipo == null) {
-				currentDate = dataAnticipo;
-			} else if (dataAnticipo != null && dataPosticipo != null) {
-				currentDate = dataAnticipo;
 
+			if (dataAnticipo != null) {
+				currentDate = dataAnticipo;
 				LOG.info("now.getDayOfWeek() : " + now.getDayOfWeek());
 				LOG.info("dataGiornata.getDayOfWeek() : " + dataGiornata.getDayOfWeek());
-				if (now.isAfter(dataAnticipo) && now.isBefore(dataGiornata) && now.getDayOfWeek() == dataGiornata.getDayOfWeek()) {
+				if ( now.isAfter(dataAnticipo) && now.getDayOfWeek() == dataGiornata.getDayOfWeek() ) {
+					currentDate = dataGiornata;
+				}
+			}
+			
+			if (dataPosticipo != null) {
+				LOG.info("now.getDayOfWeek() : " + now.getDayOfWeek());
+				LOG.info("dataPosticipo.getDayOfWeek() : " + dataPosticipo.getDayOfWeek());
+				if ( now.getDayOfWeek() == dataPosticipo.getDayOfWeek() ) {
 					currentDate = dataGiornata;
 				}
 			}
