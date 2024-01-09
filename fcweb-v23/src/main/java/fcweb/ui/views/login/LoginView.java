@@ -317,6 +317,10 @@ public class LoginView extends VerticalLayout{
 				if ( now.getDayOfWeek() == dataPosticipo.getDayOfWeek() ) {
 					currentDate = dataGiornata;
 				}
+			} else {
+				if (dataAnticipo != null) {
+					currentDate = dataAnticipo;	
+				}
 			}
 		}
 
