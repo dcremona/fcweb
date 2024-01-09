@@ -1,7 +1,6 @@
 package fcweb.utils;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.TextArea;
 
 import de.codecamp.vaadin.components.messagedialog.MessageDialog;
@@ -28,7 +27,8 @@ public class CustomMessageDialog{
 		MessageDialog messageDialog = new MessageDialog().setTitle(TITLE_MSG_ERROR, VaadinIcon.WARNING.create()).setMessage(msg == null ? "ND" : msg);
 		// messageDialog.addButtonToMiddle().text("Annulla").tertiary().onClick(ev
 		// -> Notification.show("Annulla")).closeOnClick();
-		messageDialog.addButtonToMiddle().text(LABEL_CHIUDI).primary().onClick(ev -> Notification.show(LABEL_CHIUDI)).closeOnClick();
+		//messageDialog.addButtonToMiddle().text(LABEL_CHIUDI).primary().onClick(ev -> Notification.show(LABEL_CHIUDI)).closeOnClick();
+		messageDialog.addButtonToMiddle().text(LABEL_CHIUDI).primary().closeOnClick();
 		messageDialog.open();
 	}
 
@@ -36,7 +36,7 @@ public class CustomMessageDialog{
 		MessageDialog messageDialog = new MessageDialog().setTitle(TITLE_MSG_INFO, VaadinIcon.EXCLAMATION.create()).setMessage(msg == null ? "ND" : msg);
 		// messageDialog.addButtonToMiddle().text("Annulla").tertiary().onClick(ev
 		// -> Notification.show("Annulla")).closeOnClick();
-		messageDialog.addButtonToMiddle().text(LABEL_CHIUDI).primary().onClick(ev -> Notification.show(LABEL_CHIUDI)).closeOnClick();
+		messageDialog.addButtonToMiddle().text(LABEL_CHIUDI).primary().closeOnClick();
 		messageDialog.open();
 	}
 
