@@ -26,7 +26,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,10 +48,10 @@ import fcweb.backend.data.entity.FcPagelle;
 import fcweb.backend.service.AttoreService;
 import fcweb.backend.service.ClassificaService;
 import fcweb.backend.service.ClassificaTotalePuntiService;
-import fcweb.backend.service.GiornataService;
-import fcweb.backend.service.GiornataDettService;
 import fcweb.backend.service.GiornataDettInfoService;
+import fcweb.backend.service.GiornataDettService;
 import fcweb.backend.service.GiornataInfoService;
+import fcweb.backend.service.GiornataService;
 import fcweb.utils.Costants;
 import fcweb.utils.JasperReporUtils;
 
@@ -64,7 +64,7 @@ public class JobProcessSendMail{
 	private Environment env;
 
 	@Autowired
-	private JavaMailSender javaMailSender;
+	private JavaMailSenderImpl javaMailSender;
 
 	@Autowired
 	private GiornataInfoService giornataInfoController;

@@ -30,7 +30,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.vaadin.ronny.AbsoluteLayout;
 
 import com.flowingcode.vaadin.addons.simpletimer.SimpleTimer;
@@ -93,7 +93,7 @@ public class EmTeamInsertView extends VerticalLayout
 	private Environment env;
 
 	@Autowired
-	private JavaMailSender javaMailSender;
+	private JavaMailSenderImpl javaMailSender;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;

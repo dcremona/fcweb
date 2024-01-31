@@ -33,7 +33,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.vaadin.ronny.AbsoluteLayout;
 import org.vaadin.tabs.PagedTabs;
 
@@ -105,7 +105,7 @@ public class EmMercatoView extends VerticalLayout
 	private Environment env;
 
 	@Autowired
-	private JavaMailSender javaMailSender;
+	private JavaMailSenderImpl javaMailSender;
 
 	private static final String width = "100px";
 	private static final String height = "120px";
