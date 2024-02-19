@@ -117,10 +117,10 @@ public class JobProcessGiornata{
 
 	@Autowired
 	private ClassificaTotalePuntiRepository classificaTotalePuntiRepository;
-	
+
 	@Autowired
 	private GiornataGiocatoreRepository giornataGiocatoreRepository;
-	
+
 	public HashMap<Object, Object> initDbGiocatori(String httpUrlImg,
 			String imgPath, String fileName, boolean updateQuotazioni,
 			boolean updateImg, String percentuale) throws Exception {
@@ -4417,18 +4417,20 @@ public class JobProcessGiornata{
 			}
 		}
 	}
-	
-	public void initDbGiornataGiocatore(FcGiornataInfo giornataInfo,String fileName,boolean bSqualificato,boolean bInfortunato) throws Exception {
+
+	public void initDbGiornataGiocatore(FcGiornataInfo giornataInfo,
+			String fileName, boolean bSqualificato, boolean bInfortunato)
+			throws Exception {
 
 		LOG.info("START initDbGiornataGiocatore");
-		
+
 		FileReader fileReader = null;
 		CSVParser csvFileParser = null;
 
 		// Create the CSVFormat object with the header mapping
 		@SuppressWarnings("deprecation")
 		CSVFormat csvFileFormat = CSVFormat.EXCEL.withDelimiter(';');
-		
+
 		try {
 
 			// initialize FileReader object
@@ -4440,17 +4442,17 @@ public class JobProcessGiornata{
 			// Get a list of CSV file records
 			List<CSVRecord> csvRecords = csvFileParser.getRecords();
 
-			//LocalDateTime now = LocalDateTime.now();
+			// LocalDateTime now = LocalDateTime.now();
 
 			for (int i = 1; i < csvRecords.size(); i++) {
 				CSVRecord record = csvRecords.get(i);
-				
+
 				String cognGiocatore = record.get(0);
 				String note = record.get(1);
-				
+
 				List<FcGiocatore> listGiocatore = this.giocatoreRepository.findByCognGiocatoreContaining(cognGiocatore);
 				FcGiocatore giocatore = listGiocatore.get(0);
-				
+
 				FcGiornataGiocatore giornataGiocatore = new FcGiornataGiocatore();
 				FcGiornataGiocatoreId giornataGiocatorePK = new FcGiornataGiocatoreId();
 				giornataGiocatorePK.setIdGiornata(giornataInfo.getCodiceGiornata());
@@ -4459,14 +4461,14 @@ public class JobProcessGiornata{
 				giornataGiocatore.setInfortunato(bInfortunato);
 				giornataGiocatore.setSqualificato(bSqualificato);
 				if (bInfortunato) {
-					giornataGiocatore.setNote("Infortunato: " + note);	
-				} else if (bSqualificato) { 
+					giornataGiocatore.setNote("Infortunato: " + note);
+				} else if (bSqualificato) {
 					giornataGiocatore.setNote("Squalificato: " + note);
 				}
 				this.giornataGiocatoreRepository.save(giornataGiocatore);
 
 			}
-			
+
 			LOG.info("END initDbGiornataGiocatore");
 
 		} catch (Exception e) {
@@ -4474,7 +4476,7 @@ public class JobProcessGiornata{
 			LOG.error("Error in initDbGiornataGiocatore !!!");
 			throw e;
 		} finally {
-			
+
 			if (fileReader != null) {
 				fileReader.close();
 			}
