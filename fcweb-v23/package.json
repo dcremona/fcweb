@@ -315,10 +315,10 @@
     "@vaadin-component-factory/vcf-toggle-button": "$@vaadin-component-factory/vcf-toggle-button",
     "apexcharts": "$apexcharts",
     "date-fns": "$date-fns",
-    "line-awesome": "$line-awesome",
     "lit-element": "$lit-element",
     "lit-html": "$lit-html",
-    "onecolor": "$onecolor"
+    "onecolor": "$onecolor",
+    "line-awesome": "$line-awesome"
   },
   "vaadin": {
     "dependencies": {
