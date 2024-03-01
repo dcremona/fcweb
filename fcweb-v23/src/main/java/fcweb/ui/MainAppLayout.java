@@ -72,6 +72,7 @@ import fcweb.ui.views.seriea.MercatoView;
 import fcweb.ui.views.seriea.RegolamentoView;
 import fcweb.ui.views.seriea.SquadreAllView;
 import fcweb.ui.views.seriea.SquadreView;
+import fcweb.ui.views.seriea.SqualificatiIndisponibiliView;
 import fcweb.ui.views.seriea.StatisticheView;
 import fcweb.ui.views.seriea.TeamInsertMobileView;
 import fcweb.ui.views.seriea.TeamInsertView;
@@ -1027,6 +1028,7 @@ public class MainAppLayout extends AppLayout {
                         new MenuItemInfo("Classifica", "la la-table", ClassificaView.class), //
                         new MenuItemInfo("Formazioni", "la la-calendar-check", FormazioniView.class), //
                         new MenuItemInfo("Statistiche", "la la-chart-line", StatisticheView.class), //
+                        new MenuItemInfo("Squalificati-Indisponibili", "la la-chart-line", SqualificatiIndisponibiliView.class), //
                         new MenuItemInfo("Download", "la la-download", DownloadView.class), //
                         new MenuItemInfo("Albo", "la la-history", AlboView.class), //
                         new MenuItemInfo("Regolamento", "la la-comment", RegolamentoView.class), //
@@ -1062,6 +1064,7 @@ public class MainAppLayout extends AppLayout {
                         new MenuItemInfo("Classifica", "la la-table", ClassificaView.class), //
                         new MenuItemInfo("Formazioni", "la la-calendar-check", FormazioniView.class), //
                         new MenuItemInfo("Statistiche", "la la-chart-line", StatisticheView.class), //
+                        new MenuItemInfo("Squalificati-Indisponibili", "la la-chart-line", SqualificatiIndisponibiliView.class), //
                         new MenuItemInfo("Download", "la la-download", DownloadView.class), //
                         new MenuItemInfo("Albo", "la la-history", AlboView.class), //
                         new MenuItemInfo("Regolamento", "la la-comment", RegolamentoView.class), //
