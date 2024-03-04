@@ -30,10 +30,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 
-import common.mail.MailClient;
 import common.util.Buffer;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
@@ -57,6 +55,7 @@ import fcweb.backend.service.AttoreRepository;
 import fcweb.backend.service.CalendarioCompetizioneRepository;
 import fcweb.backend.service.CampionatoRepository;
 import fcweb.backend.service.ClassificaTotalePuntiRepository;
+import fcweb.backend.service.EmailService;
 import fcweb.backend.service.FormazioneRepository;
 import fcweb.backend.service.GiocatoreRepository;
 import fcweb.backend.service.GiornataDettRepository;
@@ -77,7 +76,7 @@ public class JobProcessGiornata{
 	private Environment env;
 
 	@Autowired
-	private JavaMailSenderImpl javaMailSender;
+	private EmailService emailService;
 
 	@Autowired
 	private CampionatoRepository campionatoRepository;
@@ -959,7 +958,6 @@ public class JobProcessGiornata{
 				}
 			}
 
-			MailClient client = new MailClient(javaMailSender);
 			String email_destinatario = (String) p.getProperty("to");
 			String[] to = null;
 			if (email_destinatario != null && !email_destinatario.equals("")) {
@@ -989,10 +987,18 @@ public class JobProcessGiornata{
 			formazioneHtml += "<p>Ciao Davide</p>\n";
 			formazioneHtml += "</body>\n";
 			formazioneHtml += "<html>";
-
-			String from = (String) env.getProperty("spring.mail.username");
-
-			client.sendMail(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", att);
+			
+			try {
+				String from = (String) env.getProperty("spring.mail.secondary.username");
+				emailService.sendMail(false,from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", att);
+			} catch (Exception e) {
+				try {
+					String from = (String) env.getProperty("spring.mail.primary.username");
+					emailService.sendMail(true,from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", att);
+				} catch (Exception e2) {
+					throw e2;
+				}
+			}
 
 			LOG.info("END aggiornamentoPFGiornata");
 

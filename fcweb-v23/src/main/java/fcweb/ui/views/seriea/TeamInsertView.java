@@ -18,9 +18,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +28,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.vaadin.ronny.AbsoluteLayout;
 
 import com.flowingcode.vaadin.addons.simpletimer.SimpleTimer;
@@ -57,8 +53,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 
-import common.mail.ContentIdGenerator;
-import common.mail.MailClient;
+import common.util.ContentIdGenerator;
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
 import fcweb.backend.data.entity.FcCalendarioCompetizione;
@@ -73,6 +68,7 @@ import fcweb.backend.data.entity.FcStatistiche;
 import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.AttoreService;
 import fcweb.backend.service.CalendarioCompetizioneService;
+import fcweb.backend.service.EmailService;
 import fcweb.backend.service.FormazioneService;
 import fcweb.backend.service.GiornataDettService;
 import fcweb.backend.service.GiornataGiocatoreService;
@@ -95,7 +91,7 @@ public class TeamInsertView extends VerticalLayout
 	private Environment env;
 
 	@Autowired
-	private JavaMailSenderImpl javaMailSender;
+	private EmailService emailService;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -1838,8 +1834,7 @@ public class TeamInsertView extends VerticalLayout
 		}
 	}
 
-	private void sendNewMail(String desc_giornata) throws AddressException,
-			IOException, MessagingException, NamingException {
+	private void sendNewMail(String desc_giornata) throws Exception {
 
 		String subject = "Formazione " + descAttore + " - " + desc_giornata;
 
@@ -2033,8 +2028,6 @@ public class TeamInsertView extends VerticalLayout
 		formazioneHtml += "</body>\n";
 		formazioneHtml += "<html>";
 
-		MailClient client = new MailClient(javaMailSender);
-
 		String email_destinatario = "";
 		String ACTIVE_MAIL = (String) p.getProperty("ACTIVE_MAIL");
 		if ("true".equals(ACTIVE_MAIL)) {
@@ -2056,10 +2049,17 @@ public class TeamInsertView extends VerticalLayout
 		String[] cc = null;
 		String[] bcc = null;
 
-		String from = (String) env.getProperty("spring.mail.username");
-		
-		client.sendMail2(from,to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
-
+		try {
+			String from = (String) env.getProperty("spring.mail.secondary.username");
+			emailService.sendMail2(false,from,to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
+		} catch (Exception e) {
+			try {
+				String from = (String) env.getProperty("spring.mail.primary.username");
+				emailService.sendMail2(true,from,to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
+			} catch (Exception e2) {
+				throw e2;
+			}
+		}
 	}
 
 	private Image buildImage(String path, String nomeImg) {

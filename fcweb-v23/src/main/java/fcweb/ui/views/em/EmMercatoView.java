@@ -19,9 +19,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.naming.NamingException;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
@@ -33,7 +30,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.vaadin.ronny.AbsoluteLayout;
 import org.vaadin.tabs.PagedTabs;
 
@@ -65,8 +61,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 
-import common.mail.ContentIdGenerator;
-import common.mail.MailClient;
+import common.util.ContentIdGenerator;
 import common.util.Utils;
 import de.codecamp.vaadin.components.messagedialog.MessageDialog;
 import fcweb.backend.data.entity.FcAttore;
@@ -81,6 +76,7 @@ import fcweb.backend.data.entity.FcRuolo;
 import fcweb.backend.data.entity.FcSquadra;
 import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.AttoreService;
+import fcweb.backend.service.EmailService;
 import fcweb.backend.service.FormazioneService;
 import fcweb.backend.service.GiocatoreService;
 import fcweb.backend.service.MercatoInfoService;
@@ -105,7 +101,7 @@ public class EmMercatoView extends VerticalLayout
 	private Environment env;
 
 	@Autowired
-	private JavaMailSenderImpl javaMailSender;
+	private EmailService emailService;
 
 	private static final String width = "100px";
 	private static final String height = "120px";
@@ -2311,8 +2307,7 @@ public class EmMercatoView extends VerticalLayout
 
 	}
 
-	private void sendNewMail() throws AddressException, IOException,
-			MessagingException, NamingException {
+	private void sendNewMail() throws Exception {
 		LOG.info("START sendNewMail");
 
 		String subject = "Mercato-Cambi " + attore.getDescAttore() + " - " + currentDescGiornata;
@@ -2560,8 +2555,6 @@ public class EmMercatoView extends VerticalLayout
 		formazioneHtml += "</BODY>\n";
 		formazioneHtml += "<HTML>";
 
-		MailClient client = new MailClient(javaMailSender);
-
 		String email_destinatario = "";
 		String ACTIVE_MAIL = (String) p.getProperty("ACTIVE_MAIL");
 		if ("true".equals(ACTIVE_MAIL)) {
@@ -2583,10 +2576,18 @@ public class EmMercatoView extends VerticalLayout
 		String[] cc = null;
 		String[] bcc = null;
 
-		String from = (String) env.getProperty("spring.mail.username");
-
-		client.sendMail2(from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
-
+		try {
+			String from = (String) env.getProperty("spring.mail.secondary.username");
+			emailService.sendMail2(false,from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
+		} catch (Exception e) {
+			try {
+				String from = (String) env.getProperty("spring.mail.primary.username");
+				emailService.sendMail2(true,from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
+			} catch (Exception e2) {
+				throw e2;
+			}
+		}
+		
 		LOG.info("END sendNewMail");
 
 	}
