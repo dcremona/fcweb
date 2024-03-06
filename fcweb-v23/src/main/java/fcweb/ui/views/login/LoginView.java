@@ -1,17 +1,12 @@
 package fcweb.ui.views.login;
 
-import com.vaadin.flow.component.html.Image;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import org.springframework.core.io.ResourceLoader;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,8 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -252,11 +249,11 @@ public class LoginView extends VerticalLayout{
 		LOG.info("CurrentGG: " + giornataInfo.getCodiceGiornata());
 
 		String fusoOrario = (String) properties.getProperty("FUSO_ORARIO");
-		String nextDate = getNextDate(giornataInfo);
+		String nextDate = Utils.getNextDate(giornataInfo);
 
 		long millisDiff = 0;
 		try {
-			millisDiff = getMillisDiff(nextDate, fusoOrario);
+			millisDiff = Utils.getMillisDiff(nextDate, fusoOrario);
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
 		}
@@ -273,57 +270,6 @@ public class LoginView extends VerticalLayout{
 		VaadinSession.getCurrent().setAttribute("COUNTDOWNDATE", getCalendarCountDown(nextDate, fusoOrario));
 
 		return true;
-	}
-
-	private String getNextDate(FcGiornataInfo giornataInfo) {
-
-		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime currentDate = LocalDateTime.now();
-
-		LocalDateTime dataAnticipo = null;
-		LocalDateTime dataAnticipo1 = giornataInfo.getDataAnticipo1();
-		LocalDateTime dataAnticipo2 = giornataInfo.getDataAnticipo2();
-		if (dataAnticipo1 != null && dataAnticipo2 != null) {
-			if (now.isBefore(dataAnticipo1)) {
-				dataAnticipo = dataAnticipo1;
-			} else if (now.isAfter(dataAnticipo1)) {
-				dataAnticipo = dataAnticipo2;
-			}
-		} else if (dataAnticipo1 == null && dataAnticipo2 != null) {
-			dataAnticipo = dataAnticipo2;
-		}
-		LocalDateTime dataGiornata = giornataInfo.getDataGiornata();
-		LocalDateTime dataPosticipo = giornataInfo.getDataPosticipo();
-
-		if (dataGiornata != null) {
-			currentDate = dataGiornata;
-
-			if (dataAnticipo != null) {
-				currentDate = dataAnticipo;
-				LOG.info("now.getDayOfWeek() : " + now.getDayOfWeek());
-				LOG.info("dataGiornata.getDayOfWeek() : " + dataGiornata.getDayOfWeek());
-				if ( now.isAfter(dataAnticipo) && now.getDayOfWeek() == dataGiornata.getDayOfWeek() ) {
-					currentDate = dataGiornata;
-				}
-			}
-			
-			if (dataPosticipo != null) {
-				LOG.info("now.getDayOfWeek() : " + now.getDayOfWeek());
-				LOG.info("dataPosticipo.getDayOfWeek() : " + dataPosticipo.getDayOfWeek());
-				if ( now.getDayOfWeek() == dataPosticipo.getDayOfWeek() ) {
-					currentDate = dataGiornata;
-				}
-			} else {
-				if (dataAnticipo != null) {
-					currentDate = dataAnticipo;	
-				}
-			}
-		}
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		String currentDataGiornata = currentDate.format(formatter);
-
-		return currentDataGiornata;
 	}
 
 	private Date getCalendarCountDown(String currentDataGiornata,
@@ -348,43 +294,6 @@ public class LoginView extends VerticalLayout{
 		c.set(yy, mm, dd, h, m, 0);
 
 		return c.getTime();
-	}
-
-	private long getMillisDiff(String nextDate, String fusoOrario)
-			throws Exception {
-
-		Calendar c = Calendar.getInstance();
-		DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		String currentDataGiornata = fmt.format(c.getTime());
-		// String strDate1 = "2018/12/17 19:00:00";
-		// String strDate2 = "2018/12/17 20:00:00";
-		String strDate1 = currentDataGiornata;
-		String strDate2 = nextDate;
-
-		fmt.setLenient(false);
-		Date d1 = fmt.parse(strDate1);
-		Date d2 = fmt.parse(strDate2);
-
-		// Calculates the difference in milliseconds.
-		long millisDiff = d2.getTime() - d1.getTime();
-		int seconds = (int) (millisDiff / 1000 % 60);
-		int minutes = (int) (millisDiff / 60000 % 60);
-		int hours = (int) (millisDiff / 3600000 % 24);
-		int days = (int) (millisDiff / 86400000);
-
-		LOG.info(days + " days, ");
-		LOG.info(hours + " hours, ");
-		LOG.info(minutes + " minutes, ");
-		LOG.info(seconds + " seconds");
-
-		long diffFuso = Long.parseLong(fusoOrario) * 3600000;
-		millisDiff = millisDiff - diffFuso;
-
-		if (millisDiff < 0) {
-			millisDiff = 0;
-		}
-
-		return millisDiff;
 	}
 
 	private Image buildImage(String path, String nomeImg) {
