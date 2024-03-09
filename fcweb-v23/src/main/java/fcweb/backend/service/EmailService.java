@@ -1,13 +1,10 @@
 package fcweb.backend.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.io.FileUtils;
@@ -68,6 +65,7 @@ public class EmailService{
 		log.info("INIZIO ESECUZIONE sendMail              ");
 		log.info("****************************************");
 
+		log.info(" bPrimary: " + bPrimary);
 		log.info(" from: " + from);
 		log.info(" subject: " + subject);
 		log.info(" message: " + messageBody);
@@ -82,7 +80,9 @@ public class EmailService{
 			msg.setFrom(from);
 
 			MimeMessageHelper helper = new MimeMessageHelper(msg,true);
-			helper.setFrom(from, "notifiche-fclt");
+			if (!bPrimary) {
+				helper.setFrom(from, "notifiche-fclt");	
+			}
 			helper.setTo(to);
 			if (cc != null) {
 				helper.setCc(cc);
@@ -121,7 +121,9 @@ public class EmailService{
 				}
 				msg.setFrom(from);
 				MimeMessageHelper helper = new MimeMessageHelper(msg,true);
-				helper.setFrom(from, "notifiche-fclt");
+				if (!bPrimary) {
+					helper.setFrom(from, "notifiche-fclt");	
+				}
 				helper.setTo(to);
 				if (cc != null) {
 					helper.setCc(cc);
@@ -169,12 +171,13 @@ public class EmailService{
 			String[] cc, String[] bcc, String subject, String messageBody,
 			String typeMessage, String priority,
 			Map<String, InputStream> images)
-			throws IOException, MessagingException, AddressException {
+			throws Exception {
 
 		log.info("****************************************");
 		log.info("INIZIO ESECUZIONE sendMail2              ");
 		log.info("****************************************");
 
+		log.info(" bPrimary: " + bPrimary);
 		log.info(" from: " + from);
 		log.info(" subject: " + subject);
 		log.info(" message: " + messageBody);
@@ -191,7 +194,9 @@ public class EmailService{
 			msg.setFrom(from);
 
 			MimeMessageHelper helper = new MimeMessageHelper(msg,true);
-			helper.setFrom(from, "notifiche-fclt");
+			if (!bPrimary) {
+				helper.setFrom(from, "notifiche-fclt");	
+			}
 			helper.setTo(to);
 			if (cc != null) {
 				helper.setCc(cc);
@@ -244,7 +249,9 @@ public class EmailService{
 
 				msg.setFrom(from);
 				MimeMessageHelper helper = new MimeMessageHelper(msg,true);
-				helper.setFrom(from, "notifiche-fclt");
+				if (!bPrimary) {
+					helper.setFrom(from, "notifiche-fclt");	
+				}
 				helper.setTo(to);
 				if (cc != null) {
 					helper.setCc(cc);

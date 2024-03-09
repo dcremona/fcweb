@@ -1738,7 +1738,6 @@ public class EmTeamInsertView extends VerticalLayout
 						insert_dett_info(giornataInfo.getCodiceGiornata(), dataora);
 						LOG.info("insert_dett_info OK");
 					} catch (Exception exd) {
-						LOG.error(exd.getMessage());
 						CustomMessageDialog.showMessageErrorDetails(CustomMessageDialog.MSG_ERROR_GENERIC, exd.getMessage());
 					}
 
@@ -2083,10 +2082,12 @@ public class EmTeamInsertView extends VerticalLayout
 			String from = (String) env.getProperty("spring.mail.secondary.username");
 			emailService.sendMail2(false,from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
 		} catch (Exception e) {
+			LOG.error(e.getMessage());
 			try {
 				String from = (String) env.getProperty("spring.mail.primary.username");
 				emailService.sendMail2(true,from, to, cc, bcc, subject, formazioneHtml, "text/html", "3", listImg);
 			} catch (Exception e2) {
+				LOG.error(e2.getMessage());
 				throw e2;
 			}
 		}
