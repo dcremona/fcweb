@@ -27,6 +27,9 @@ RUN mvn clean package -DskipTests -Pdocker
 
 # Running stage: the part that is used for running the application
 FROM openjdk:16-jdk-slim
+RUN mkdir -p /app
+RUN mkdir -p /app/data
+RUN mkdir -p /app/pdf
 COPY --from=build /usr/src/app/target/*.jar /usr/app/app.jar
 RUN useradd -m myuser
 USER myuser
