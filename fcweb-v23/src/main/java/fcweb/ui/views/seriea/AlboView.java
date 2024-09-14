@@ -23,6 +23,7 @@ import com.vaadin.flow.server.VaadinSession;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
+import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcExpStat;
 import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.AlboService;
@@ -58,7 +59,9 @@ public class AlboView extends VerticalLayout {
 		if (!Utils.isValidVaadinSession()) {
 			return;
 		}
-		accessoController.insertAccesso(this.getClass().getName());
+		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+		FcAttore attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+		accessoController.insertAccesso(campionato,attore,this.getClass().getName());
 
 		initLayout();
 	}

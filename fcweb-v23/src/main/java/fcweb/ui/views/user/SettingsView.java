@@ -10,29 +10,24 @@ import com.vaadin.componentfactory.ToggleButton;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
-import com.wontlost.dicebear.Constants.Style;
-import com.wontlost.dicebear.DicebearVaadin;
-import com.wontlost.dicebear.Options;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
+import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.AttoreService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.CustomMessageDialog;
 
 @Route(value = "settings", layout = MainAppLayout.class)
-@PreserveOnRefresh
 @PageTitle("Modifica Dati Utente")
 public class SettingsView extends VerticalLayout
 		implements ComponentEventListener<ClickEvent<Button>>{
@@ -44,7 +39,7 @@ public class SettingsView extends VerticalLayout
 	@Autowired
 	private AttoreService attoreController;
 
-	private static final String[] styles = new String[] { Style.adventurer.toString(), Style.avataaars.toString(), Style.big_ears.toString(), Style.big_smile.toString(), Style.bottts.toString(), Style.croodles.toString(), Style.identicon.toString(), Style.micah.toString(), Style.miniavs.toString(), Style.open_peeps.toString(), Style.personas.toString(), Style.pixel_art.toString() };
+	//private static final String[] styles = new String[] { Style.adventurer.toString(), Style.avataaars.toString(), Style.big_ears.toString(), Style.big_smile.toString(), Style.bottts.toString(), Style.croodles.toString(), Style.identicon.toString(), Style.micah.toString(), Style.miniavs.toString(), Style.open_peeps.toString(), Style.personas.toString(), Style.pixel_art.toString() };
 
 	private TextField nome = null;
 	private TextField cognome = null;
@@ -52,8 +47,8 @@ public class SettingsView extends VerticalLayout
 	private TextField username = null;
 	private TextField descAttore = null;
 	private TextField cellulare = null;
-	private DicebearVaadin dicebearVaadin = null;
-	private ComboBox<String> comboStyle = null;
+	//private DicebearVaadin dicebearVaadin = null;
+	//private ComboBox<String> comboStyle = null;
 	private ToggleButton settingNotifiche = null;
 
 	private ToggleButton cambiaPassword = null;
@@ -75,9 +70,9 @@ public class SettingsView extends VerticalLayout
 		if (!Utils.isValidVaadinSession()) {
 			return;
 		}
-		accessoController.insertAccesso(this.getClass().getName());
-
+		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
 		attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+		accessoController.insertAccesso(campionato,attore,this.getClass().getName());
 		
 		initLayout();
 	}
@@ -113,48 +108,48 @@ public class SettingsView extends VerticalLayout
 				cellulare.setValue(attore.getCellulare());	
 			}
 
-			dicebearVaadin = new DicebearVaadin();
-			dicebearVaadin.setStyle(Style.avataaars);
-			Options options = new Options();
-			options.setRadius(100);
-			options.setMargin(20);
-			options.setWidth(100);
-			options.setHeight(100);
-			options.setBackground("transparent");
-			dicebearVaadin.setOptions(options);
+//			dicebearVaadin = new DicebearVaadin();
+//			dicebearVaadin.setStyle(Style.avataaars);
+//			Options options = new Options();
+//			options.setRadius(100);
+//			options.setMargin(20);
+//			options.setWidth(100);
+//			options.setHeight(100);
+//			options.setBackground("transparent");
+//			dicebearVaadin.setOptions(options);
 
-			comboStyle = new ComboBox<>();
-			comboStyle.setLabel("Immagine Profilo:");
-			comboStyle.setItems(styles);
-			comboStyle.setPlaceholder("Immagine Profilo");
-			comboStyle.setClearButtonVisible(false);
-			comboStyle.addValueChangeListener(evt -> {
-
-				if (evt.getValue().equals(Style.avataaars.toString())) {
-					dicebearVaadin.setStyle(Style.avataaars);
-				} else if (evt.getValue().equals(Style.adventurer.toString())) {
-					dicebearVaadin.setStyle(Style.adventurer);
-				} else if (evt.getValue().equals(Style.big_ears.toString())) {
-					dicebearVaadin.setStyle(Style.big_ears);
-				} else if (evt.getValue().equals(Style.big_smile.toString())) {
-					dicebearVaadin.setStyle(Style.big_smile);
-				} else if (evt.getValue().equals(Style.bottts.toString())) {
-					dicebearVaadin.setStyle(Style.bottts);
-				} else if (evt.getValue().equals(Style.croodles.toString())) {
-					dicebearVaadin.setStyle(Style.croodles);
-				} else if (evt.getValue().equals(Style.identicon.toString())) {
-					dicebearVaadin.setStyle(Style.identicon);
-				} else if (evt.getValue().equals(Style.micah.toString())) {
-					dicebearVaadin.setStyle(Style.micah);
-				} else if (evt.getValue().equals(Style.open_peeps.toString())) {
-					dicebearVaadin.setStyle(Style.open_peeps);
-				} else if (evt.getValue().equals(Style.personas.toString())) {
-					dicebearVaadin.setStyle(Style.personas);
-				} else if (evt.getValue().equals(Style.pixel_art.toString())) {
-					dicebearVaadin.setStyle(Style.pixel_art);
-				}
-			});
-			comboStyle.setValue(attore.getStyle());
+//			comboStyle = new ComboBox<>();
+//			comboStyle.setLabel("Immagine Profilo:");
+//			comboStyle.setItems(styles);
+//			comboStyle.setPlaceholder("Immagine Profilo");
+//			comboStyle.setClearButtonVisible(false);
+//			comboStyle.addValueChangeListener(evt -> {
+//
+//				if (evt.getValue().equals(Style.avataaars.toString())) {
+//					dicebearVaadin.setStyle(Style.avataaars);
+//				} else if (evt.getValue().equals(Style.adventurer.toString())) {
+//					dicebearVaadin.setStyle(Style.adventurer);
+//				} else if (evt.getValue().equals(Style.big_ears.toString())) {
+//					dicebearVaadin.setStyle(Style.big_ears);
+//				} else if (evt.getValue().equals(Style.big_smile.toString())) {
+//					dicebearVaadin.setStyle(Style.big_smile);
+//				} else if (evt.getValue().equals(Style.bottts.toString())) {
+//					dicebearVaadin.setStyle(Style.bottts);
+//				} else if (evt.getValue().equals(Style.croodles.toString())) {
+//					dicebearVaadin.setStyle(Style.croodles);
+//				} else if (evt.getValue().equals(Style.identicon.toString())) {
+//					dicebearVaadin.setStyle(Style.identicon);
+//				} else if (evt.getValue().equals(Style.micah.toString())) {
+//					dicebearVaadin.setStyle(Style.micah);
+//				} else if (evt.getValue().equals(Style.open_peeps.toString())) {
+//					dicebearVaadin.setStyle(Style.open_peeps);
+//				} else if (evt.getValue().equals(Style.personas.toString())) {
+//					dicebearVaadin.setStyle(Style.personas);
+//				} else if (evt.getValue().equals(Style.pixel_art.toString())) {
+//					dicebearVaadin.setStyle(Style.pixel_art);
+//				}
+//			});
+//			comboStyle.setValue(attore.getStyle());
 
 			settingNotifiche = new ToggleButton();
 			settingNotifiche.setLabel("Notifiche Email");
@@ -185,7 +180,7 @@ public class SettingsView extends VerticalLayout
 			saveButton.addClickListener(this);
 
 			FormLayout formLayout = new FormLayout();
-			formLayout.add(nome, cognome, descAttore, cellulare, email, comboStyle, dicebearVaadin, settingNotifiche, username, cambiaPassword, fieldsPwd);
+			formLayout.add(nome, cognome, descAttore, cellulare, email, settingNotifiche, username, cambiaPassword, fieldsPwd);
 			formLayout.setResponsiveSteps(
 					// Use one column by default
 					new ResponsiveStep("0",1),
@@ -220,16 +215,16 @@ public class SettingsView extends VerticalLayout
 				return;
 			}
 
-			if (this.comboStyle.getValue().equals("")) {
-				CustomMessageDialog.showMessageError("Style: obbligatoria!");
-				return;
-			}
+//			if (this.comboStyle.getValue().equals("")) {
+//				CustomMessageDialog.showMessageError("Style: obbligatoria!");
+//				return;
+//			}
 
 			attore.setNome(nome.getValue());
 			attore.setCognome(cognome.getValue());
 			attore.setDescAttore(descAttore.getValue());
 			attore.setCellulare(cellulare.getValue());
-			attore.setStyle(comboStyle.getValue());
+			//attore.setStyle(comboStyle.getValue());
 			attore.setNotifiche(settingNotifiche.getValue().booleanValue());
 			if (this.cambiaPassword.getValue()) {
 				if (!checkPwd()) {

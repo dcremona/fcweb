@@ -26,7 +26,6 @@ import com.vaadin.flow.component.svg.Svg;
 import com.vaadin.flow.component.svg.elements.Circle;
 import com.vaadin.flow.component.svg.elements.Text;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
@@ -40,15 +39,14 @@ import fcweb.backend.data.entity.FcGiornataInfo;
 import fcweb.backend.data.entity.FcGiornataRis;
 import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.ClassificaTotalePuntiService;
-import fcweb.backend.service.GiornataService;
 import fcweb.backend.service.GiornataInfoService;
 import fcweb.backend.service.GiornataRisService;
+import fcweb.backend.service.GiornataService;
 import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 
 @PageTitle("Home")
 @Route(value = "home", layout = MainAppLayout.class)
-@PreserveOnRefresh
 public class HomeView extends VerticalLayout{
 
 	private static final long serialVersionUID = 1L;
@@ -85,7 +83,10 @@ public class HomeView extends VerticalLayout{
 				return;
 			}
 
-			accessoController.insertAccesso(this.getClass().getName());
+			FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+			FcAttore attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+			accessoController.insertAccesso(campionato,attore,this.getClass().getName());
+
 
 			add(buildInfoGiornate());
 

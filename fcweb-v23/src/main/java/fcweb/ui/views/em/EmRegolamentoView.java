@@ -29,6 +29,7 @@ import com.wontlost.ckeditor.VaadinCKEditorBuilder;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
+import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcRegolamento;
 import fcweb.backend.service.AccessoService;
 import fcweb.backend.service.RegolamentoService;
@@ -69,7 +70,10 @@ public class EmRegolamentoView extends VerticalLayout
 		if (!Utils.isValidVaadinSession()) {
 			return;
 		}
-		accessoController.insertAccesso(this.getClass().getName());
+		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+		FcAttore attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+		accessoController.insertAccesso(campionato,attore,this.getClass().getName());
+
 		initData();
 		initLayout();
 	}

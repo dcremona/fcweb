@@ -27,6 +27,7 @@ import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAccesso;
@@ -69,7 +70,10 @@ public class FcAccessoView extends VerticalLayout
 		if (!Utils.isValidVaadinSession()) {
 			return;
 		}
-		accessoController.insertAccesso(this.getClass().getName());
+		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+		FcAttore attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+		accessoController.insertAccesso(campionato,attore,this.getClass().getName());
+
 		initLayout();
 	}
 

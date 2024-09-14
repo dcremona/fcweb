@@ -48,9 +48,10 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinSession;
 
 import common.util.ContentIdGenerator;
@@ -77,9 +78,8 @@ import fcweb.ui.MainAppLayout;
 import fcweb.utils.Costants;
 import fcweb.utils.CustomMessageDialog;
 
-@Route(value = "insert", layout = MainAppLayout.class)
-@PreserveOnRefresh
-@PageTitle("Schiera Formazione")
+@Route(value = "schiera", layout = MainAppLayout.class)
+@PageTitle("Schiera_Formazione")
 public class TeamInsertView extends VerticalLayout
 		implements ComponentEventListener<ClickEvent<Button>>{
 
@@ -206,19 +206,26 @@ public class TeamInsertView extends VerticalLayout
 
 	@PostConstruct
 	void init() throws Exception {
-		LOG.info("init");
+        System.out.println(VaadinServlet.getCurrent()); // to verify that the servlet class is MyServlet
+        System.out.println(VaadinService.getCurrent().getDeploymentConfiguration().isCloseIdleSessions()); // should print "true"
+		LOG.info("START init");
 		if (!Utils.isValidVaadinSession()) {
 			return;
 		}
-		accessoController.insertAccesso(this.getClass().getName());
+		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+		FcAttore attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+		accessoController.insertAccesso(campionato,attore,this.getClass().getName());
 
 		initData();
 
 		initLayout();
+		
+		LOG.info("END init");
 	}
 
 	private void initData() throws Exception {
-
+		LOG.info("START initData");
+		
 		p = (Properties) VaadinSession.getCurrent().getAttribute("PROPERTIES");
 		attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
 		giornataInfo = (FcGiornataInfo) VaadinSession.getCurrent().getAttribute("GIORNATA_INFO");
@@ -236,10 +243,14 @@ public class TeamInsertView extends VerticalLayout
 		listPartite = calendarioTimController.findByIdGiornataOrderByDataAsc(giornataInfo.getCodiceGiornata());
 		
 		listSqualificatiInfortunati = giornataGiocatoreService.findByCustonm(giornataInfo, null);
+		
+		LOG.info("END initData");
 	}
 
 	private void initLayout() throws Exception {
-
+		
+		LOG.info("START initLayout");
+		
 		absLayout = new AbsoluteLayout(1500,1200);
 		absLayout.getElement().getStyle().set("border", Costants.BORDER_COLOR);
 		absLayout.getElement().getStyle().set("background", Costants.LOWER_GRAY);
@@ -466,6 +477,8 @@ public class TeamInsertView extends VerticalLayout
 			timer.addTimerEndEvent(ev -> showMessageStopInsert());
 			layoutAvviso.add(timer);
 		}
+		
+		LOG.info("END initLayout");
 	}
 
 	private void showMessageStopInsert() {

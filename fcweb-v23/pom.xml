@@ -241,11 +241,11 @@
 		   <artifactId>ckeditor-vaadin</artifactId>
 		   <version>2.3.4</version>
 		</dependency>
-		<dependency>
+		<!--dependency>
 		   <groupId>com.wontlost</groupId>
 		   <artifactId>dicebear-vaadin</artifactId>
 		   <version>1.0.5</version>
-		</dependency>
+		</dependencyy-->
 		<dependency>
 		   <groupId>de.codecamp.vaadin</groupId>
 		   <artifactId>vaadin-message-dialog</artifactId>

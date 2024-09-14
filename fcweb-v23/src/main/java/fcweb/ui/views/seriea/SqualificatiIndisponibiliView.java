@@ -36,6 +36,7 @@ import com.vaadin.flow.server.VaadinSession;
 
 import common.util.Utils;
 import fcweb.backend.data.entity.FcAttore;
+import fcweb.backend.data.entity.FcCampionato;
 import fcweb.backend.data.entity.FcGiocatore;
 import fcweb.backend.data.entity.FcGiornataGiocatore;
 import fcweb.backend.data.entity.FcGiornataInfo;
@@ -84,7 +85,9 @@ public class SqualificatiIndisponibiliView extends VerticalLayout
 		if (!Utils.isValidVaadinSession()) {
 			return;
 		}
-		accessoController.insertAccesso(this.getClass().getName());
+		FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+		FcAttore attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+		accessoController.insertAccesso(campionato,attore,this.getClass().getName());
 		initData();
 		initLayout();
 	}

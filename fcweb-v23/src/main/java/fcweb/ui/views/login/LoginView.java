@@ -48,7 +48,7 @@ import fcweb.utils.CustomMessageDialog;
 
 @Route(value = "fcWeb")
 @RouteAlias(value = "")
-@PageTitle("")
+@PageTitle("Login")
 public class LoginView extends VerticalLayout{
 
 	private static final long serialVersionUID = 1L;
@@ -84,8 +84,8 @@ public class LoginView extends VerticalLayout{
 		LOG.info("init");
 
 		if (Utils.isValidVaadinSession()) {
-			UI.getCurrent().getSession().close();
 			VaadinSession.getCurrent().getSession().invalidate();
+			UI.getCurrent().getSession().close();
 			return;
 		}
 
@@ -161,7 +161,10 @@ public class LoginView extends VerticalLayout{
 
 			boolean isAuthenticated = checkUser(e.getUsername(), e.getPassword());
 			if (isAuthenticated) {
-				accessoController.insertAccesso(this.getClass().getName());
+				FcCampionato campionato = (FcCampionato) VaadinSession.getCurrent().getAttribute("CAMPIONATO");
+				FcAttore attore = (FcAttore) VaadinSession.getCurrent().getAttribute("ATTORE");
+				accessoController.insertAccesso(campionato,attore,this.getClass().getName());
+
 
 				if ("logo.png".equals(imgLogo)) {
 					UI.getCurrent().navigate(HomeView.class);
@@ -259,8 +262,18 @@ public class LoginView extends VerticalLayout{
 		}
 		LOG.info("millisDiff : " + millisDiff);
 		LOG.info("Login " + attore.getDescAttore() + " success");
+		
+		LOG.info("removeAttribute : " );
+		VaadinSession.getCurrent().getSession().removeAttribute("GIORNATA_INFO");
+		VaadinSession.getCurrent().getSession().removeAttribute("ATTORE");
+		VaadinSession.getCurrent().getSession().removeAttribute("PROPERTIES");
+		VaadinSession.getCurrent().getSession().removeAttribute("CAMPIONATO");
+		VaadinSession.getCurrent().getSession().removeAttribute("NEXTDATE");
+		VaadinSession.getCurrent().getSession().removeAttribute("MILLISDIFF");
+		VaadinSession.getCurrent().getSession().removeAttribute("COUNTDOWNDATE");
 
 		// Set a session attribute
+		LOG.info("setAttribute : " );
 		VaadinSession.getCurrent().setAttribute("GIORNATA_INFO", giornataInfo);
 		VaadinSession.getCurrent().setAttribute("ATTORE", attore);
 		VaadinSession.getCurrent().setAttribute("PROPERTIES", properties);
