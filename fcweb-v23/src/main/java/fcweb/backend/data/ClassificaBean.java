@@ -19,6 +19,15 @@ public class ClassificaBean implements Serializable{
 	private Double puntiGiornata5;
 	private Double puntiGiornata6;
 	private Double puntiGiornata7;
+	private Double ptTvst;
+
+	public Double getPtTvst() {
+		return ptTvst;
+	}
+
+	public void setPtTvst(Double ptTvst) {
+		this.ptTvst = ptTvst;
+	}
 
 	public String getSquadra() {
 		return squadra;
